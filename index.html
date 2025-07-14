@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riesgo Macroeconómico y Sectorial | Banco Guayaquil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-magenta: #D2006E;
+      --bg-blue: #160F41;
+      --text-light: #ffffff;
+      --card-bg: #ffffff;
+      --card-text: #160F41;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', system-ui, sans-serif;
+      background: var(--bg-blue);
+      color: var(--text-light);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--bg-magenta);
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      color: var(--card-text);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card h2 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+    }
+
+    .card a {
+      margin-top: auto;
+      align-self: flex-start;
+      background: var(--bg-magenta);
+      color: var(--text-light);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .card a:hover,
+    .card a:focus {
+      background: #E72E8A;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      background: #0F0A2D;
+      color: var(--text-light);
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background: #f5f5f9;
+        color: var(--bg-blue);
+      }
+      header {
+        color: var(--text-light);
+      }
+      .card {
+        color: var(--card-text);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Riesgo Macroeconómico y Sectorial</h1>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Reporte macro</h2>
+      <a href="https://app.powerbi.com/links/8vew9TpiQb?ctid=78181095-efa1-4806-9626-ca6be188d1d0&pbi_source=linkShare&bookmarkGuid=b16c38d8-129c-44c2-ac30-4720347cec45" target="_blank" rel="noopener">Ver reporte</a>
+    </div>
+
+    <div class="card">
+      <h2>Espresso Macroeconómico — Ventas</h2>
+      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EU4UVaKcMAJAn1Jt5HdYIBYBHQhTbKa41HHRnFcSdRJo3Q?e=ovfe57" target="_blank" rel="noopener">Descargar</a>
+    </div>
+
+    <div class="card">
+      <h2>Espresso Macroeconómico — Inflación</h2>
+      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EY51ZZ9kVVZDgAURJ30UGa8BgTxQPGgwwAI3VpfSfNegug?e=mR5tTA" target="_blank" rel="noopener">Descargar</a>
+    </div>
+
+    <div class="card">
+      <h2>Espresso Macroeconómico — Empleo</h2>
+      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EaCxBVpYGVtKjQjk6fiH7soB2g3KyM8DVWYmuTTXMe_TOQ?e=5fnpku" target="_blank" rel="noopener">Descargar</a>
+    </div>
+
+    <div class="card">
+      <h2>Reportes de coyuntura</h2>
+      <a href="https://bancoguayaquil1.sharepoint.com/:f:/s/RiesgoMacroeconmicoySectorial/ElViM2MYUgZBlVF5KXJJO3UBemQ-z0tvpID2yrvdxzb7iw?e=o4he3Z" target="_blank" rel="noopener">Explorar</a>
+    </div>
+
+    <div class="card">
+      <h2>Fichas sectoriales</h2>
+      <a href="https://app.powerbi.com/links/Bh_nYG18FN?ctid=78181095-efa1-4806-9626-ca6be188d1d0&pbi_source=linkShare" target="_blank" rel="noopener">Ver fichas</a>
+    </div>
+
+    <div class="card">
+      <h2>Boletines sectoriales</h2>
+      <a href="https://bancoguayaquil1.sharepoint.com/:f:/s/RiesgoMacroeconmicoySectorial/EuUG8oVzDzxKjyuQrlq_SLEBsAixzs248zRHUJMFqGVrJA?e=Kj8kGo" target="_blank" rel="noopener">Explorar</a>
+    </div>
+  </main>
+
+  <footer>
+    © Banco Guayaquil — Área de Riesgo Macroeconómico y Sectorial
+  </footer>
+</body>
+</html>
