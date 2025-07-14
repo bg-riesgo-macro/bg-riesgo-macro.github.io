@@ -48,7 +48,27 @@
       width: 100%;
       max-width: 900px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .espresso {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+    }
+
+    .espresso-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      color: var(--text-light);
+    }
+
+    .espresso-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.2rem;
@@ -128,21 +148,6 @@
     </div>
 
     <div class="card">
-      <h2>Espresso Macroeconómico — Ventas</h2>
-      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EU4UVaKcMAJAn1Jt5HdYIBYBHQhTbKa41HHRnFcSdRJo3Q?e=ovfe57" target="_blank" rel="noopener">Descargar</a>
-    </div>
-
-    <div class="card">
-      <h2>Espresso Macroeconómico — Inflación</h2>
-      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EY51ZZ9kVVZDgAURJ30UGa8BgTxQPGgwwAI3VpfSfNegug?e=mR5tTA" target="_blank" rel="noopener">Descargar</a>
-    </div>
-
-    <div class="card">
-      <h2>Espresso Macroeconómico — Empleo</h2>
-      <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EaCxBVpYGVtKjQjk6fiH7soB2g3KyM8DVWYmuTTXMe_TOQ?e=5fnpku" target="_blank" rel="noopener">Descargar</a>
-    </div>
-
-    <div class="card">
       <h2>Reportes de coyuntura</h2>
       <a href="https://bancoguayaquil1.sharepoint.com/:f:/s/RiesgoMacroeconmicoySectorial/ElViM2MYUgZBlVF5KXJJO3UBemQ-z0tvpID2yrvdxzb7iw?e=o4he3Z" target="_blank" rel="noopener">Explorar</a>
     </div>
@@ -158,8 +163,28 @@
     </div>
   </main>
 
+  <section class="espresso">
+    <h2 class="espresso-title">Espresso Macroeconómico</h2>
+    <div class="espresso-grid">
+      <div class="card">
+        <h2>Ventas</h2>
+        <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EU4UVaKcMAJAn1Jt5HdYIBYBHQhTbKa41HHRnFcSdRJo3Q?e=ovfe57" target="_blank" rel="noopener">Descargar</a>
+      </div>
+
+      <div class="card">
+        <h2>Inflación</h2>
+        <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EY51ZZ9kVVZDgAURJ30UGa8BgTxQPGgwwAI3VpfSfNegug?e=mR5tTA" target="_blank" rel="noopener">Descargar</a>
+      </div>
+
+      <div class="card">
+        <h2>Empleo</h2>
+        <a href="https://bancoguayaquil1.sharepoint.com/:b:/s/RiesgoMacroeconmicoySectorial/EaCxBVpYGVtKjQjk6fiH7soB2g3KyM8DVWYmuTTXMe_TOQ?e=5fnpku" target="_blank" rel="noopener">Descargar</a>
+      </div>
+    </div>
+  </section>
+
   <footer>
-    © Banco Guayaquil — Área de Riesgo Macroeconómico y Sectorial
+    © Banco Guayaquil — Unidad de Riesgo Macroeconómico y Sectorial
   </footer>
 </body>
 </html>
