@@ -12,21 +12,84 @@ import {kpiSerie, panel, cabecera} from "./components/ui.js";
 const fuente = (id) => db.meta(id).fuente;
 const desde = (serie, anio) => serie.filter(([t]) => t >= Date.UTC(anio, 0, 1));
 const s = (id, anio = 2015) => desde(db.serie(id), anio);
+
+// Cambio de un saldo frente al último dato del año anterior (desde 2018).
+function variacionEnElAnio(serie) {
+  const cierre = new Map();
+  for (const [t, v] of serie) cierre.set(new Date(t).getUTCFullYear(), v);
+  return desde(serie, 2018).map(([t, v]) => [t, v - cierre.get(new Date(t).getUTCFullYear() - 1)]);
+}
 ```
 
 ```js
 display(cabecera({
   antetitulo: "Sector monetario y financiero",
-  titulo: "Depósitos, crédito y riesgo soberano",
-  bajada: "Evolución de depósitos y cartera, liquidez, solvencia y morosidad del sistema financiero privado, tasa pasiva referencial y bonos soberanos de Ecuador.",
+  titulo: "Riesgo soberano, liquidez y crédito",
+  bajada: "Riesgo país y reservas internacionales; depósitos, cartera, liquidez, solvencia y morosidad del sistema financiero privado; tasa pasiva referencial y bonos soberanos de Ecuador.",
   corte: db.ultimo("depositos_bp")[0]
 }));
 
 display(html`<div class="kpis">
+  ${kpiSerie(db, "embi")}
+  ${kpiSerie(db, "reservas")}
   ${kpiSerie(db, "depositos_bp", {titulo: "Depósitos, bancos privados"})}
-  ${kpiSerie(db, "cartera_bp", {titulo: "Cartera, bancos privados"})}
   ${kpiSerie(db, "morosidad_sf", {titulo: "Morosidad del sistema"})}
-  ${kpiSerie(mercados, "ec2035_ytm", {titulo: "Rendimiento bono 2035"})}
+</div>`);
+```
+
+## Riesgo país
+
+```js
+display(html`<div class="paneles">
+  ${panel({
+    titulo: "Riesgo país (EMBI Ecuador)",
+    subtitulo: "Puntos básicos, diario",
+    fuente: fuente("embi"),
+    ancho: true,
+    contenido: grafico({
+      series: [{nombre: "EMBI Ecuador", datos: db.serie("embi")}],
+      frecuencia: "D", unidad: "pb", decimales: 0, navegador: true, rango: "5a", altura: 420
+    })
+  })}
+</div>`);
+```
+
+## Reservas internacionales
+
+```js
+display(html`<div class="paneles">
+  ${panel({
+    titulo: "Reservas internacionales",
+    subtitulo: "USD millones, semanal",
+    fuente: fuente("reservas"),
+    ancho: true,
+    contenido: grafico({
+      series: [{nombre: "Reservas internacionales", datos: db.serie("reservas")}],
+      frecuencia: "S", unidad: "USD mm", decimales: 0, tipo: "area", navegador: true, rango: "5a"
+    })
+  })}
+  ${panel({
+    titulo: "Composición de las reservas",
+    subtitulo: "USD millones, semanal",
+    fuente: fuente("reservas"),
+    contenido: grafico({
+      series: [
+        {nombre: "Posición neta en divisas", datos: s("reservas_divisas", 2018)},
+        {nombre: "Oro", datos: s("reservas_oro", 2018)},
+        {nombre: "DEG, FMI, ALADI y SUCRE", datos: s("reservas_otros", 2018)}
+      ],
+      frecuencia: "S", unidad: "USD mm", decimales: 0, tipo: "area", apilado: true
+    })
+  })}
+  ${panel({
+    titulo: "Variación de las reservas en el año",
+    subtitulo: "Cambio frente al cierre del año anterior, USD millones",
+    fuente: fuente("reservas"),
+    contenido: grafico({
+      series: [{nombre: "Variación en el año", datos: variacionEnElAnio(db.serie("reservas"))}],
+      frecuencia: "S", unidad: "USD mm", decimales: 0, tipo: "area", cero: true
+    })
+  })}
 </div>`);
 ```
 
@@ -148,7 +211,7 @@ display(html`<div class="paneles">
 
 ## Bonos soberanos de Ecuador
 
-Rendimiento al vencimiento de los bonos globales. El diferencial frente al bono del Tesoro de EE. UU. a 10 años sirve como aproximación del riesgo soberano mientras se incorpora el EMBI.
+Rendimiento al vencimiento de los bonos globales. El diferencial del bono 2035 frente al Tesoro de EE. UU. a 10 años es una lectura complementaria del riesgo soberano, bono por bono.
 
 ```js
 const bonos = ["2030", "2034", "2035", "2039", "2040"];
@@ -168,7 +231,7 @@ display(html`<div class="paneles">
         {nombre: "2035", datos: mercados.serie("ec2035_ytm")},
         {nombre: "2040", datos: mercados.serie("ec2040_ytm")}
       ],
-      frecuencia: "D", unidad: "%", decimales: 2
+      frecuencia: "D", unidad: "%", decimales: 2, soloImagen: true
     })
   })}
   ${panel({
@@ -177,7 +240,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg; cálculo propio",
     contenido: grafico({
       series: [{nombre: "Diferencial", datos: spread}],
-      frecuencia: "D", unidad: "pb", decimales: 0
+      frecuencia: "D", unidad: "pb", decimales: 0, soloImagen: true
     })
   })}
   ${panel({

@@ -107,7 +107,7 @@ function montar(el, construir, altura) {
 }
 
 // --- Opciones base ----------------------------------------------------------
-function base(t, {altura, frecuencia, unidad, decimales, encabezado}) {
+function base(t, {altura, frecuencia, unidad, decimales, encabezado, soloImagen = false}) {
   const ejeTexto = {color: t.suave, fontSize: "11px"};
   return {
     chart: {
@@ -204,7 +204,10 @@ function base(t, {altura, frecuencia, unidad, decimales, encabezado}) {
     exporting: {
       buttons: {
         contextButton: {
-          menuItems: ["downloadPNG", "downloadSVG", "separator", "downloadCSV", "downloadXLS", "viewData"]
+          // Datos con licencia (Bloomberg): solo se ofrece la imagen del gráfico.
+          menuItems: soloImagen
+            ? ["downloadPNG", "downloadSVG"]
+            : ["downloadPNG", "downloadSVG", "separator", "downloadCSV", "downloadXLS", "viewData"]
         }
       },
       chartOptions: {chart: {backgroundColor: t.fondo}},
@@ -289,6 +292,7 @@ function separarEtiquetas() {
  * @param {string} [o.rango="5a"]       rango inicial del selector ("1a", "3a", "5a", "Todo")
  * @param {boolean} [o.cero=false]      línea de referencia en cero
  * @param {number} [o.referencia]       línea de referencia en otro valor (p. ej. 50 en índices de difusión)
+ * @param {boolean} [o.soloImagen=false] menú sin descarga de datos (para fuentes con licencia)
  * @param {number} [o.altura=300]
  */
 export function grafico(o) {
@@ -304,6 +308,7 @@ export function grafico(o) {
     cero = false,
     referencia = cero ? 0 : undefined,
     periodo,
+    soloImagen = false,
     altura = navegador ? 380 : 300
   } = o;
   const el = document.createElement("div");
@@ -314,7 +319,7 @@ export function grafico(o) {
 
   return montar(el, (t) => {
     const encabezado = periodo ? (ctx) => periodo(ctx.x) : undefined;
-    const op = base(t, {altura, frecuencia, unidad, decimales, encabezado});
+    const op = base(t, {altura, frecuencia, unidad, decimales, encabezado, soloImagen});
     op.legend.enabled = series.length > 1;
     if (etiquetasFinales) {
       // Espacio a la derecha según el nombre más largo (≈6.5 px por carácter a 11 px).
@@ -324,6 +329,7 @@ export function grafico(o) {
     if (referencia != null) op.yAxis.plotLines = [{value: referencia, color: t.eje, width: 1, zIndex: 3}];
     if (frecuencia === "A") op.xAxis.tickInterval = 365.25 * 864e5;
     if (apilado) op.plotOptions[tipo] = {...op.plotOptions[tipo], stacking: "normal"};
+    if (apilado && tipo === "area") op.plotOptions.area.fillOpacity = 0.35;
     if (tipo === "column" && apilado) op.plotOptions.column.borderRadius = 0;
 
     op.series = series.map((s, i) => definida(serieTiempo(s, i)));
@@ -386,12 +392,12 @@ export function grafico(o) {
  * @param {"line"|"column"|"bar"} [o.tipo="line"]
  */
 export function graficoCategorias(o) {
-  const {categorias, series, unidad = "", decimales = 1, tipo = "line", cero = false, altura = 300} = o;
+  const {categorias, series, unidad = "", decimales = 1, tipo = "line", cero = false, altura = 300, soloImagen = false} = o;
   const el = document.createElement("div");
   el.className = "grafico";
   el.style.minHeight = `${altura}px`;
   return montar(el, (t) => {
-    const op = base(t, {altura, unidad, decimales, encabezado: (ctx) => ctx.key ?? categorias[ctx.x]});
+    const op = base(t, {altura, unidad, decimales, soloImagen, encabezado: (ctx) => ctx.key ?? categorias[ctx.x]});
     op.xAxis = {...op.xAxis, type: "category", categories: categorias, dateTimeLabelFormats: undefined};
     if (tipo === "bar") {
       op.xAxis.labels = {...op.xAxis.labels, style: {...op.xAxis.labels.style, fontSize: "11.5px", color: t.tinta2}};

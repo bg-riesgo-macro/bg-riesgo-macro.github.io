@@ -48,10 +48,11 @@ display(cabecera({
 const [tPib, pib] = db.ultimo("pib_real_aa");
 const [tImae, imae] = db.ultimo("imaec_aa");
 const [tInf, inf] = db.ultimo("inflacion_aa");
-const [tDep] = db.ultimo("depositos_bp");
 const dep = cambioAnual(db.serie("depositos_bp"), "USD mm").valor;
 const car = cambioAnual(db.serie("cartera_bp"), "USD mm").valor;
 const [, mora] = db.ultimo("morosidad_sf");
+const [tRi, ri] = db.ultimo("reservas");
+const [tEmbi, embi] = db.ultimo("embi");
 const [x, xAnt] = ultimoYPrevio(acum("x_total"));
 const [xnp, xnpAnt] = ultimoYPrevio(acum("x_no_pet"));
 const [bal] = ultimoYPrevio(acum("bc_total"));
@@ -69,7 +70,7 @@ const mensajes = [
   },
   {
     sector: "Financiero",
-    texto: `A ${formatoPeriodo(tDep, "M")}, los depósitos de los bancos privados crecen ${formatoNumero(dep, 1)}% anual y la cartera ${formatoNumero(car, 1)}%. La morosidad del sistema se ubica en ${formatoNumero(mora, 2)}%.`
+    texto: `Las reservas internacionales suman USD ${formatoNumero(ri, 0)} millones (${formatoPeriodo(tRi, "D")}) y el riesgo país se ubicó en ${formatoNumero(embi, 0)} pb (${formatoPeriodo(tEmbi, "D")}). Los depósitos de los bancos privados crecen ${formatoNumero(dep, 1)}% anual y la cartera ${formatoNumero(car, 1)}%.`
   },
   {
     sector: "Externo",
@@ -93,8 +94,8 @@ display(html`<div class="kpis-sectores">
   </div>
   <div class="kpi-columna">
     <h3><a href="./financiero">Sector financiero</a></h3>
-    ${kpiSerie(db, "depositos_bp", {titulo: "Depósitos, bancos privados"})}
-    ${kpiSerie(db, "morosidad_sf", {titulo: "Morosidad del sistema"})}
+    ${kpiSerie(db, "embi")}
+    ${kpiSerie(db, "reservas")}
   </div>
   <div class="kpi-columna">
     <h3><a href="./externo">Sector externo</a></h3>
@@ -151,16 +152,13 @@ display(html`<div class="paneles">
     })
   })}
   ${panel({
-    titulo: "Bono de Ecuador 2035 y Tesoro de EE. UU. a 10 años",
-    subtitulo: "Rendimiento, %, diario",
-    fuente: "Bloomberg",
-    enlace: {href: "./internacional", texto: "Economía internacional"},
+    titulo: "Riesgo país (EMBI Ecuador)",
+    subtitulo: "Puntos básicos, diario",
+    fuente: db.meta("embi").fuente,
+    enlace: {href: "./financiero", texto: "Sector financiero"},
     contenido: grafico({
-      series: [
-        {nombre: "Ecuador 2035", datos: mercados.serie("ec2035_ytm")},
-        {nombre: "Tesoro 10 años", datos: desde(mercados.serie("us_10a"), 2025)}
-      ],
-      frecuencia: "D", unidad: "%", decimales: 2
+      series: [{nombre: "EMBI Ecuador", datos: desde(db.serie("embi"), 2018)}],
+      frecuencia: "D", unidad: "pb", decimales: 0
     })
   })}
 </div>`);
@@ -173,7 +171,7 @@ display(html`<div class="paneles">
 ```js
 const grupos = [
   ["Sector real", db, ["pib_real_aa", "imaec_aa", "inflacion_aa", "desempleo", "empleo_adecuado", "subempleo"]],
-  ["Sector financiero", db, ["depositos_bp", "cartera_bp", "ltd_bp", "morosidad_sf", "liquidez_bp", "solvencia_sf", "tpr"]],
+  ["Sector financiero", db, ["embi", "reservas", "depositos_bp", "cartera_bp", "ltd_bp", "morosidad_sf", "liquidez_bp", "solvencia_sf", "tpr"]],
   ["Sector externo", db, ["terminos_intercambio", "remesas_recibidas", "ied", "cuenta_corriente_pib"]],
   ["Economía internacional", mercados, ["fed", "us_2a", "us_10a", "dxy", "wti", "cacao", "oro"]]
 ];

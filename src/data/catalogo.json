@@ -522,6 +522,56 @@
    "fuente": "BCE"
   },
   {
+   "id": "embi",
+   "sector": "financiero",
+   "nombre": "Riesgo país (EMBI Ecuador)",
+   "corto": "Riesgo país",
+   "unidad": "pb",
+   "frecuencia": "D",
+   "decimales": 0,
+   "fuente": "BCE, con datos de JP Morgan"
+  },
+  {
+   "id": "reservas",
+   "sector": "financiero",
+   "nombre": "Reservas internacionales",
+   "corto": "Reservas internacionales",
+   "unidad": "USD mm",
+   "frecuencia": "S",
+   "decimales": 0,
+   "fuente": "BCE, Reservas internacionales (semanal)"
+  },
+  {
+   "id": "reservas_divisas",
+   "sector": "financiero",
+   "nombre": "Reservas internacionales: posición neta en divisas",
+   "corto": "Posición neta en divisas",
+   "unidad": "USD mm",
+   "frecuencia": "S",
+   "decimales": 0,
+   "fuente": "BCE, Reservas internacionales (semanal)"
+  },
+  {
+   "id": "reservas_oro",
+   "sector": "financiero",
+   "nombre": "Reservas internacionales: oro",
+   "corto": "Oro",
+   "unidad": "USD mm",
+   "frecuencia": "S",
+   "decimales": 0,
+   "fuente": "BCE, Reservas internacionales (semanal)"
+  },
+  {
+   "id": "reservas_otros",
+   "sector": "financiero",
+   "nombre": "Reservas internacionales: DEG, FMI, ALADI y SUCRE",
+   "corto": "DEG, FMI, ALADI y SUCRE",
+   "unidad": "USD mm",
+   "frecuencia": "S",
+   "decimales": 0,
+   "fuente": "BCE, Reservas internacionales (semanal)"
+  },
+  {
    "id": "x_total",
    "sector": "externo",
    "nombre": "Exportaciones totales FOB",

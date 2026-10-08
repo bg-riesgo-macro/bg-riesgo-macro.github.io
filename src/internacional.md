@@ -103,7 +103,7 @@ display(html`<div class="paneles">
         {nombre: "Nikkei 225", datos: base100("nikkei", referencias[2].t)},
         {nombre: "Bovespa", datos: base100("bovespa", referencias[2].t)}
       ],
-      frecuencia: "D", unidad: "", decimales: 1, referencia: 100, altura: 400
+      frecuencia: "D", soloImagen: true, unidad: "", decimales: 1, referencia: 100, altura: 400
     })
   })}
 </div>`);
@@ -126,7 +126,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg",
     contenido: grafico({
       series: politica.map((id) => ({nombre: mercados.meta(id).corto, datos: mercados.serie(id), escalon: true})),
-      frecuencia: "D", unidad: "%", decimales: 2
+      frecuencia: "D", soloImagen: true, unidad: "%", decimales: 2
     })
   })}
   ${panel({
@@ -140,7 +140,7 @@ display(html`<div class="paneles">
         {nombre: "Hace 3 meses", datos: curvaEn("us", plazosUS, corte - 91 * DIA), color: 2},
         {nombre: "Hace 12 meses", datos: curvaEn("us", plazosUS, referencias[2].t), color: "suave", punteado: true}
       ],
-      unidad: "%", decimales: 2
+      unidad: "%", decimales: 2, soloImagen: true
     })
   })}
   ${panel({
@@ -150,7 +150,7 @@ display(html`<div class="paneles">
     contenido: graficoCategorias({
       categorias: todosPlazos,
       series: curvas.map((c) => ({nombre: c.pais, datos: curvaPais(c)})),
-      unidad: "%", decimales: 2
+      unidad: "%", decimales: 2, soloImagen: true
     })
   })}
   ${panel({
@@ -159,7 +159,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg; cálculo propio",
     contenido: grafico({
       series: [{nombre: "10 años – 2 años", datos: pendiente}],
-      frecuencia: "D", unidad: "pb", decimales: 0, cero: true
+      frecuencia: "D", soloImagen: true, unidad: "pb", decimales: 0, cero: true
     })
   })}
   ${panel({
@@ -187,7 +187,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg",
     contenido: grafico({
       series: [{nombre: "DXY", datos: mercados.serie("dxy")}],
-      frecuencia: "D", unidad: "", decimales: 2
+      frecuencia: "D", soloImagen: true, unidad: "", decimales: 2
     })
   })}
   ${panel({
@@ -229,7 +229,7 @@ display(html`<div class="paneles">
         {nombre: "WTI", datos: mercados.serie("wti")},
         {nombre: "Brent", datos: mercados.serie("brent")}
       ],
-      frecuencia: "D", unidad: "USD/barril", decimales: 2, navegador: true, rango: "3a"
+      frecuencia: "D", soloImagen: true, unidad: "USD/barril", decimales: 2, navegador: true, rango: "3a"
     })
   })}
   ${panel({
@@ -238,7 +238,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg",
     contenido: grafico({
       series: [{nombre: "Cacao", datos: mercados.serie("cacao")}],
-      frecuencia: "D", unidad: "USD/t", decimales: 0
+      frecuencia: "D", soloImagen: true, unidad: "USD/t", decimales: 0
     })
   })}
   ${panel({
@@ -247,7 +247,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg",
     contenido: grafico({
       series: [{nombre: "Oro", datos: mercados.serie("oro")}],
-      frecuencia: "D", unidad: "USD/oz", decimales: 1
+      frecuencia: "D", soloImagen: true, unidad: "USD/oz", decimales: 1
     })
   })}
   ${panel({
@@ -256,7 +256,7 @@ display(html`<div class="paneles">
     fuente: "Bloomberg",
     contenido: grafico({
       series: [{nombre: "Cobre", datos: mercados.serie("cobre")}],
-      frecuencia: "D", unidad: "¢/libra", decimales: 1
+      frecuencia: "D", soloImagen: true, unidad: "¢/libra", decimales: 1
     })
   })}
   ${panel({
@@ -268,7 +268,7 @@ display(html`<div class="paneles">
         {nombre: "Gasolina RBOB", datos: mercados.serie("gasolina")},
         {nombre: "Diésel (heating oil)", datos: mercados.serie("diesel")}
       ],
-      frecuencia: "D", unidad: "¢/galón", decimales: 1
+      frecuencia: "D", soloImagen: true, unidad: "¢/galón", decimales: 1
     })
   })}
 </div>`);

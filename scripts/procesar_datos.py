@@ -324,6 +324,35 @@ for col_, id_, nombre, corto in [
     registrar(id_, tpr.index, tpr[col_], sector="financiero", nombre=nombre, corto=corto, unidad="%",
               frecuencia="S", decimales=2, fuente="BCE")
 
+# Riesgo país: el archivo trae días calendario (fines de semana repetidos); se dejan días hábiles.
+embi = pd.read_excel(RAW / "bce_riesgo_país2.xlsx")
+embi["Fecha"] = pd.to_datetime(embi["Fecha"])
+embi = embi[embi["Fecha"].dt.dayofweek < 5]
+registrar("embi", embi["Fecha"], embi["Valor"], sector="financiero", nombre="Riesgo país (EMBI Ecuador)",
+          corto="Riesgo país", unidad="pb", frecuencia="D", decimales=0, fuente="BCE, con datos de JP Morgan")
+
+# Reservas internacionales semanales. Códigos del BCE:
+#   c1 posición neta en divisas (c11 caja en divisas; c12 depósitos netos en bancos e
+#      instituciones financieras del exterior; c13 inversiones, depósitos a plazo y títulos)
+#   c2 oro; c3 DEG; c4 posición de reserva en el FMI; c5 posición en ALADI; c6 posición en SUCRE
+# El resto (c3 a c6) se calcula como RI − c1 − c2: desde febrero de 2026 la fuente no trae c3 (DEG),
+# aunque el total sí lo incluye.
+ri = con.execute(f"""
+    select FECHA fecha, RI ri, c1 divisas, c2 oro, RI - coalesce(c1, 0) - coalesce(c2, 0) otros
+    from '{RAW / "reserva_internacional_semanal.parquet"}' order by 1
+""").df()
+FUENTE_RI = "BCE, Reservas internacionales (semanal)"
+for id_, valores, nombre, corto in [
+    ("reservas", ri["ri"], "Reservas internacionales", "Reservas internacionales"),
+    ("reservas_divisas", ri["divisas"], "Reservas internacionales: posición neta en divisas",
+     "Posición neta en divisas"),
+    ("reservas_oro", ri["oro"], "Reservas internacionales: oro", "Oro"),
+    ("reservas_otros", ri["otros"], "Reservas internacionales: DEG, FMI, ALADI y SUCRE",
+     "DEG, FMI, ALADI y SUCRE"),
+]:
+    registrar(id_, ri["fecha"], valores, sector="financiero", nombre=nombre, corto=corto, unidad="USD mm",
+              frecuencia="S", decimales=0, fuente=FUENTE_RI)
+
 # ============================================================== SECTOR EXTERNO
 bc = pd.read_excel(RAW / "balanza comercial.xlsx", header=4)
 bc = bc[pd.to_datetime(bc["fecha_corte"], errors="coerce").notna()]
@@ -518,6 +547,26 @@ for id_, ticker, campo, nombre, corto, grupo, unidad, dec in MERCADOS:
                               unidad=unidad, frecuencia="D", decimales=dec, fuente="Bloomberg", ticker=ticker))
 mercados = pd.DataFrame(ancho).sort_index()
 mercados = mercados[mercados.index.dayofweek < 5]
+
+# Licencia de Bloomberg: el sitio publica solo lo que muestra. Las series que se grafican
+# completas viajan completas; las que solo aparecen en tablas o curvas viajan con los valores
+# de las fechas de referencia que usan las páginas (hoy, 1 mes, 3 meses, cierre del año
+# anterior y 12 meses).
+HISTORIA_COMPLETA = {"fed", "bce_tasa", "boe", "boj", "us_10a", "us_2a", "dxy", "wti", "brent", "cacao",
+                     "oro", "cobre", "gasolina", "diesel", "ec2030_ytm", "ec2035_ytm", "ec2040_ytm"}
+ULTIMO_ANIO = {"spx", "stoxx50", "nikkei", "bovespa"}
+corte = mercados.index.max()
+referencias = [corte, corte - pd.Timedelta(days=30), corte - pd.Timedelta(days=91),
+               pd.Timestamp(corte.year - 1, 12, 31), corte - pd.DateOffset(years=1)]
+for id_ in mercados.columns:
+    if id_ in HISTORIA_COMPLETA:
+        continue
+    s = mercados[id_].dropna()
+    conservar = {s.index[s.index <= r].max() for r in referencias if (s.index <= r).any()}
+    if id_ in ULTIMO_ANIO:
+        conservar |= set(s.index[s.index >= referencias[-1] - pd.Timedelta(days=7)])
+    mercados.loc[~mercados.index.isin(conservar), id_] = None
+mercados = mercados.dropna(how="all")
 mercados.index = mercados.index.strftime("%Y-%m-%d")
 mercados.index.name = "fecha"
 mercados.round(4).to_csv(OUT / "mercados.csv")
