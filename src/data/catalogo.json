@@ -1,5 +1,6 @@
 {
  "incidencias_ipc": "2026-08-01",
+ "perfil_vencimientos": "2026-07-01",
  "series": [
   {
    "id": "pib_real_aa",
@@ -570,6 +571,266 @@
    "frecuencia": "S",
    "decimales": 0,
    "fuente": "BCE, Reservas internacionales (semanal)"
+  },
+  {
+   "id": "spnf_ingresos",
+   "sector": "fiscal",
+   "nombre": "Ingresos totales del SPNF",
+   "corto": "Ingresos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_gastos",
+   "sector": "fiscal",
+   "nombre": "Gastos totales del SPNF",
+   "corto": "Gastos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_resultado_global",
+   "sector": "fiscal",
+   "nombre": "Resultado global del SPNF",
+   "corto": "Resultado global",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_resultado_primario",
+   "sector": "fiscal",
+   "nombre": "Resultado primario del SPNF",
+   "corto": "Resultado primario",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_primario_no_petrolero",
+   "sector": "fiscal",
+   "nombre": "Resultado primario no petrolero del SPNF",
+   "corto": "Primario no petrolero",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_ing_petroleros",
+   "sector": "fiscal",
+   "nombre": "Ingresos petroleros del SPNF",
+   "corto": "Petroleros",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_tributarios",
+   "sector": "fiscal",
+   "nombre": "Ingresos tributarios del SPNF",
+   "corto": "Tributarios",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_intereses",
+   "sector": "fiscal",
+   "nombre": "Intereses de la deuda pública",
+   "corto": "Intereses",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_inversion",
+   "sector": "fiscal",
+   "nombre": "Inversión en activos no financieros",
+   "corto": "Inversión",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "spnf_subsidios_combustibles",
+   "sector": "fiscal",
+   "nombre": "Subsidios a los combustibles",
+   "corto": "Subsidios a combustibles",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero"
+  },
+  {
+   "id": "resultado_global_pib",
+   "sector": "fiscal",
+   "nombre": "Resultado global del SPNF",
+   "corto": "Resultado global",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero; BCE, Cuentas Nacionales (cálculo propio)"
+  },
+  {
+   "id": "resultado_primario_pib",
+   "sector": "fiscal",
+   "nombre": "Resultado primario del SPNF",
+   "corto": "Resultado primario",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero; BCE, Cuentas Nacionales (cálculo propio)"
+  },
+  {
+   "id": "primario_no_petrolero_pib",
+   "sector": "fiscal",
+   "nombre": "Resultado primario no petrolero del SPNF",
+   "corto": "Primario no petrolero",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero; BCE, Cuentas Nacionales (cálculo propio)"
+  },
+  {
+   "id": "ingresos_spnf_pib",
+   "sector": "fiscal",
+   "nombre": "Ingresos totales del SPNF",
+   "corto": "Ingresos",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero; BCE, Cuentas Nacionales (cálculo propio)"
+  },
+  {
+   "id": "gastos_spnf_pib",
+   "sector": "fiscal",
+   "nombre": "Gastos totales del SPNF",
+   "corto": "Gastos",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "MEF, Operaciones del Sector Público No Financiero; BCE, Cuentas Nacionales (cálculo propio)"
+  },
+  {
+   "id": "deuda_externa",
+   "sector": "fiscal",
+   "nombre": "Deuda pública externa",
+   "corto": "Externa",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Boletín de deuda pública"
+  },
+  {
+   "id": "deuda_interna",
+   "sector": "fiscal",
+   "nombre": "Deuda pública interna y otras obligaciones",
+   "corto": "Interna",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Boletín de deuda pública"
+  },
+  {
+   "id": "deuda_total",
+   "sector": "fiscal",
+   "nombre": "Deuda pública total y otras obligaciones",
+   "corto": "Deuda pública",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "MEF, Boletín de deuda pública"
+  },
+  {
+   "id": "deuda_pib",
+   "sector": "fiscal",
+   "nombre": "Deuda pública y otras obligaciones / PIB",
+   "corto": "Deuda pública / PIB",
+   "unidad": "% PIB",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "MEF, Boletín de deuda pública (PIB de referencia de cada boletín)"
+  },
+  {
+   "id": "sri_renta",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: Impuesto a la renta",
+   "corto": "Impuesto a la renta",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_iva",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: IVA",
+   "corto": "IVA",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_ice",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: ICE",
+   "corto": "ICE",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_isd",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: ISD",
+   "corto": "ISD",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_vehiculos",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: Vehículos",
+   "corto": "Vehículos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_bruta",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: Recaudación bruta",
+   "corto": "Recaudación bruta",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
+  },
+  {
+   "id": "sri_neta",
+   "sector": "fiscal",
+   "nombre": "Recaudación SRI: Recaudación neta",
+   "corto": "Recaudación neta",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Estadísticas de recaudación"
   },
   {
    "id": "x_total",

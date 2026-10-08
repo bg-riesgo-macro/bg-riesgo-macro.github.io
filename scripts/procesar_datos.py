@@ -15,8 +15,8 @@ Salidas en src/data/:
     importaciones.csv / .json      importaciones mensuales por CUODE
     ventas_sector.csv              ventas SRI mensuales por sección CIIU
     ipc_incidencias.csv            incidencia mensual por división del IPC (último mes)
-
-El sector fiscal todavía usa los datos ilustrativos de fiscal_ilustrativo.csv.
+    spnf.csv                       operaciones mensuales del SPNF por partida (MEF)
+    vencimientos.csv               perfil de vencimientos de la deuda pública (MEF)
 """
 
 from __future__ import annotations
@@ -353,6 +353,192 @@ for id_, valores, nombre, corto in [
     registrar(id_, ri["fecha"], valores, sector="financiero", nombre=nombre, corto=corto, unidad="USD mm",
               frecuencia="S", decimales=0, fuente=FUENTE_RI)
 
+# ============================================================== SECTOR FISCAL
+import warnings  # noqa: E402
+
+warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
+
+# Operaciones del SPNF (MEF): columnas anuales, trimestrales y mensuales; se usan las mensuales.
+FUENTE_SPNF = "MEF, Operaciones del Sector Público No Financiero"
+op = pd.read_excel(RAW / "mef_spnf" / "8.Operaciones-de-Ingresos-y-Gastos-SPNF-2013-2026.xlsx",
+                   sheet_name="SPNF", header=None)
+fila_fechas = op.iloc[4]
+cols_mes = [j for j, v in enumerate(fila_fechas) if isinstance(v, pd.Timestamp) or hasattr(v, "month")]
+fechas_spnf = [pd.Timestamp(fila_fechas[j]) for j in cols_mes]
+spnf = []
+for i in range(5, len(op)):
+    codigo, concepto = op.iat[i, 0], op.iat[i, 1]
+    if pd.isna(codigo) or pd.isna(concepto):
+        continue
+    codigo = str(codigo).split()[0].split(".")[0]
+    for j, f in zip(cols_mes, fechas_spnf):
+        v = pd.to_numeric(op.iat[i, j], errors="coerce")
+        if pd.notna(v):
+            spnf.append((f.strftime("%Y-%m-%d"), codigo, limpiar(concepto), round(float(v), 3)))
+spnf = pd.DataFrame(spnf, columns=["fecha", "codigo", "concepto", "valor"]).drop_duplicates(["fecha", "codigo"])
+# Quitar notas al pie del nombre ("Exportación 1/" → "Exportación").
+spnf["concepto"] = spnf["concepto"].str.replace(r"\s*\d+/\s*$|\s*\(\*+\)\s*$|\s*/\d+$", "", regex=True)
+spnf.to_csv(OUT / "spnf.csv", index=False)
+
+por_codigo = spnf.pivot(index="fecha", columns="codigo", values="valor")
+por_codigo.index = pd.to_datetime(por_codigo.index)
+for codigo, id_, nombre, corto in [
+    ("1", "spnf_ingresos", "Ingresos totales del SPNF", "Ingresos"),
+    ("2", "spnf_gastos", "Gastos totales del SPNF", "Gastos"),
+    ("3", "spnf_resultado_global", "Resultado global del SPNF", "Resultado global"),
+    ("4", "spnf_resultado_primario", "Resultado primario del SPNF", "Resultado primario"),
+    ("41", "spnf_primario_no_petrolero", "Resultado primario no petrolero del SPNF", "Primario no petrolero"),
+    ("11", "spnf_ing_petroleros", "Ingresos petroleros del SPNF", "Petroleros"),
+    ("121", "spnf_tributarios", "Ingresos tributarios del SPNF", "Tributarios"),
+    ("213", "spnf_intereses", "Intereses de la deuda pública", "Intereses"),
+    ("221", "spnf_inversion", "Inversión en activos no financieros", "Inversión"),
+    ("57", "spnf_subsidios_combustibles", "Subsidios a los combustibles", "Subsidios a combustibles"),
+]:
+    registrar(id_, por_codigo.index, por_codigo[codigo], sector="fiscal", nombre=nombre, corto=corto,
+              unidad="USD mm", frecuencia="M", decimales=0, fuente=FUENTE_SPNF)
+
+# Resultados anuales en % del PIB (años completos), con el PIB nominal de cuentas nacionales.
+anual = por_codigo.groupby(por_codigo.index.year).agg(["sum", "count"])
+for codigo, id_, nombre, corto in [
+    ("3", "resultado_global_pib", "Resultado global del SPNF", "Resultado global"),
+    ("4", "resultado_primario_pib", "Resultado primario del SPNF", "Resultado primario"),
+    ("41", "primario_no_petrolero_pib", "Resultado primario no petrolero del SPNF", "Primario no petrolero"),
+    ("1", "ingresos_spnf_pib", "Ingresos totales del SPNF", "Ingresos"),
+    ("2", "gastos_spnf_pib", "Gastos totales del SPNF", "Gastos"),
+]:
+    completos = [a for a in anual.index if anual.loc[a, (codigo, "count")] == 12 and a in pib_anual.index]
+    registrar(id_, [pd.Timestamp(a, 1, 1) for a in completos],
+              [anual.loc[a, (codigo, "sum")] / pib_anual[a] * 100 for a in completos], sector="fiscal",
+              nombre=nombre, corto=corto, unidad="% PIB", frecuencia="A", decimales=1,
+              fuente=f"{FUENTE_SPNF}; BCE, Cuentas Nacionales (cálculo propio)")
+
+# Deuda pública: un boletín mensual del MEF por archivo; la hoja del indicador cambia de
+# nombre entre boletines, así que se ubica por su contenido.
+MES_ARCHIVO = {"ENE": 1, "FEB": 2, "MAR": 3, "ABR": 4, "MAY": 5, "JUN": 6, "JUL": 7, "AGO": 8,
+               "SEP": 9, "OCT": 10, "NOV": 11, "DIC": 12}
+CLAVES_DEUDA = {"externa": "total deuda externa", "interna": "total deuda interna",
+                "total": "deuda pública total", "pib": "pib nominal"}
+
+
+def indicador_deuda(ruta: Path) -> dict:
+    import openpyxl
+    wb = openpyxl.load_workbook(ruta, read_only=True, data_only=True)
+    candidatas = [n for n in wb.sheetnames if re.fullmatch(r"1\.?", n.strip()) or "indicador" in n.lower()]
+    for nombre in candidatas + [n for n in wb.sheetnames if n not in candidatas]:
+        out = {}
+        for r in wb[nombre].iter_rows(values_only=True):
+            v = [x for x in r if x is not None]
+            if len(v) < 2:
+                continue
+            etiqueta = limpiar(v[0]).lower()
+            for k, c in CLAVES_DEUDA.items():
+                if etiqueta.startswith(c) and k not in out and isinstance(v[1], (int, float)):
+                    out[k] = float(v[1])
+        if "total" in out and "externa" in out:
+            return out
+    raise ValueError(f"No se encontró el indicador de deuda en {ruta.name}")
+
+
+deuda = []
+for ruta in sorted((RAW / "mef_deuda").glob("*.xlsx")):
+    if "PERFIL" in ruta.name.upper():
+        continue
+    nombre = ruta.name.upper()
+    mes = next(m for clave, m in MES_ARCHIVO.items() if clave in nombre)
+    anio = int(re.search(r"20\d\d", nombre)[0])
+    deuda.append({"fecha": pd.Timestamp(anio, mes, 1), **indicador_deuda(ruta)})
+deuda = pd.DataFrame(deuda).sort_values("fecha").drop_duplicates("fecha", keep="last").set_index("fecha")
+# PIB de referencia de cada boletín (proyección del año); si falta, el del boletín más cercano.
+deuda["pib"] = deuda["pib"].where(deuda["pib"] > 1e7).bfill().ffill()
+FUENTE_DEUDA = "MEF, Boletín de deuda pública"
+for col_, id_, nombre, corto in [
+    ("externa", "deuda_externa", "Deuda pública externa", "Externa"),
+    ("interna", "deuda_interna", "Deuda pública interna y otras obligaciones", "Interna"),
+    ("total", "deuda_total", "Deuda pública total y otras obligaciones", "Deuda pública"),
+]:
+    registrar(id_, deuda.index, deuda[col_], sector="fiscal", nombre=nombre, corto=corto, unidad="USD mm",
+              frecuencia="M", decimales=0, fuente=FUENTE_DEUDA, escala=1 / 1000)
+registrar("deuda_pib", deuda.index, deuda["total"] / deuda["pib"] * 100, sector="fiscal",
+          nombre="Deuda pública y otras obligaciones / PIB", corto="Deuda pública / PIB", unidad="% PIB",
+          frecuencia="M", decimales=1, fuente=f"{FUENTE_DEUDA} (PIB de referencia de cada boletín)")
+
+# Perfil de vencimientos (MEF): capital e intereses por año (largo plazo) y por mes (corto plazo).
+perfil_lp = sorted((RAW / "mef_deuda").glob("PERFIL*LP*.xlsx"))[-1]
+perfil_cp = sorted((RAW / "mef_deuda").glob("PERFIL*CP*.xlsx"))[-1]
+
+
+def perfil_anual(hoja: str, prefijo: str) -> list[tuple]:
+    """Totales por año de la deuda externa (por tipo de acreedor) e interna."""
+    df = pd.read_excel(perfil_lp, sheet_name=hoja, header=None)
+    fila_anios = next(i for i in range(20) if isinstance(df.iat[i, 1], (int, float)) and df.iat[i, 1] > 2000)
+    anios = {j: int(v) for j, v in enumerate(df.iloc[fila_anios]) if isinstance(v, (int, float)) and v > 2000}
+    etiquetas = [limpiar(x) if isinstance(x, str) else "" for x in df.iloc[:, 0]]
+    totales = [i for i, e in enumerate(etiquetas) if e.lower() == "total general"]
+    filas_ = {"externa": totales[0], "interna": totales[1]}
+    if prefijo == "capital":
+        for clave, texto in [("bonos", "BONOS EMITIDOS EN MERCADOS"), ("bancos", "CONVENIOS ORIGINALES (BANCOS"),
+                             ("gobiernos", "CONVENIOS ORIGINALES (GOB"), ("organismos", "ORGANISMOS INTERNACIONALES")]:
+            filas_[clave] = next(i for i, e in enumerate(etiquetas) if e.upper().startswith(texto))
+    out = []
+    for clave, i in filas_.items():
+        for j, a in anios.items():
+            v = pd.to_numeric(df.iat[i, j], errors="coerce")
+            out.append(("anual", f"{a}-01-01", f"{prefijo}_{clave}", round((v if pd.notna(v) else 0) / 1e6, 3)))
+    return out
+
+
+def perfil_mensual(hoja: str, prefijo: str, rotulo: str) -> list[tuple]:
+    """Total (externa + interna) de los próximos meses."""
+    df = pd.read_excel(perfil_cp, sheet_name=hoja, header=None)
+    i = next(i for i in range(30) if limpiar(df.iat[i, 0]).upper().startswith(f"{rotulo} DEUDA EXTERNA + INTERNA"))
+    cab = df.iloc[i - 1]
+    out = []
+    for j in range(1, df.shape[1]):
+        m = re.match(r"([A-ZÁÉÍÓÚ]+)\s+(\d{4})", limpiar(cab[j]).upper()) if isinstance(cab[j], str) else None
+        if m and m[1].lower() in MESES_LARGOS:
+            fecha = pd.Timestamp(int(m[2]), MESES_LARGOS[m[1].lower()], 1)
+            out.append(("mensual", fecha.strftime("%Y-%m-%d"), f"{prefijo}_total",
+                        round(float(pd.to_numeric(df.iat[i, j], errors="coerce") or 0) / 1e6, 3)))
+    return out
+
+
+vencimientos = (perfil_anual("19.", "capital") + perfil_anual("20.", "intereses")
+                + perfil_mensual("16.", "capital", "CAPITAL") + perfil_mensual("17.", "intereses", "INTERES"))
+pd.DataFrame(vencimientos, columns=["tipo", "fecha", "concepto", "valor"]).to_csv(OUT / "vencimientos.csv", index=False)
+corte_perfil = re.search(r"(ENERO|FEBRERO|MARZO|ABRIL|MAYO|JUNIO|JULIO|AGOSTO|SEPTIEMBRE|OCTUBRE|NOVIEMBRE|DICIEMBRE)-(\d{4})",
+                         perfil_lp.name.upper())
+fecha_perfil = pd.Timestamp(int(corte_perfil[2]), MESES_LARGOS[corte_perfil[1].lower()], 1)
+
+# Recaudación del SRI: hoja "Recaudación abierta" de cada archivo anual (miles de USD).
+IMPUESTOS_SRI = [
+    ("sri_renta", "Impuesto a la Renta", "Impuesto a la renta"),
+    ("sri_iva", "Impuesto al Valor Agregado", "IVA"),
+    ("sri_ice", "Impuesto a los Consumos Especiales", "ICE"),
+    ("sri_isd", "Impuesto a la Salida de Divisas", "ISD"),
+    ("sri_vehiculos", "Impuesto a los Vehículos Motorizados", "Vehículos"),
+    ("sri_bruta", "RECAUDACIÓN BRUTA", "Recaudación bruta"),
+    ("sri_neta", "RECAUDACIÓN NETA", "Recaudación neta"),
+]
+sri = {id_: {} for id_, _, _ in IMPUESTOS_SRI}
+for ruta in sorted((RAW / "sri").glob("*.xlsx")):
+    df = pd.read_excel(ruta, sheet_name="Recaudación abierta", header=None)
+    fila_cab = next(i for i in range(15) if limpiar(df.iat[i, 0]).upper() == "CONCEPTOS")
+    anio = int(re.search(r"20\d\d", limpiar(df.iat[1, 0]) + " " + ruta.name)[0])
+    cols = {j: MESES_LARGOS[limpiar(c).lower()] for j, c in enumerate(df.iloc[fila_cab])
+            if isinstance(c, str) and limpiar(c).lower() in MESES_LARGOS}
+    etiquetas = [limpiar(x) if isinstance(x, str) else "" for x in df.iloc[:, 0]]
+    # Meses con dato: el archivo del año en curso trae ceros en los meses futuros.
+    i_neta = next(i for i, e in enumerate(etiquetas) if e.upper().startswith("RECAUDACIÓN NETA"))
+    meses_con_dato = [j for j in cols if (pd.to_numeric(df.iat[i_neta, j], errors="coerce") or 0) > 0]
+    for id_, texto, _ in IMPUESTOS_SRI:
+        i = next(i for i, e in enumerate(etiquetas) if e.upper().startswith(texto.upper()))
+        for j in meses_con_dato:
+            sri[id_][pd.Timestamp(anio, cols[j], 1)] = float(pd.to_numeric(df.iat[i, j], errors="coerce") or 0) / 1000
+for id_, _, corto in IMPUESTOS_SRI:
+    s = pd.Series(sri[id_]).sort_index()
+    registrar(id_, s.index, s, sector="fiscal", nombre=f"Recaudación SRI: {corto}", corto=corto,
+              unidad="USD mm", frecuencia="M", decimales=0, fuente="SRI, Estadísticas de recaudación")
+
 # ============================================================== SECTOR EXTERNO
 bc = pd.read_excel(RAW / "balanza comercial.xlsx", header=4)
 bc = bc[pd.to_datetime(bc["fecha_corte"], errors="coerce").notna()]
@@ -576,7 +762,8 @@ json.dump({"curvas": [{"id": p, "pais": n, "plazos": [t for t, _ in pl]} for p, 
 
 # ============================================================== Escritura
 pd.DataFrame(filas, columns=["id", "fecha", "valor"]).to_csv(OUT / "series.csv", index=False)
-json.dump({"incidencias_ipc": fecha_incidencias.strftime("%Y-%m-%d"), "series": catalogo},
+json.dump({"incidencias_ipc": fecha_incidencias.strftime("%Y-%m-%d"),
+           "perfil_vencimientos": fecha_perfil.strftime("%Y-%m-%d"), "series": catalogo},
           open(OUT / "catalogo.json", "w"), ensure_ascii=False, indent=1)
 
 ids = [c["id"] for c in catalogo]

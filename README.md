@@ -2,7 +2,7 @@
 
 Seguimiento macroeconómico del Ecuador organizado en cuatro sectores (real, financiero, fiscal y externo) más una página de resumen. Construido con [Observable Framework](https://observablehq.com/framework/) y [Highcharts Stock](https://www.highcharts.com/products/stock/).
 
-> **Estado:** versión preliminar. El sector fiscal aún usa datos ilustrativos.
+> **Estado:** versión preliminar.
 
 ## Desarrollo local
 
@@ -54,7 +54,8 @@ El script lee `data_raw/` y escribe en `src/data/`:
 | `importaciones.csv` + `.json` | Importaciones mensuales por CUODE |
 | `ventas_sector.csv` | Ventas SRI por sección CIIU |
 | `ipc_incidencias.csv` | Incidencia por división del IPC (último mes) |
-| `fiscal_ilustrativo.*` | Sector fiscal: datos ilustrativos, temporales |
+| `spnf.csv` | Operaciones mensuales del SPNF por partida (MEF) |
+| `vencimientos.csv` | Perfil de vencimientos de la deuda pública (MEF) |
 
 - **Fechas:** inicio del período (`2026-04-01` = T2 2026; `2025-01-01` = año 2025).
 - **Frecuencias:** `D` diaria, `S` semanal, `M` mensual, `T` trimestral, `A` anual.

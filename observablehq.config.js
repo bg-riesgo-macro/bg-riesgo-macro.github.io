@@ -44,6 +44,6 @@ export default {
         .join("")}
     </nav>`,
 
-  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, SRI, Superintendencia de Bancos y Bloomberg.
-    <span class="pie-aviso">Versión preliminar. El sector fiscal usa datos ilustrativos mientras se completa la información.</span>`
+  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, MEF, SRI, Superintendencia de Bancos y Bloomberg.
+    <span class="pie-aviso">Versión preliminar: cifras sujetas a revisión.</span>`
 };

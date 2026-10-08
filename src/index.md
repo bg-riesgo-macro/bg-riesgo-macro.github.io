@@ -8,7 +8,7 @@ import {db} from "./components/base.js";
 import {mercados} from "./components/mercados.js";
 import {acumuladoAnual, etiquetaAcumulado, mesUltimo, variacion, cambioAnual, haceUnAno, formatoNumero, formatoCambio, formatoPeriodo} from "./components/datos.js";
 import {grafico} from "./components/graficos.js";
-import {kpi, kpiSerie, panel, cabecera} from "./components/ui.js";
+import {kpiSerie, panel, cabecera, kpiAcumulado as kpiAcumuladoBase} from "./components/ui.js";
 
 const desde = (serie, anio) => serie.filter(([t]) => t >= Date.UTC(anio, 0, 1));
 ```
@@ -21,23 +21,14 @@ const anioComercio = new Date(db.ultimo("x_total")[0]).getUTCFullYear();
 const etiqueta = (t) => etiquetaAcumulado(mes, new Date(t).getUTCFullYear());
 const ultimoYPrevio = (serie) => [serie[serie.length - 1][1], serie[serie.length - 2][1]];
 
-function kpiAcumulado(titulo, datos, {nivel = true} = {}) {
-  const [v, ant] = ultimoYPrevio(datos);
-  return kpi({
-    titulo, datos, frecuencia: "A", unidad: "USD mm", decimales: 0,
-    periodo: etiquetaAcumulado(mes, anioComercio), etiquetaPunto: etiqueta,
-    cambio: nivel
-      ? {valor: (v / ant - 1) * 100, unidad: "%", etiqueta: "a/a"}
-      : {valor: v - ant, unidad: "USD mm", decimales: 0, etiqueta: "vs. año previo"}
-  });
-}
+const kpiAcumulado = (titulo, datos, opciones = {}) => kpiAcumuladoBase({titulo, datos, mes, ...opciones});
 ```
 
 ```js
 display(cabecera({
   antetitulo: "Panorama macroeconómico",
   titulo: "Ecuador en cuatro sectores",
-  bajada: "Lo esencial de la economía real, el sistema financiero, el sector externo y el entorno internacional, con la última información disponible.",
+  bajada: "Lo esencial de la economía real, el sistema financiero, las finanzas públicas, el sector externo y el entorno internacional, con la última información disponible.",
   corte: mercados.corte(),
   frecuencia: "D"
 }));
@@ -60,6 +51,14 @@ const [, ust10] = mercados.ultimo("us_10a");
 const [, fed] = mercados.ultimo("fed");
 const [, wti] = mercados.ultimo("wti");
 const [, cacao] = mercados.ultimo("cacao");
+
+// Sector fiscal: acumulado del SPNF a su propio mes de corte.
+const mesFiscal = mesUltimo(db.serie("spnf_resultado_global"));
+const acumFiscal = (id) => desde(acumuladoAnual(db.serie(id), mesFiscal), 2018);
+const anioFiscal = new Date(db.ultimo("spnf_resultado_global")[0]).getUTCFullYear();
+const [rg, rgAnt] = ultimoYPrevio(acumFiscal("spnf_resultado_global"));
+const [tDeuda, deudaPib] = db.ultimo("deuda_pib");
+const saldo = (v) => `${v >= 0 ? "superávit" : "déficit"} de USD ${formatoNumero(Math.abs(v), 0)} millones`;
 const pct = (a, b) => formatoCambio((a / b - 1) * 100, 1, "%");
 const periodoComercio = `enero y ${etiquetaAcumulado(mes).replace("ene–", "")} de ${anioComercio}`;
 
@@ -71,6 +70,10 @@ const mensajes = [
   {
     sector: "Financiero",
     texto: `Las reservas internacionales suman USD ${formatoNumero(ri, 0)} millones (${formatoPeriodo(tRi, "D")}) y el riesgo país se ubicó en ${formatoNumero(embi, 0)} pb (${formatoPeriodo(tEmbi, "D")}). Los depósitos de los bancos privados crecen ${formatoNumero(dep, 1)}% anual y la cartera ${formatoNumero(car, 1)}%.`
+  },
+  {
+    sector: "Fiscal",
+    texto: `Entre enero y ${etiquetaAcumulado(mesFiscal).replace("ene–", "")} de ${anioFiscal}, el SPNF registró un ${saldo(rg)}, frente a un ${saldo(rgAnt)} en el mismo período de ${anioFiscal - 1}. La deuda pública equivale a ${formatoNumero(deudaPib, 1)}% del PIB (${formatoPeriodo(tDeuda, "M")}).`
   },
   {
     sector: "Externo",
@@ -98,17 +101,16 @@ display(html`<div class="kpis-sectores">
     ${kpiSerie(db, "reservas")}
   </div>
   <div class="kpi-columna">
+    <h3><a href="./fiscal">Sector fiscal</a></h3>
+    ${kpiAcumuladoBase({titulo: "Resultado global del SPNF", datos: acumFiscal("spnf_resultado_global"), mes: mesFiscal, nivel: false})}
+    ${kpiSerie(db, "deuda_pib")}
+  </div>
+  <div class="kpi-columna">
     <h3><a href="./externo">Sector externo</a></h3>
     ${kpiAcumulado("Exportaciones", acum("x_total"))}
     ${kpiAcumulado("Balanza comercial", acum("bc_total"), {nivel: false})}
   </div>
-  <div class="kpi-columna">
-    <h3><a href="./internacional">Economía internacional</a></h3>
-    ${kpiSerie(mercados, "us_10a", {titulo: "Tesoro EE. UU. 10 años"})}
-    ${kpiSerie(mercados, "wti", {titulo: "Petróleo WTI"})}
-  </div>
-</div>
-<p class="nota-sector">El <a href="./fiscal">sector fiscal</a> está en construcción y por ahora muestra datos ilustrativos.</p>`);
+</div>`);
 ```
 
 ## Indicadores clave por sector
@@ -172,6 +174,7 @@ display(html`<div class="paneles">
 const grupos = [
   ["Sector real", db, ["pib_real_aa", "imaec_aa", "inflacion_aa", "desempleo", "empleo_adecuado", "subempleo"]],
   ["Sector financiero", db, ["embi", "reservas", "depositos_bp", "cartera_bp", "ltd_bp", "morosidad_sf", "liquidez_bp", "solvencia_sf", "tpr"]],
+  ["Sector fiscal", db, ["resultado_global_pib", "resultado_primario_pib", "deuda_total", "deuda_pib"]],
   ["Sector externo", db, ["terminos_intercambio", "remesas_recibidas", "ied", "cuenta_corriente_pib"]],
   ["Economía internacional", mercados, ["fed", "us_2a", "us_10a", "dxy", "wti", "cacao", "oro"]]
 ];

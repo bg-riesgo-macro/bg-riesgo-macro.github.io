@@ -1,7 +1,7 @@
 // Piezas de interfaz: tarjetas de indicadores y paneles de gráfico.
 
 import {html} from "npm:htl";
-import {cambioAnual, formatoCambio, formatoNumero, formatoPeriodo} from "./datos.js";
+import {cambioAnual, etiquetaAcumulado, formatoCambio, formatoNumero, formatoPeriodo} from "./datos.js";
 import {minigrafico} from "./graficos.js";
 
 /**
@@ -60,6 +60,23 @@ export function kpiSerie(db, id, opciones = {}) {
   });
 }
 
+/**
+ * KPI de un acumulado anual (enero al mes de corte), comparado con el mismo período del año previo.
+ * `nivel: false` muestra la diferencia absoluta en lugar de la variación porcentual (para saldos).
+ */
+export function kpiAcumulado({titulo, datos, mes, unidad = "USD mm", decimales = 0, nivel = true}) {
+  const [t, v] = datos[datos.length - 1];
+  const [, ant] = datos[datos.length - 2];
+  return kpi({
+    titulo, datos, frecuencia: "A", unidad, decimales,
+    periodo: etiquetaAcumulado(mes, new Date(t).getUTCFullYear()),
+    etiquetaPunto: (x) => etiquetaAcumulado(mes, new Date(x).getUTCFullYear()),
+    cambio: nivel
+      ? {valor: (v / ant - 1) * 100, unidad: "%", etiqueta: "a/a"}
+      : {valor: v - ant, unidad, decimales, etiqueta: "vs. año previo"}
+  });
+}
+
 // --- Pantalla completa de paneles -----------------------------------------
 const pantallaCompletaDisponible = document.fullscreenEnabled || document.webkitFullscreenEnabled;
 const elementoCompleto = () => document.fullscreenElement ?? document.webkitFullscreenElement;
@@ -106,6 +123,40 @@ export function panel({titulo, subtitulo, fuente, contenido, ancho = false, enla
     ${fuente ? html`<p class="panel-pie">Fuente: ${fuente}.</p>` : null}
     <p class="panel-marca"><span class="marca-cuadro" aria-hidden="true"></span><strong>BG</strong> Riesgo Macro</p>
   </section>`;
+}
+
+/**
+ * Cuadro comparativo de dos períodos (p. ej. acumulado ene–jul de dos años).
+ *
+ * @param {object} o
+ * @param {{nombre: string, tipo: "total"|"grupo"|"subgrupo"|"item", nivel: number, a: number, b: number,
+ *          tmA?: number, tmB?: number}[]} o.filas   la primera fila es el total de referencia
+ * @param {string} o.columnaA   encabezado del período base
+ * @param {string} o.columnaB   encabezado del período actual
+ * @param {boolean} [o.participacion=true]  columna de participación sobre la primera fila
+ * @param {boolean} [o.diferencia=false]    columna de diferencia absoluta (útil para saldos negativos)
+ * @param {boolean} [o.volumen=false]       columna de variación de volumen (tmA, tmB)
+ */
+export function cuadroComparativo({filas, columnaA, columnaB, participacion = true, diferencia = false, volumen = false}) {
+  // La variación porcentual solo tiene sentido entre valores positivos.
+  const variacion = (a, b) => (a > 0 && b >= 0 ? formatoCambio((b / a - 1) * 100, 1, "%") : "–");
+  return html`<div class="tabla-wrap"><table class="tablero cuadro">
+    <thead><tr>
+      <th></th><th>${columnaA}</th><th>${columnaB}</th><th>Var. %</th>
+      ${diferencia ? html`<th>Diferencia</th>` : null}
+      ${participacion ? html`<th>Part.</th>` : null}
+      ${volumen ? html`<th>Var. volumen</th>` : null}
+    </tr></thead>
+    <tbody>${filas.map((f) => html`<tr class=${`fila-${f.tipo} nivel-${f.nivel}`}>
+      <td>${f.nombre}</td>
+      <td>${formatoNumero(f.a, 1)}</td>
+      <td>${formatoNumero(f.b, 1)}</td>
+      <td>${variacion(f.a, f.b)}</td>
+      ${diferencia ? html`<td>${formatoCambio(f.b - f.a, 1)}</td>` : null}
+      ${participacion ? html`<td>${formatoNumero((f.b / filas[0].b) * 100, 1)}%</td>` : null}
+      ${volumen ? html`<td>${f.tmA != null ? variacion(f.tmA, f.tmB) : ""}</td>` : null}
+    </tr>`)}</tbody>
+  </table></div>`;
 }
 
 /** Cabecera de página con antetítulo, título, bajada y fecha de corte. */

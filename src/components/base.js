@@ -2,15 +2,15 @@
 import {FileAttachment} from "observablehq:stdlib";
 import {crearBase} from "./datos.js";
 
-const [filas, catalogo, filasFiscal, catalogoFiscal] = await Promise.all([
+const [filas, catalogo] = await Promise.all([
   FileAttachment("../data/series.csv").csv({typed: true}),
-  FileAttachment("../data/catalogo.json").json(),
-  // Sector fiscal: datos ilustrativos hasta completar la información.
-  FileAttachment("../data/fiscal_ilustrativo.csv").csv({typed: true}),
-  FileAttachment("../data/fiscal_ilustrativo.json").json()
+  FileAttachment("../data/catalogo.json").json()
 ]);
 
-export const db = crearBase([...filas, ...filasFiscal], [...catalogo.series, ...catalogoFiscal]);
+export const db = crearBase(filas, catalogo.series);
 
 /** Fecha (UTC) del cuadro de incidencias del IPC. */
 export const fechaIncidenciasIpc = new Date(catalogo.incidencias_ipc);
+
+/** Fecha (UTC) de corte del perfil de vencimientos de la deuda. */
+export const fechaPerfilVencimientos = new Date(catalogo.perfil_vencimientos);

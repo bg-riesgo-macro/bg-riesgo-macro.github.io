@@ -6,7 +6,7 @@ title: Sector externo
 import {db} from "./components/base.js";
 import {acumuladoAnual, etiquetaAcumulado, mesUltimo, formatoNumero, formatoCambio, MESES} from "./components/datos.js";
 import {grafico, graficoCategorias} from "./components/graficos.js";
-import {kpi, panel, cabecera} from "./components/ui.js";
+import {panel, cabecera, cuadroComparativo, kpiAcumulado as kpiAcumuladoBase} from "./components/ui.js";
 
 const fuente = (id) => db.meta(id).fuente;
 ```
@@ -22,16 +22,7 @@ const periodo = etiquetaAcumulado(mes, anioActual);
 const periodoCorto = etiquetaAcumulado(mes);
 
 // KPI de un acumulado: compara con el mismo período del año anterior.
-function kpiAcumulado(titulo, datos, {nivel = true} = {}) {
-  const [, v] = datos[datos.length - 1];
-  const [, ant] = datos[datos.length - 2];
-  return kpi({
-    titulo, datos, frecuencia: "A", unidad: "USD mm", decimales: 0, periodo, etiquetaPunto: etiqueta,
-    cambio: nivel
-      ? {valor: (v / ant - 1) * 100, unidad: "%", etiqueta: "a/a"}
-      : {valor: v - ant, unidad: "USD mm", decimales: 0, etiqueta: "vs. año previo"}
-  });
-}
+const kpiAcumulado = (titulo, datos, opciones = {}) => kpiAcumuladoBase({titulo, datos, mes, ...opciones});
 ```
 
 ```js
@@ -162,27 +153,12 @@ const filasCuadro = [
 ];
 const totalActual = filasCuadro[0].b;
 
-function cuadro(filas, {volumen = true} = {}) {
-  const variacion = (a, b) => (a > 0 ? formatoCambio((b / a - 1) * 100, 1, "%") : "–");
-  return html`<div class="tabla-wrap"><table class="tablero cuadro">
-    <thead><tr>
-      <th></th>
-      <th>${etiquetaAcumulado(mes, anioPrevio)}</th>
-      <th>${etiquetaAcumulado(mes, anioActual)}</th>
-      <th>Var. valor</th>
-      <th>Part. ${anioActual}</th>
-      ${volumen ? html`<th>Var. volumen</th>` : null}
-    </tr></thead>
-    <tbody>${filas.map((f) => html`<tr class=${`fila-${f.tipo} nivel-${f.nivel}`}>
-      <td>${f.nombre}</td>
-      <td>${formatoNumero(f.a, 1)}</td>
-      <td>${formatoNumero(f.b, 1)}</td>
-      <td>${variacion(f.a, f.b)}</td>
-      <td>${formatoNumero((f.b / filas[0].b) * 100, 1)}%</td>
-      ${volumen ? html`<td>${f.tmA != null ? variacion(f.tmA, f.tmB) : ""}</td>` : null}
-    </tr>`)}</tbody>
-  </table></div>`;
-}
+const cuadro = (filas, {volumen = true} = {}) =>
+  cuadroComparativo({
+    filas, volumen,
+    columnaA: etiquetaAcumulado(mes, anioPrevio),
+    columnaB: etiquetaAcumulado(mes, anioActual)
+  });
 ```
 
 Valores FOB en millones de USD, acumulados de enero a ${MESES[mes]}. Los cinco principales productos primarios e industrializados se ordenan por su valor en ${anioActual}. La variación de volumen se calcula en toneladas métricas.
