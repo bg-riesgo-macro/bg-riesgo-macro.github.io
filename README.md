@@ -2,7 +2,7 @@
 
 Seguimiento macroeconómico del Ecuador organizado en cuatro sectores (real, financiero, fiscal y externo) más una página de resumen. Construido con [Observable Framework](https://observablehq.com/framework/) y [Highcharts Stock](https://www.highcharts.com/products/stock/).
 
-> **Estado:** maqueta con datos ilustrativos (no oficiales).
+> **Estado:** versión preliminar. El sector fiscal aún usa datos ilustrativos.
 
 ## Desarrollo local
 
@@ -23,26 +23,41 @@ src/
   financiero.md       Sector monetario y financiero
   fiscal.md           Sector fiscal
   externo.md          Sector externo
-  data/
-    series.csv        Series en formato largo: id, fecha, valor
-    catalogo.json     Metadatos de cada serie (nombre, sector, unidad, frecuencia, fuente)
+  internacional.md    Economía internacional (Bloomberg)
+  data/               Datos generados por scripts/procesar_datos.py
   components/
-    base.js           Carga los datos una sola vez para todas las páginas
+    base.js           Carga las series macro una sola vez para todas las páginas
+    mercados.js       Carga las series de Bloomberg (solo en las páginas que las usan)
     datos.js          Transformaciones (sumas móviles, variaciones) y formatos
     graficos.js       Envoltorio de Highcharts con el estilo del sitio
     ui.js             Tarjetas KPI, paneles y cabeceras
   style.css           Tipografía, colores (incluye modo oscuro) y diseño
 observablehq.config.js
+scripts/procesar_datos.py   data_raw/ → src/data/
 ```
 
 ## Datos
 
-Cada serie se identifica por un `id` que aparece en `series.csv` y en `catalogo.json`.
+Los archivos fuente van en `data_raw/`. Esa carpeta no se sube a git: los archivos son pesados y algunos tienen licencias de uso restringido. Para regenerar los datos del sitio, ejecuta [uv](https://docs.astral.sh/uv/) desde la raíz del repositorio:
+
+```sh
+uv run scripts/procesar_datos.py
+```
+
+El script lee `data_raw/` y escribe en `src/data/`:
+
+| Archivo | Contenido |
+|---|---|
+| `series.csv` + `catalogo.json` | Series macro en formato largo (`id, fecha, valor`) y su ficha |
+| `mercados.csv` + `mercados.json` | Series diarias de Bloomberg (formato ancho) |
+| `exportaciones.csv` + `.json` | Exportaciones mensuales por producto (clasificación BCE) |
+| `importaciones.csv` + `.json` | Importaciones mensuales por CUODE |
+| `ventas_sector.csv` | Ventas SRI por sección CIIU |
+| `ipc_incidencias.csv` | Incidencia por división del IPC (último mes) |
+| `fiscal_ilustrativo.*` | Sector fiscal: datos ilustrativos, temporales |
 
 - **Fechas:** inicio del período (`2026-04-01` = T2 2026; `2025-01-01` = año 2025).
-- **Frecuencias:** `D` diaria, `M` mensual, `T` trimestral, `A` anual.
-
-Para agregar un indicador: añade sus filas a `series.csv`, su ficha a `catalogo.json` y úsalo en la página que corresponda con `db.serie("id")`.
+- **Frecuencias:** `D` diaria, `S` semanal, `M` mensual, `T` trimestral, `A` anual.
 
 ## Publicación
 

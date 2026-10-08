@@ -20,7 +20,8 @@ display(cabecera({
   antetitulo: "Sector fiscal",
   titulo: "Finanzas públicas y deuda",
   bajada: "Ingresos, gastos y resultado del Sector Público No Financiero, recaudación tributaria y endeudamiento público.",
-  corte: db.corte()
+  corte: db.ultimo("deuda_pib")[0],
+  aviso: "En construcción · datos ilustrativos"
 }));
 
 display(html`<div class="kpis">

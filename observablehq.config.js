@@ -5,7 +5,8 @@ const secciones = [
   {name: "Sector real", path: "/real"},
   {name: "Sector financiero", path: "/financiero"},
   {name: "Sector fiscal", path: "/fiscal"},
-  {name: "Sector externo", path: "/externo"}
+  {name: "Sector externo", path: "/externo"},
+  {name: "Economía internacional", path: "/internacional"}
 ];
 
 const activo = (actual, destino) =>
@@ -43,6 +44,6 @@ export default {
         .join("")}
     </nav>`,
 
-  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, MEF, SRI, Superintendencia de Bancos.
-    <span class="pie-aviso">Maqueta con datos ilustrativos; no constituyen cifras oficiales.</span>`
+  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, SRI, Superintendencia de Bancos y Bloomberg.
+    <span class="pie-aviso">Versión preliminar. El sector fiscal usa datos ilustrativos mientras se completa la información.</span>`
 };

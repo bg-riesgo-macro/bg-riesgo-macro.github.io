@@ -1,0 +1,46 @@
+{
+ "01": {
+  "descripcion": "Bienes de consumo no duradero",
+  "grupo": "Bienes de consumo"
+ },
+ "02": {
+  "descripcion": "Bienes de consumo duradero",
+  "grupo": "Bienes de consumo"
+ },
+ "03": {
+  "descripcion": "Combustibles, lubricantes y productos conexos",
+  "grupo": "Combustibles y lubricantes"
+ },
+ "04": {
+  "descripcion": "Materias primas y productos intermedios para la agricultura",
+  "grupo": "Materias primas"
+ },
+ "05": {
+  "descripcion": "Materias primas y productos intermedios para la industria (excluido construccion)",
+  "grupo": "Materias primas"
+ },
+ "06": {
+  "descripcion": "Materiales de construccion",
+  "grupo": "Materias primas"
+ },
+ "07": {
+  "descripcion": "Bienes de capital para la agricultura",
+  "grupo": "Bienes de capital"
+ },
+ "08": {
+  "descripcion": "Bienes de capital para la industria",
+  "grupo": "Bienes de capital"
+ },
+ "09": {
+  "descripcion": "Equipo de transporte",
+  "grupo": "Bienes de capital"
+ },
+ "10": {
+  "descripcion": "Diversos",
+  "grupo": "Diversos"
+ },
+ "99": {
+  "descripcion": "Trafico postal internacional y correos rapidos / bienes de consumo",
+  "grupo": "Bienes de consumo"
+ }
+}

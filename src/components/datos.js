@@ -83,13 +83,14 @@ export function formatoCambio(v, decimales = 1, unidad = "") {
   return `${signo}${formatoNumero(Math.abs(v), decimales)}${sep}${unidad}`;
 }
 
-/** Etiqueta del período según la frecuencia: D, M, T (trimestral) o A (anual). */
+/** Etiqueta del período según la frecuencia: D (diaria), S (semanal), M, T (trimestral) o A (anual). */
 export function formatoPeriodo(t, frecuencia) {
   const d = new Date(t);
   const y = d.getUTCFullYear();
   const m = d.getUTCMonth();
   switch (frecuencia) {
     case "D":
+    case "S":
       return `${d.getUTCDate()} ${MESES[m]} ${y}`;
     case "M":
       return `${MESES[m]} ${y}`;
@@ -121,4 +122,42 @@ export function cambioAnual(serie, unidad) {
   if (unidad.includes("%")) return {valor: v - ant[1], unidad: "pp", etiqueta: "a/a"};
   if (unidad === "pb") return {valor: v - ant[1], unidad: "pb", decimales: 0, etiqueta: "a/a"};
   return {valor: (v / ant[1] - 1) * 100, unidad: "%", etiqueta: "a/a"};
+}
+
+/** Valor de la última observación con fecha igual o anterior a `t`. */
+export function valorEn(serie, t) {
+  for (let i = serie.length - 1; i >= 0; i--) if (serie[i][0] <= t) return serie[i][1];
+  return undefined;
+}
+
+/** Mes (0–11) de la última observación de una serie mensual o trimestral. */
+export function mesUltimo(serie) {
+  return new Date(serie[serie.length - 1][0]).getUTCMonth();
+}
+
+/**
+ * Acumulado de enero al mes `mesCorte` (0–11) de cada año, solo para años completos
+ * hasta ese mes. Devuelve [[1-ene-año, suma], …].
+ */
+export function acumuladoAnual(serie, mesCorte = mesUltimo(serie)) {
+  const porAnio = new Map();
+  for (const [t, v] of serie) {
+    const d = new Date(t);
+    if (d.getUTCMonth() > mesCorte) continue;
+    const a = d.getUTCFullYear();
+    const acc = porAnio.get(a) ?? {suma: 0, n: 0};
+    acc.suma += v;
+    acc.n += 1;
+    porAnio.set(a, acc);
+  }
+  const esperado = new Set(serie.map(([t]) => new Date(t).getUTCMonth()).filter((m) => m <= mesCorte)).size;
+  return [...porAnio]
+    .filter(([, {n}]) => n === esperado)
+    .map(([a, {suma}]) => [Date.UTC(a, 0, 1), suma])
+    .sort((x, y) => x[0] - y[0]);
+}
+
+/** Etiqueta de un acumulado: "ene–jul 2026" (o "2026" si cubre el año completo). */
+export function etiquetaAcumulado(mesCorte, anio) {
+  return mesCorte === 11 ? `${anio}` : `ene–${MESES[mesCorte]}${anio != null ? ` ${anio}` : ""}`;
 }

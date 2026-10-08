@@ -58,6 +58,12 @@ function tokens() {
   };
 }
 
+/** Quita las claves sin valor para que no anulen las opciones heredadas. */
+const definida = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
+
+/** Color de una serie: índice de la paleta categórica o nombre de un token ("tinta", "suave"). */
+const colorSerie = (t, c, i) => (typeof c === "string" ? t[c] : t.series[c ?? i]);
+
 // --- Redibujo al cambiar de modo claro/oscuro -------------------------------
 const registro = new Set();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
@@ -101,7 +107,7 @@ function montar(el, construir, altura) {
 }
 
 // --- Opciones base ----------------------------------------------------------
-function base(t, {altura, frecuencia, unidad, decimales}) {
+function base(t, {altura, frecuencia, unidad, decimales, encabezado}) {
   const ejeTexto = {color: t.suave, fontSize: "11px"};
   return {
     chart: {
@@ -163,7 +169,8 @@ function base(t, {altura, frecuencia, unidad, decimales}) {
               <span style="color:${t.suave}">${unidad}</span></div>`
           )
           .join("");
-        return `<div style="font-weight:600;margin-bottom:2px">${formatoPeriodo(this.x, frecuencia)}</div>${filas}`;
+        const titulo = encabezado ? encabezado(this) : formatoPeriodo(this.x, frecuencia);
+        return `<div style="font-weight:600;margin-bottom:2px">${titulo}</div>${filas}`;
       }
     },
     plotOptions: {
@@ -271,8 +278,9 @@ function separarEtiquetas() {
  * Gráfico de series de tiempo.
  *
  * @param {object} o
- * @param {{nombre: string, datos: [number, number][], tipo?: string, color?: number}[]} o.series
- * @param {"D"|"M"|"T"|"A"} o.frecuencia
+ * @param {{nombre: string, datos: [number, number][], tipo?: string, color?: number|string, escalon?: boolean}[]} o.series
+ * @param {"D"|"S"|"M"|"T"|"A"} o.frecuencia
+ * @param {(t: number) => string} [o.periodo]  etiqueta del período en el tooltip (p. ej. "ene–jul 2026")
  * @param {string} o.unidad          unidad mostrada en el tooltip
  * @param {number} [o.decimales=1]
  * @param {"line"|"column"|"area"} [o.tipo="line"]
@@ -280,6 +288,7 @@ function separarEtiquetas() {
  * @param {boolean} [o.navegador=false] usa Highcharts Stock con navegador y selector de rango
  * @param {string} [o.rango="5a"]       rango inicial del selector ("1a", "3a", "5a", "Todo")
  * @param {boolean} [o.cero=false]      línea de referencia en cero
+ * @param {number} [o.referencia]       línea de referencia en otro valor (p. ej. 50 en índices de difusión)
  * @param {number} [o.altura=300]
  */
 export function grafico(o) {
@@ -293,6 +302,8 @@ export function grafico(o) {
     navegador = false,
     rango = "5a",
     cero = false,
+    referencia = cero ? 0 : undefined,
+    periodo,
     altura = navegador ? 380 : 300
   } = o;
   const el = document.createElement("div");
@@ -302,24 +313,31 @@ export function grafico(o) {
   const etiquetasFinales = !navegador && tipo === "line" && series.length >= 2 && series.length <= 4;
 
   return montar(el, (t) => {
-    const op = base(t, {altura, frecuencia, unidad, decimales});
+    const encabezado = periodo ? (ctx) => periodo(ctx.x) : undefined;
+    const op = base(t, {altura, frecuencia, unidad, decimales, encabezado});
     op.legend.enabled = series.length > 1;
     if (etiquetasFinales) {
-      op.chart.spacingRight = 84;
+      // Espacio a la derecha según el nombre más largo (≈6.5 px por carácter a 11 px).
+      op.chart.spacingRight = Math.min(150, 14 + 6.5 * Math.max(...series.map((s) => s.nombre.length)));
       op.chart.events = {render: separarEtiquetas};
     }
-    if (cero) op.yAxis.plotLines = [{value: 0, color: t.eje, width: 1, zIndex: 3}];
+    if (referencia != null) op.yAxis.plotLines = [{value: referencia, color: t.eje, width: 1, zIndex: 3}];
     if (frecuencia === "A") op.xAxis.tickInterval = 365.25 * 864e5;
     if (apilado) op.plotOptions[tipo] = {...op.plotOptions[tipo], stacking: "normal"};
     if (tipo === "column" && apilado) op.plotOptions.column.borderRadius = 0;
 
-    op.series = series.map((s, i) => {
-      const color = t.series[s.color ?? i];
+    op.series = series.map((s, i) => definida(serieTiempo(s, i)));
+    function serieTiempo(s, i) {
+      const color = colorSerie(t, s.color, i);
       const ultimo = s.datos[s.datos.length - 1];
       return {
         name: s.nombre,
         type: s.tipo ?? tipo,
         data: s.datos,
+        step: s.escalon ? "left" : undefined,
+        stacking: s.tipo && s.tipo !== tipo ? undefined : apilado ? "normal" : undefined,
+        marker: s.tipo === "line" && tipo === "column" ? {enabled: true, symbol: "circle"} : undefined,
+        zIndex: s.tipo && s.tipo !== tipo ? 5 : undefined,
         color,
         borderColor: t.fondo,
         borderWidth: tipo === "column" && apilado ? 1 : 0,
@@ -339,7 +357,7 @@ export function grafico(o) {
             }
           : undefined
       };
-    });
+    }
 
     // En pantallas angostas las etiquetas finales restan demasiado espacio.
     if (etiquetasFinales) {
@@ -359,8 +377,45 @@ export function grafico(o) {
   }, altura);
 }
 
+/**
+ * Gráfico con eje de categorías (curvas de rendimiento, rankings, incidencias).
+ *
+ * @param {object} o
+ * @param {string[]} o.categorias
+ * @param {{nombre: string, datos: number[], color?: number|string, punteado?: boolean}[]} o.series
+ * @param {"line"|"column"|"bar"} [o.tipo="line"]
+ */
+export function graficoCategorias(o) {
+  const {categorias, series, unidad = "", decimales = 1, tipo = "line", cero = false, altura = 300} = o;
+  const el = document.createElement("div");
+  el.className = "grafico";
+  el.style.minHeight = `${altura}px`;
+  return montar(el, (t) => {
+    const op = base(t, {altura, unidad, decimales, encabezado: (ctx) => ctx.key ?? categorias[ctx.x]});
+    op.xAxis = {...op.xAxis, type: "category", categories: categorias, dateTimeLabelFormats: undefined};
+    if (tipo === "bar") {
+      op.xAxis.labels = {...op.xAxis.labels, style: {...op.xAxis.labels.style, fontSize: "11.5px", color: t.tinta2}};
+      op.xAxis.crosshair = false;
+      op.tooltip.shared = false;
+    }
+    op.legend.enabled = series.length > 1;
+    if (cero) op.yAxis.plotLines = [{value: 0, color: t.eje, width: 1, zIndex: 3}];
+    op.plotOptions.bar = {...op.plotOptions.column, maxPointWidth: 18};
+    op.series = series.map((s, i) => ({
+      name: s.nombre,
+      type: tipo,
+      data: s.datos,
+      color: colorSerie(t, s.color, i),
+      dashStyle: s.punteado ? "ShortDash" : undefined,
+      connectNulls: true,
+      marker: tipo === "line" ? {enabled: true, symbol: "circle", radius: 4} : undefined
+    }));
+    return Highcharts.chart(el, op);
+  }, altura);
+}
+
 /** Línea mínima para las tarjetas de indicadores; marca el último dato en magenta. */
-export function minigrafico(datos, {frecuencia, unidad = "", decimales = 1, altura = 44} = {}) {
+export function minigrafico(datos, {frecuencia, unidad = "", decimales = 1, altura = 44, etiquetaPunto} = {}) {
   const el = document.createElement("div");
   el.className = "kpi-spark";
   return montar(el, (t) =>
@@ -388,7 +443,8 @@ export function minigrafico(datos, {frecuencia, unidad = "", decimales = 1, altu
         padding: 6,
         style: {color: t.tinta, fontSize: "11px"},
         formatter() {
-          return `<span style="color:${t.tinta2}">${formatoPeriodo(this.x, frecuencia)}</span>&nbsp; <b>${formatoNumero(this.y, decimales)}</b> ${unidad}`;
+          const etiqueta = etiquetaPunto ? etiquetaPunto(this.x) : formatoPeriodo(this.x, frecuencia);
+          return `<span style="color:${t.tinta2}">${etiqueta}</span>&nbsp; <b>${formatoNumero(this.y, decimales)}</b> ${unidad}`;
         }
       },
       plotOptions: {

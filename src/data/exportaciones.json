@@ -1,0 +1,310 @@
+{
+ "110101": {
+  "producto": "Arroz",
+  "grupo": "primario"
+ },
+ "110201": {
+  "producto": "Banano",
+  "grupo": "primario"
+ },
+ "110202": {
+  "producto": "Plátano",
+  "grupo": "primario"
+ },
+ "110301": {
+  "producto": "Cacao",
+  "grupo": "primario"
+ },
+ "110401": {
+  "producto": "Café lavado",
+  "grupo": "primario"
+ },
+ "110402": {
+  "producto": "Cafe natural",
+  "grupo": "primario"
+ },
+ "110501": {
+  "producto": "Naranjas",
+  "grupo": "primario"
+ },
+ "110502": {
+  "producto": "Piñas",
+  "grupo": "primario"
+ },
+ "110503": {
+  "producto": "Melones",
+  "grupo": "primario"
+ },
+ "110599": {
+  "producto": "Otras frutas",
+  "grupo": "primario"
+ },
+ "111001": {
+  "producto": "Abacá",
+  "grupo": "primario"
+ },
+ "111003": {
+  "producto": "Algodón",
+  "grupo": "primario"
+ },
+ "111099": {
+  "producto": "Otras fibras vegetales",
+  "grupo": "primario"
+ },
+ "111101": {
+  "producto": "Tabaco en rama",
+  "grupo": "primario"
+ },
+ "111105": {
+  "producto": "Hojas de té",
+  "grupo": "primario"
+ },
+ "111106": {
+  "producto": "Maíz",
+  "grupo": "primario"
+ },
+ "111109": {
+  "producto": "Flores naturales",
+  "grupo": "primario"
+ },
+ "111199": {
+  "producto": "Otros prod. agrícolas",
+  "grupo": "primario"
+ },
+ "120101": {
+  "producto": "Balza",
+  "grupo": "primario"
+ },
+ "120301": {
+  "producto": "Coníferas",
+  "grupo": "primario"
+ },
+ "120399": {
+  "producto": "Otras maderas",
+  "grupo": "primario"
+ },
+ "130201": {
+  "producto": "Pieles y cueros",
+  "grupo": "primario"
+ },
+ "130399": {
+  "producto": "Otros pecuarios",
+  "grupo": "primario"
+ },
+ "140101": {
+  "producto": "Atún",
+  "grupo": "primario"
+ },
+ "140102": {
+  "producto": "Pescado",
+  "grupo": "primario"
+ },
+ "140201": {
+  "producto": "Camarones",
+  "grupo": "primario"
+ },
+ "140301": {
+  "producto": "Langostas",
+  "grupo": "primario"
+ },
+ "140499": {
+  "producto": "Otros piscicolas",
+  "grupo": "primario"
+ },
+ "150101": {
+  "producto": "Crudo",
+  "grupo": "petrolero"
+ },
+ "150201": {
+  "producto": "Oro",
+  "grupo": "primario"
+ },
+ "150202": {
+  "producto": "Plata",
+  "grupo": "primario"
+ },
+ "150301": {
+  "producto": "Concentrado de plomo y cobre",
+  "grupo": "primario"
+ },
+ "150401": {
+  "producto": "Concentrado de zinc",
+  "grupo": "primario"
+ },
+ "150501": {
+  "producto": "Sal mineral",
+  "grupo": "primario"
+ },
+ "150699": {
+  "producto": "Otros productos mineros",
+  "grupo": "primario"
+ },
+ "210101": {
+  "producto": "Medicinas",
+  "grupo": "industrializado"
+ },
+ "210201": {
+  "producto": "Farmaceuticos",
+  "grupo": "industrializado"
+ },
+ "210399": {
+  "producto": "Otros químicos y farmaceuticos",
+  "grupo": "industrializado"
+ },
+ "220101": {
+  "producto": "Jugos y conservas de frutas",
+  "grupo": "industrializado"
+ },
+ "220201": {
+  "producto": "Azúcar",
+  "grupo": "industrializado"
+ },
+ "220301": {
+  "producto": "Melazas y panelas",
+  "grupo": "industrializado"
+ },
+ "220401": {
+  "producto": "Café industrializado",
+  "grupo": "industrializado"
+ },
+ "220501": {
+  "producto": "Elaborados de cacao",
+  "grupo": "industrializado"
+ },
+ "220601": {
+  "producto": "Elaborados de banano",
+  "grupo": "industrializado"
+ },
+ "220701": {
+  "producto": "Harina de pescado",
+  "grupo": "industrializado"
+ },
+ "220702": {
+  "producto": "Aceite de pescado",
+  "grupo": "industrializado"
+ },
+ "220703": {
+  "producto": "Enlatados de pescado",
+  "grupo": "industrializado"
+ },
+ "220799": {
+  "producto": "Otros elaborados del mar",
+  "grupo": "industrializado"
+ },
+ "220801": {
+  "producto": "Productos agricolas en conserva",
+  "grupo": "industrializado"
+ },
+ "220901": {
+  "producto": "Harina y elaborados de cereales",
+  "grupo": "industrializado"
+ },
+ "221001": {
+  "producto": "Carne, leche y elaborados",
+  "grupo": "industrializado"
+ },
+ "221101": {
+  "producto": "Bebidas",
+  "grupo": "industrializado"
+ },
+ "221201": {
+  "producto": "Extractos y aceites vegetales",
+  "grupo": "industrializado"
+ },
+ "221399": {
+  "producto": "Otros alimenticios",
+  "grupo": "industrializado"
+ },
+ "230101": {
+  "producto": "Alimento para animales",
+  "grupo": "industrializado"
+ },
+ "230301": {
+  "producto": "Leña y carbón vegetal",
+  "grupo": "industrializado"
+ },
+ "230401": {
+  "producto": "Maderas terciads y prensadas",
+  "grupo": "industrializado"
+ },
+ "230501": {
+  "producto": "Artículos de madera y corcho",
+  "grupo": "industrializado"
+ },
+ "230601": {
+  "producto": "Derivados",
+  "grupo": "petrolero"
+ },
+ "230701": {
+  "producto": "Vehículos y sus partes",
+  "grupo": "industrializado"
+ },
+ "230702": {
+  "producto": "Máquina ind. y sus partes",
+  "grupo": "industrializado"
+ },
+ "230799": {
+  "producto": "Otras manufacturas de metales",
+  "grupo": "industrializado"
+ },
+ "230801": {
+  "producto": "Aparatos eléctricos",
+  "grupo": "industrializado"
+ },
+ "230901": {
+  "producto": "Artículos electrodomésticos",
+  "grupo": "industrializado"
+ },
+ "231001": {
+  "producto": "Sombreros de paja toquilla y mocora",
+  "grupo": "industrializado"
+ },
+ "231101": {
+  "producto": "Artículos de cestería",
+  "grupo": "industrializado"
+ },
+ "231201": {
+  "producto": "Manufacturas de papel y cartón",
+  "grupo": "industrializado"
+ },
+ "231301": {
+  "producto": "Prendas de vestir",
+  "grupo": "industrializado"
+ },
+ "231399": {
+  "producto": "Otras manufacturas de fibras textiles",
+  "grupo": "industrializado"
+ },
+ "231401": {
+  "producto": "Manufacturas de cuero, plástico y caucho",
+  "grupo": "industrializado"
+ },
+ "231501": {
+  "producto": "Artesanía diversa",
+  "grupo": "industrializado"
+ },
+ "231699": {
+  "producto": "Otras mercancías",
+  "grupo": "industrializado"
+ },
+ "310101": {
+  "producto": "Desperdicios de papel y cartón",
+  "grupo": "otro"
+ },
+ "320101": {
+  "producto": "Desperdcios de metales (chatarra)",
+  "grupo": "otro"
+ },
+ "330101": {
+  "producto": "Otros desperdicios",
+  "grupo": "otro"
+ },
+ "330199": {
+  "producto": "Otros de otros desperdicios",
+  "grupo": "otro"
+ },
+ "410101": {
+  "producto": "Anim. vivos no p' alimentación",
+  "grupo": "otro"
+ }
+}

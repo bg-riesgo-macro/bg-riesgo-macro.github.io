@@ -1,39 +1,715 @@
-[
-  {"id": "pib_real_aa", "sector": "real", "nombre": "PIB real, variación anual", "corto": "Crecimiento del PIB", "unidad": "%", "frecuencia": "T", "decimales": 1, "fuente": "BCE, Cuentas Nacionales Trimestrales"},
-  {"id": "pib_nominal", "sector": "real", "nombre": "PIB nominal", "corto": "PIB nominal", "unidad": "USD mm", "frecuencia": "A", "decimales": 0, "fuente": "BCE"},
-  {"id": "ideac", "sector": "real", "nombre": "Índice de Actividad Económica Coyuntural (IDEAC)", "corto": "IDEAC", "unidad": "índice", "frecuencia": "M", "decimales": 1, "fuente": "BCE"},
-  {"id": "inflacion_aa", "sector": "real", "nombre": "Inflación anual (IPC)", "corto": "Inflación anual", "unidad": "%", "frecuencia": "M", "decimales": 2, "fuente": "INEC"},
-  {"id": "inflacion_mm", "sector": "real", "nombre": "Inflación mensual (IPC)", "corto": "Inflación mensual", "unidad": "%", "frecuencia": "M", "decimales": 2, "fuente": "INEC"},
-  {"id": "desempleo", "sector": "real", "nombre": "Tasa de desempleo nacional", "corto": "Desempleo", "unidad": "%", "frecuencia": "M", "decimales": 1, "fuente": "INEC, ENEMDU"},
-  {"id": "empleo_adecuado", "sector": "real", "nombre": "Tasa de empleo adecuado", "corto": "Empleo adecuado", "unidad": "%", "frecuencia": "M", "decimales": 1, "fuente": "INEC, ENEMDU"},
-  {"id": "prod_petrolera", "sector": "real", "nombre": "Producción nacional de petróleo", "corto": "Producción petrolera", "unidad": "miles bpd", "frecuencia": "M", "decimales": 0, "fuente": "BCE / ARCERNNR"},
-
-  {"id": "depositos", "sector": "financiero", "nombre": "Depósitos del público, bancos privados", "corto": "Depósitos", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "SB / BCE"},
-  {"id": "credito", "sector": "financiero", "nombre": "Cartera bruta, bancos privados", "corto": "Crédito", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "SB / BCE"},
-  {"id": "tasa_activa", "sector": "financiero", "nombre": "Tasa activa efectiva referencial, productivo corporativo", "corto": "Tasa activa", "unidad": "%", "frecuencia": "M", "decimales": 2, "fuente": "BCE"},
-  {"id": "tasa_pasiva", "sector": "financiero", "nombre": "Tasa pasiva efectiva referencial", "corto": "Tasa pasiva", "unidad": "%", "frecuencia": "M", "decimales": 2, "fuente": "BCE"},
-  {"id": "morosidad", "sector": "financiero", "nombre": "Morosidad de la cartera, bancos privados", "corto": "Morosidad", "unidad": "%", "frecuencia": "M", "decimales": 2, "fuente": "SB"},
-  {"id": "reservas", "sector": "financiero", "nombre": "Reservas internacionales", "corto": "Reservas internacionales", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "embi", "sector": "financiero", "nombre": "Riesgo país (EMBI Ecuador)", "corto": "Riesgo país", "unidad": "pb", "frecuencia": "D", "decimales": 0, "fuente": "JP Morgan / BCE"},
-
-  {"id": "ingresos_spnf", "sector": "fiscal", "nombre": "Ingresos totales del SPNF", "corto": "Ingresos SPNF", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE, Operaciones del SPNF"},
-  {"id": "gastos_spnf", "sector": "fiscal", "nombre": "Gastos totales del SPNF", "corto": "Gastos SPNF", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE, Operaciones del SPNF"},
-  {"id": "resultado_global_pib", "sector": "fiscal", "nombre": "Resultado global del SPNF", "corto": "Resultado global", "unidad": "% PIB", "frecuencia": "A", "decimales": 1, "fuente": "BCE / MEF"},
-  {"id": "resultado_primario_pib", "sector": "fiscal", "nombre": "Resultado primario del SPNF", "corto": "Resultado primario", "unidad": "% PIB", "frecuencia": "A", "decimales": 1, "fuente": "BCE / MEF"},
-  {"id": "recaudacion", "sector": "fiscal", "nombre": "Recaudación tributaria", "corto": "Recaudación SRI", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "SRI"},
-  {"id": "deuda_externa", "sector": "fiscal", "nombre": "Deuda pública externa", "corto": "Deuda externa", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "MEF"},
-  {"id": "deuda_interna", "sector": "fiscal", "nombre": "Deuda pública interna", "corto": "Deuda interna", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "MEF"},
-  {"id": "deuda_pib", "sector": "fiscal", "nombre": "Deuda pública total", "corto": "Deuda pública", "unidad": "% PIB", "frecuencia": "M", "decimales": 1, "fuente": "MEF"},
-
-  {"id": "x_petroleras", "sector": "externo", "nombre": "Exportaciones petroleras (FOB)", "corto": "X petroleras", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "x_no_petroleras", "sector": "externo", "nombre": "Exportaciones no petroleras (FOB)", "corto": "X no petroleras", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "importaciones", "sector": "externo", "nombre": "Importaciones (FOB)", "corto": "Importaciones", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "x_camaron", "sector": "externo", "nombre": "Exportaciones de camarón", "corto": "Camarón", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "x_banano", "sector": "externo", "nombre": "Exportaciones de banano y plátano", "corto": "Banano", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "x_mineria", "sector": "externo", "nombre": "Exportaciones mineras", "corto": "Minería", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "x_cacao", "sector": "externo", "nombre": "Exportaciones de cacao y elaborados", "corto": "Cacao", "unidad": "USD mm", "frecuencia": "M", "decimales": 0, "fuente": "BCE"},
-  {"id": "wti", "sector": "externo", "nombre": "Precio del petróleo WTI", "corto": "WTI", "unidad": "USD/barril", "frecuencia": "D", "decimales": 2, "fuente": "EIA"},
-  {"id": "crudo_oriente", "sector": "externo", "nombre": "Precio del crudo Oriente", "corto": "Crudo Oriente", "unidad": "USD/barril", "frecuencia": "D", "decimales": 2, "fuente": "EP Petroecuador"},
-  {"id": "cuenta_corriente_pib", "sector": "externo", "nombre": "Saldo de la cuenta corriente", "corto": "Cuenta corriente", "unidad": "% PIB", "frecuencia": "A", "decimales": 1, "fuente": "BCE, Balanza de Pagos"},
-  {"id": "remesas", "sector": "externo", "nombre": "Remesas recibidas", "corto": "Remesas", "unidad": "USD mm", "frecuencia": "T", "decimales": 0, "fuente": "BCE"}
-]
+{
+ "incidencias_ipc": "2026-08-01",
+ "series": [
+  {
+   "id": "pib_real_aa",
+   "sector": "real",
+   "nombre": "PIB real, variación anual (serie desestacionalizada)",
+   "corto": "Crecimiento del PIB",
+   "unidad": "%",
+   "frecuencia": "T",
+   "decimales": 1,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "aporte_consumo",
+   "sector": "real",
+   "nombre": "Aporte al crecimiento anual del PIB: Consumo",
+   "corto": "Consumo",
+   "unidad": "pp",
+   "frecuencia": "T",
+   "decimales": 2,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "aporte_fbkf",
+   "sector": "real",
+   "nombre": "Aporte al crecimiento anual del PIB: Inversión (FBKF)",
+   "corto": "Inversión (FBKF)",
+   "unidad": "pp",
+   "frecuencia": "T",
+   "decimales": 2,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "aporte_xnetas",
+   "sector": "real",
+   "nombre": "Aporte al crecimiento anual del PIB: Exportaciones netas",
+   "corto": "Exportaciones netas",
+   "unidad": "pp",
+   "frecuencia": "T",
+   "decimales": 2,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "aporte_existencias",
+   "sector": "real",
+   "nombre": "Aporte al crecimiento anual del PIB: Variación de existencias",
+   "corto": "Variación de existencias",
+   "unidad": "pp",
+   "frecuencia": "T",
+   "decimales": 2,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "pib_nominal",
+   "sector": "real",
+   "nombre": "PIB nominal",
+   "corto": "PIB nominal",
+   "unidad": "USD mm",
+   "frecuencia": "A",
+   "decimales": 0,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "vab_petrolero_aa",
+   "sector": "real",
+   "nombre": "VAB petrolero real, variación anual",
+   "corto": "VAB petrolero",
+   "unidad": "%",
+   "frecuencia": "T",
+   "decimales": 1,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "vab_no_petrolero_aa",
+   "sector": "real",
+   "nombre": "VAB no petrolero real, variación anual",
+   "corto": "VAB no petrolero",
+   "unidad": "%",
+   "frecuencia": "T",
+   "decimales": 1,
+   "fuente": "BCE, Cuentas Nacionales Trimestrales"
+  },
+  {
+   "id": "imaec",
+   "sector": "real",
+   "nombre": "Índice de Actividad Económica coyuntural (IMAEc), desestacionalizado",
+   "corto": "IMAEc",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa",
+   "sector": "real",
+   "nombre": "IMAEc, variación anual",
+   "corto": "IMAEc, variación anual",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_agro",
+   "sector": "real",
+   "nombre": "IMAEc Agropecuario, variación anual",
+   "corto": "Agropecuario",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_petroleo",
+   "sector": "real",
+   "nombre": "IMAEc Petróleo y minas, variación anual",
+   "corto": "Petróleo y minas",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_manufactura",
+   "sector": "real",
+   "nombre": "IMAEc Manufactura, variación anual",
+   "corto": "Manufactura",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_construccion",
+   "sector": "real",
+   "nombre": "IMAEc Construcción, variación anual",
+   "corto": "Construcción",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_comercio",
+   "sector": "real",
+   "nombre": "IMAEc Comercio, variación anual",
+   "corto": "Comercio",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "imaec_aa_servicios",
+   "sector": "real",
+   "nombre": "IMAEc Servicios, variación anual",
+   "corto": "Servicios",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, IMAEc"
+  },
+  {
+   "id": "inflacion_aa",
+   "sector": "real",
+   "nombre": "Inflación anual (IPC)",
+   "corto": "Inflación anual",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "INEC, Índice de Precios al Consumidor"
+  },
+  {
+   "id": "inflacion_mm",
+   "sector": "real",
+   "nombre": "Inflación mensual (IPC)",
+   "corto": "Inflación mensual",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "INEC, Índice de Precios al Consumidor"
+  },
+  {
+   "id": "inflacion_acum",
+   "sector": "real",
+   "nombre": "Inflación acumulada en el año (IPC)",
+   "corto": "Inflación acumulada",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "INEC, Índice de Precios al Consumidor"
+  },
+  {
+   "id": "desempleo",
+   "sector": "real",
+   "nombre": "Tasa de desempleo nacional",
+   "corto": "Desempleo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "INEC, ENEMDU (cálculo propio con factor de expansión)"
+  },
+  {
+   "id": "empleo_adecuado",
+   "sector": "real",
+   "nombre": "Tasa de empleo adecuado",
+   "corto": "Empleo adecuado",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "INEC, ENEMDU (cálculo propio con factor de expansión)"
+  },
+  {
+   "id": "subempleo",
+   "sector": "real",
+   "nombre": "Tasa de subempleo",
+   "corto": "Subempleo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "INEC, ENEMDU (cálculo propio con factor de expansión)"
+  },
+  {
+   "id": "otro_no_pleno",
+   "sector": "real",
+   "nombre": "Otro empleo no pleno y no remunerado",
+   "corto": "Otro no pleno",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "INEC, ENEMDU (cálculo propio con factor de expansión)"
+  },
+  {
+   "id": "iee",
+   "sector": "real",
+   "nombre": "Índice de Expectativas Empresariales: IEE global",
+   "corto": "IEE global",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "iee_comercio",
+   "sector": "real",
+   "nombre": "Índice de Expectativas Empresariales: Comercio",
+   "corto": "Comercio",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "iee_construccion",
+   "sector": "real",
+   "nombre": "Índice de Expectativas Empresariales: Construcción",
+   "corto": "Construcción",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "iee_manufactura",
+   "sector": "real",
+   "nombre": "Índice de Expectativas Empresariales: Manufactura",
+   "corto": "Manufactura",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "iee_servicios",
+   "sector": "real",
+   "nombre": "Índice de Expectativas Empresariales: Servicios",
+   "corto": "Servicios",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "icc",
+   "sector": "real",
+   "nombre": "Índice de Confianza del Consumidor: ICC global",
+   "corto": "ICC global",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "icc_presente",
+   "sector": "real",
+   "nombre": "Índice de Confianza del Consumidor: Situación presente",
+   "corto": "Situación presente",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "icc_futura",
+   "sector": "real",
+   "nombre": "Índice de Confianza del Consumidor: Situación futura",
+   "corto": "Situación futura",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Por confirmar"
+  },
+  {
+   "id": "cemento_despachos",
+   "sector": "real",
+   "nombre": "Despachos de cemento",
+   "corto": "Despachos de cemento",
+   "unidad": "miles t",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Empresas cementeras"
+  },
+  {
+   "id": "cemento_produccion",
+   "sector": "real",
+   "nombre": "Producción de cemento",
+   "corto": "Producción de cemento",
+   "unidad": "miles t",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Empresas cementeras"
+  },
+  {
+   "id": "ventas_sri",
+   "sector": "real",
+   "nombre": "Ventas totales y exportaciones declaradas (formulario 104, casillero 419)",
+   "corto": "Ventas SRI",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "SRI, Saiku"
+  },
+  {
+   "id": "depositos_bp",
+   "sector": "financiero",
+   "nombre": "Depósitos del público, bancos privados",
+   "corto": "Depósitos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_bp",
+   "sector": "financiero",
+   "nombre": "Cartera bruta, bancos privados",
+   "corto": "Cartera",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "ltd_bp",
+   "sector": "financiero",
+   "nombre": "Relación cartera / depósitos (LTD), bancos privados",
+   "corto": "Cartera / depósitos",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "dep_vista_pct",
+   "sector": "financiero",
+   "nombre": "Depósitos a la vista, % del total, bancos privados",
+   "corto": "Depósitos a la vista",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "depositos_sf",
+   "sector": "financiero",
+   "nombre": "Depósitos del sistema financiero privado",
+   "corto": "Depósitos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_sf",
+   "sector": "financiero",
+   "nombre": "Cartera bruta del sistema financiero privado",
+   "corto": "Cartera",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "activos_liquidos_sf",
+   "sector": "financiero",
+   "nombre": "Activos líquidos del sistema financiero privado",
+   "corto": "Activos líquidos",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_sf",
+   "sector": "financiero",
+   "nombre": "Morosidad de la cartera, sistema financiero privado",
+   "corto": "Morosidad",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_productivo",
+   "sector": "financiero",
+   "nombre": "Morosidad, segmento productivo",
+   "corto": "Productivo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_comercial",
+   "sector": "financiero",
+   "nombre": "Morosidad, segmento comercial",
+   "corto": "Comercial",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_microcredito",
+   "sector": "financiero",
+   "nombre": "Morosidad, microcrédito",
+   "corto": "Microcrédito",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_vivienda",
+   "sector": "financiero",
+   "nombre": "Morosidad, vivienda",
+   "corto": "Vivienda",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "solvencia_sf",
+   "sector": "financiero",
+   "nombre": "Índice de solvencia, sistema financiero privado",
+   "corto": "Solvencia",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "liquidez_bp",
+   "sector": "financiero",
+   "nombre": "Liquidez de bancos privados",
+   "corto": "Liquidez bancos",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "liquidez_coac1",
+   "sector": "financiero",
+   "nombre": "Liquidez de cooperativas segmento 1",
+   "corto": "Liquidez COAC 1",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "tpr",
+   "sector": "financiero",
+   "nombre": "Tasa pasiva referencial",
+   "corto": "Tasa pasiva referencial",
+   "unidad": "%",
+   "frecuencia": "S",
+   "decimales": 2,
+   "fuente": "BCE"
+  },
+  {
+   "id": "tpr_bp",
+   "sector": "financiero",
+   "nombre": "Tasa pasiva referencial, bancos privados",
+   "corto": "Bancos privados",
+   "unidad": "%",
+   "frecuencia": "S",
+   "decimales": 2,
+   "fuente": "BCE"
+  },
+  {
+   "id": "tpr_coop",
+   "sector": "financiero",
+   "nombre": "Tasa pasiva referencial, cooperativas",
+   "corto": "Cooperativas",
+   "unidad": "%",
+   "frecuencia": "S",
+   "decimales": 2,
+   "fuente": "BCE"
+  },
+  {
+   "id": "x_total",
+   "sector": "externo",
+   "nombre": "Exportaciones totales FOB",
+   "corto": "Exportaciones",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "x_pet",
+   "sector": "externo",
+   "nombre": "Exportaciones petroleras FOB",
+   "corto": "Petroleras",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "x_no_pet",
+   "sector": "externo",
+   "nombre": "Exportaciones no petroleras FOB",
+   "corto": "No petroleras",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "m_total",
+   "sector": "externo",
+   "nombre": "Importaciones totales FOB",
+   "corto": "Importaciones",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "m_pet",
+   "sector": "externo",
+   "nombre": "Importaciones petroleras FOB",
+   "corto": "Petroleras",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "m_no_pet",
+   "sector": "externo",
+   "nombre": "Importaciones no petroleras FOB",
+   "corto": "No petroleras",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "bc_total",
+   "sector": "externo",
+   "nombre": "Balanza comercial total",
+   "corto": "Total",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "bc_pet",
+   "sector": "externo",
+   "nombre": "Balanza comercial petrolera",
+   "corto": "Petrolera",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "bc_no_pet",
+   "sector": "externo",
+   "nombre": "Balanza comercial no petrolera",
+   "corto": "No petrolera",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "terminos_intercambio",
+   "sector": "externo",
+   "nombre": "Índice de términos de intercambio",
+   "corto": "Términos de intercambio",
+   "unidad": "índice",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "BCE, Balanza Comercial"
+  },
+  {
+   "id": "cuenta_corriente",
+   "sector": "externo",
+   "nombre": "Saldo de la cuenta corriente",
+   "corto": "Cuenta corriente",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "bp_bienes",
+   "sector": "externo",
+   "nombre": "Balanza de bienes (balanza de pagos)",
+   "corto": "Bienes",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "bp_servicios",
+   "sector": "externo",
+   "nombre": "Balanza de servicios",
+   "corto": "Servicios",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "bp_ingreso_primario",
+   "sector": "externo",
+   "nombre": "Ingreso primario",
+   "corto": "Ingreso primario",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "bp_ingreso_secundario",
+   "sector": "externo",
+   "nombre": "Ingreso secundario",
+   "corto": "Ingreso secundario",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "remesas_recibidas",
+   "sector": "externo",
+   "nombre": "Remesas recibidas",
+   "corto": "Remesas recibidas",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "remesas_enviadas",
+   "sector": "externo",
+   "nombre": "Remesas enviadas",
+   "corto": "Remesas enviadas",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "ied",
+   "sector": "externo",
+   "nombre": "Inversión extranjera directa (pasivos netos)",
+   "corto": "IED",
+   "unidad": "USD mm",
+   "frecuencia": "T",
+   "decimales": 0,
+   "fuente": "BCE, Balanza de Pagos"
+  },
+  {
+   "id": "cuenta_corriente_pib",
+   "sector": "externo",
+   "nombre": "Saldo de la cuenta corriente",
+   "corto": "Cuenta corriente",
+   "unidad": "% PIB",
+   "frecuencia": "A",
+   "decimales": 1,
+   "fuente": "BCE, Balanza de Pagos y Cuentas Nacionales"
+  }
+ ]
+}

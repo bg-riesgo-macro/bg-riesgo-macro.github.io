@@ -15,15 +15,17 @@ import {minigrafico} from "./graficos.js";
  * @param {number} [o.decimales=1]
  * @param {{valor: number, unidad: string, decimales?: number, etiqueta: string}} [o.cambio]
  * @param {number} [o.ventana]           observaciones a mostrar en la minilínea
+ * @param {string} [o.periodo]           etiqueta del período (por omisión, la fecha del último dato)
+ * @param {(t: number) => string} [o.etiquetaPunto]  etiqueta de cada punto en la minilínea
  */
-export function kpi({titulo, datos, frecuencia, unidad, decimales = 1, cambio, ventana}) {
+export function kpi({titulo, datos, frecuencia, unidad, decimales = 1, cambio, ventana, periodo, etiquetaPunto}) {
   const [t, v] = datos[datos.length - 1];
   const tramo = ventana ? datos.slice(-ventana) : datos;
   return html`<div class="kpi">
     <p class="kpi-titulo">${titulo}</p>
     <div class="kpi-valor">${formatoNumero(v, decimales)}<span class="kpi-unidad">${unidad}</span></div>
     <div class="kpi-detalle">
-      <span>${formatoPeriodo(t, frecuencia)}</span>
+      <span>${periodo ?? formatoPeriodo(t, frecuencia)}</span>
       ${cambio
         ? html`<span class="kpi-cambio">${cambio.valor > 0 ? "▲" : cambio.valor < 0 ? "▼" : "■"} ${formatoCambio(
             cambio.valor,
@@ -32,7 +34,7 @@ export function kpi({titulo, datos, frecuencia, unidad, decimales = 1, cambio, v
           )} ${cambio.etiqueta}</span>`
         : null}
     </div>
-    ${tramo.length > 2 ? minigrafico(tramo, {frecuencia, unidad, decimales}) : null}
+    ${tramo.length > 2 ? minigrafico(tramo, {frecuencia, unidad, decimales, etiquetaPunto}) : null}
   </div>`;
 }
 
@@ -52,7 +54,9 @@ export function kpiSerie(db, id, opciones = {}) {
     unidad,
     decimales: opciones.decimales ?? m.decimales,
     cambio: opciones.cambio === null ? undefined : opciones.cambio ?? cambioAnual(datos, unidad),
-    ventana
+    ventana,
+    periodo: opciones.periodo,
+    etiquetaPunto: opciones.etiquetaPunto
   });
 }
 
@@ -100,19 +104,19 @@ export function panel({titulo, subtitulo, fuente, contenido, ancho = false, enla
     ${subtitulo ? html`<p class="panel-sub">${subtitulo}</p>` : null}
     ${contenido}
     ${fuente ? html`<p class="panel-pie">Fuente: ${fuente}.</p>` : null}
-    <p class="panel-marca"><span class="marca-cuadro" aria-hidden="true"></span><strong>BG</strong> Riesgo Macro · Datos ilustrativos</p>
+    <p class="panel-marca"><span class="marca-cuadro" aria-hidden="true"></span><strong>BG</strong> Riesgo Macro</p>
   </section>`;
 }
 
 /** Cabecera de página con antetítulo, título, bajada y fecha de corte. */
-export function cabecera({antetitulo, titulo, bajada, corte}) {
+export function cabecera({antetitulo, titulo, bajada, corte, frecuencia = "M", aviso = "Versión preliminar"}) {
   return html`<header class="cabecera">
     <p class="antetitulo">${antetitulo}</p>
     <h1>${titulo}</h1>
     ${bajada ? html`<p class="bajada">${bajada}</p>` : null}
     <div class="meta">
-      <span>Información disponible al ${formatoPeriodo(corte, "D")}</span>
-      <span class="etiqueta">Datos ilustrativos</span>
+      <span>${frecuencia === "D" ? "Información disponible al" : "Datos hasta"} ${formatoPeriodo(corte, frecuencia)}</span>
+      ${aviso ? html`<span class="etiqueta">${aviso}</span>` : null}
     </div>
   </header>`;
 }

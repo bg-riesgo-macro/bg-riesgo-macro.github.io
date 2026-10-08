@@ -1,0 +1,90 @@
+[
+ {
+  "id": "ingresos_spnf",
+  "sector": "fiscal",
+  "nombre": "Ingresos totales del SPNF",
+  "corto": "Ingresos SPNF",
+  "unidad": "USD mm",
+  "frecuencia": "M",
+  "decimales": 0,
+  "fuente": "BCE, Operaciones del SPNF",
+  "ilustrativo": true
+ },
+ {
+  "id": "gastos_spnf",
+  "sector": "fiscal",
+  "nombre": "Gastos totales del SPNF",
+  "corto": "Gastos SPNF",
+  "unidad": "USD mm",
+  "frecuencia": "M",
+  "decimales": 0,
+  "fuente": "BCE, Operaciones del SPNF",
+  "ilustrativo": true
+ },
+ {
+  "id": "resultado_global_pib",
+  "sector": "fiscal",
+  "nombre": "Resultado global del SPNF",
+  "corto": "Resultado global",
+  "unidad": "% PIB",
+  "frecuencia": "A",
+  "decimales": 1,
+  "fuente": "BCE / MEF",
+  "ilustrativo": true
+ },
+ {
+  "id": "resultado_primario_pib",
+  "sector": "fiscal",
+  "nombre": "Resultado primario del SPNF",
+  "corto": "Resultado primario",
+  "unidad": "% PIB",
+  "frecuencia": "A",
+  "decimales": 1,
+  "fuente": "BCE / MEF",
+  "ilustrativo": true
+ },
+ {
+  "id": "recaudacion",
+  "sector": "fiscal",
+  "nombre": "Recaudación tributaria",
+  "corto": "Recaudación SRI",
+  "unidad": "USD mm",
+  "frecuencia": "M",
+  "decimales": 0,
+  "fuente": "SRI",
+  "ilustrativo": true
+ },
+ {
+  "id": "deuda_externa",
+  "sector": "fiscal",
+  "nombre": "Deuda pública externa",
+  "corto": "Deuda externa",
+  "unidad": "USD mm",
+  "frecuencia": "M",
+  "decimales": 0,
+  "fuente": "MEF",
+  "ilustrativo": true
+ },
+ {
+  "id": "deuda_interna",
+  "sector": "fiscal",
+  "nombre": "Deuda pública interna",
+  "corto": "Deuda interna",
+  "unidad": "USD mm",
+  "frecuencia": "M",
+  "decimales": 0,
+  "fuente": "MEF",
+  "ilustrativo": true
+ },
+ {
+  "id": "deuda_pib",
+  "sector": "fiscal",
+  "nombre": "Deuda pública total",
+  "corto": "Deuda pública",
+  "unidad": "% PIB",
+  "frecuencia": "M",
+  "decimales": 1,
+  "fuente": "MEF",
+  "ilustrativo": true
+ }
+]

@@ -3,3 +3,6 @@
 node_modules/
 yarn-error.log
 src/.observablehq/cache/
+
+# Archivos fuente: pesados y con licencias de uso restringido (Bloomberg, datos internos)
+data_raw/
