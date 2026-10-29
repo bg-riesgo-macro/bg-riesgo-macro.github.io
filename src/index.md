@@ -162,7 +162,6 @@ display(html`<div class="paneles">
     subtitulo: "Variación anual, %, bancos privados",
     fuente: db.meta("depositos_bp").fuente,
     enlace: {href: "./financiero", texto: "Sector financiero"},
-    nota: "En una economía dolarizada, los depósitos crecen cuando entran dólares (exportaciones, remesas, inversión y financiamiento externos) y se frenan cuando salen; por eso este gráfico se lee junto con el sector externo.",
     contenido: grafico({
       series: [
         {nombre: "Depósitos", datos: variacion(db.serie("depositos_bp"), 12)},

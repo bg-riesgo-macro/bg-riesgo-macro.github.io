@@ -513,16 +513,6 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "morosidad_castigos_bp",
-   "sector": "financiero",
-   "nombre": "Morosidad ajustada por castigos de 12 meses, bancos privados",
-   "corto": "Morosidad con castigos",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 2,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
    "id": "cobertura_bp",
    "sector": "financiero",
    "nombre": "Cobertura de la cartera improductiva (provisiones / improductiva), bancos privados",
@@ -543,19 +533,9 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "liquidez_inmediata_bp",
-   "sector": "financiero",
-   "nombre": "Liquidez inmediata, bancos privados",
-   "corto": "Liquidez inmediata",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
    "id": "liquidez_primera_bp",
    "sector": "financiero",
-   "nombre": "Liquidez de primera línea, bancos privados",
+   "nombre": "Liquidez de primera línea (aproximación con información pública), bancos privados",
    "corto": "Primera línea",
    "unidad": "%",
    "frecuencia": "M",
@@ -565,38 +545,8 @@
   {
    "id": "liquidez_segunda_bp",
    "sector": "financiero",
-   "nombre": "Liquidez de segunda línea, bancos privados",
+   "nombre": "Liquidez de segunda línea (aproximación con información pública), bancos privados",
    "corto": "Segunda línea",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "fondos_portafolio_bp",
-   "sector": "financiero",
-   "nombre": "Fondos disponibles y portafolio de inversiones / depósitos de corto plazo, promedio de 12 meses, bancos privados",
-   "corto": "Disponibles + portafolio (prom. 12 meses)",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "fondos_activos_bp",
-   "sector": "financiero",
-   "nombre": "Fondos disponibles / activos totales, bancos privados",
-   "corto": "Fondos disponibles / activos",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "nsfr_bp",
-   "sector": "financiero",
-   "nombre": "Fondeo estable neto (fondeo estable disponible / requerido), bancos privados",
-   "corto": "Fondeo estable neto",
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 1,

@@ -294,6 +294,7 @@ function separarEtiquetas() {
  * @param {boolean} [o.cero=false]      línea de referencia en cero
  * @param {number} [o.referencia]       línea de referencia en otro valor (p. ej. 50 en índices de difusión)
  * @param {boolean} [o.soloImagen=false] menú sin descarga de datos (para fuentes con licencia)
+ * @param {{desde: number, hasta: number, etiqueta?: string}[]} [o.bandas] períodos sombreados (p. ej. un cambio normativo)
  * @param {number} [o.altura=300]
  */
 export function grafico(o) {
@@ -309,6 +310,7 @@ export function grafico(o) {
     cero = false,
     referencia = cero ? 0 : undefined,
     periodo,
+    bandas = [],
     soloImagen = false,
     altura = navegador ? 380 : 300
   } = o;
@@ -328,6 +330,15 @@ export function grafico(o) {
       op.chart.events = {render: separarEtiquetas};
     }
     if (referencia != null) op.yAxis.plotLines = [{value: referencia, color: t.eje, width: 1, zIndex: 3}];
+    op.xAxis.plotBands = bandas.map((b) => ({
+      from: b.desde,
+      to: b.hasta,
+      color: t.fondoAlt,
+      zIndex: 0,
+      label: b.etiqueta
+        ? {text: b.etiqueta, align: "left", verticalAlign: "top", x: 6, y: 14, style: {color: t.suave, fontSize: "10.5px"}}
+        : undefined
+    }));
     if (frecuencia === "A") op.xAxis.tickInterval = 365.25 * 864e5;
     if (apilado) op.plotOptions[tipo] = {...op.plotOptions[tipo], stacking: "normal"};
     if (apilado && tipo === "area") op.plotOptions.area.fillOpacity = 0.35;

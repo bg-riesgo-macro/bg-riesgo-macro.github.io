@@ -370,28 +370,16 @@ for col_, id_, nombre, corto, unidad, esc, dec in [
      "Morosidad", "%", 100, 2),
     *[(f"Morosidad {c}", f"morosidad_{i}_bp", f"Morosidad de la cartera {n.lower()}, bancos privados", n, "%", 100, 2)
       for c, i, n in SEGMENTOS_SB],
-    ("Npl Castigos12m Total", "morosidad_castigos_bp",
-     "Morosidad ajustada por castigos de 12 meses, bancos privados", "Morosidad con castigos", "%", 100, 2),
     ("Cobertura Total", "cobertura_bp", "Cobertura de la cartera improductiva (provisiones / improductiva), bancos privados",
      "Cobertura", "%", 100, 0),
     ("Pt Activos Contingente Riesgo", "solvencia_bp",
      "Solvencia (patrimonio técnico / activos y contingentes ponderados por riesgo), bancos privados",
      "Solvencia", "%", 100, 1),
-    ("Perlas Liquidez Imnediata", "liquidez_inmediata_bp", "Liquidez inmediata, bancos privados",
-     "Liquidez inmediata", "%", 100, 1),
-    ("Liquidez Primera Linea", "liquidez_primera_bp", "Liquidez de primera línea, bancos privados",
-     "Primera línea", "%", 100, 1),
-    ("Liquidez Segunda Linea", "liquidez_segunda_bp", "Liquidez de segunda línea, bancos privados",
-     "Segunda línea", "%", 100, 1),
-    # Las columnas "Camel" son promedios de 12 meses (Camel Liquidez es el promedio del indicador
-    # oficial de liquidez que sigue más abajo).
-    ("Camel Fondos Port", "fondos_portafolio_bp",
-     "Fondos disponibles y portafolio de inversiones / depósitos de corto plazo, promedio de 12 meses, bancos privados",
-     "Disponibles + portafolio (prom. 12 meses)", "%", 100, 1),
-    ("Act Liquidos", "fondos_activos_bp", "Fondos disponibles / activos totales, bancos privados",
-     "Fondos disponibles / activos", "%", 100, 1),
-    ("Perlas Nsfr", "nsfr_bp", "Fondeo estable neto (fondeo estable disponible / requerido), bancos privados",
-     "Fondeo estable neto", "%", 100, 1),
+    # Primera y segunda línea: aproximaciones con información pública a los indicadores regulatorios.
+    ("Liquidez Primera Linea", "liquidez_primera_bp",
+     "Liquidez de primera línea (aproximación con información pública), bancos privados", "Primera línea", "%", 100, 1),
+    ("Liquidez Segunda Linea", "liquidez_segunda_bp",
+     "Liquidez de segunda línea (aproximación con información pública), bancos privados", "Segunda línea", "%", 100, 1),
     ("Roe", "roe_bp", "Rentabilidad sobre patrimonio (ROE), bancos privados", "ROE", "%", 100, 1),
     ("Camel Roa", "roa_bp", "Rentabilidad sobre activos (ROA), bancos privados", "ROA", "%", 100, 2),
 ]:

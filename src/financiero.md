@@ -221,41 +221,49 @@ display(html`<div class="paneles">
 
 ## Calidad de cartera
 
-La morosidad es la cartera improductiva (vencida y que no devenga intereses) sobre la cartera bruta. La morosidad ajustada suma al numerador y al denominador los castigos de los últimos 12 meses.
+La morosidad es la cartera improductiva (vencida y que no devenga intereses) sobre la cartera bruta.
 
 ```js
+// Cambio normativo por la pandemia: el vencido se registraba a los 60 días de mora (marzo 2020 a diciembre 2022).
+const bandaVencido = [{desde: Date.UTC(2020, 2, 1), hasta: Date.UTC(2022, 11, 31), etiqueta: "Vencido a 60 días"}];
+const fuenteVencido = "resoluciones 569-2020-F, 609-2020-F y JPRF-F-2022-030";
+const notaVencido = "Zona sombreada: por la pandemia, entre marzo de 2020 y diciembre de 2022 los créditos impagos pasaban a cartera vencida a los 60 días de mora (61 días desde fines de 2020) y no a los 30. Por eso la morosidad de ese período no es comparable y tiende a verse más baja. Desde enero de 2023 se volvió a 30 días, salvo en vivienda.";
+
 display(html`<div class="paneles">
   ${panel({
     titulo: "Morosidad de la cartera",
     subtitulo: "%, bancos privados",
-    fuente: fuente("morosidad_bp"),
+    fuente: `${fuente("morosidad_bp")}; ${fuenteVencido}`,
+    nota: notaVencido,
     contenido: grafico({
-      series: [
-        {nombre: "Morosidad", datos: s("morosidad_bp")},
-        {nombre: "Ajustada por castigos", datos: s("morosidad_castigos_bp")}
-      ],
+      series: [{nombre: "Morosidad", datos: s("morosidad_bp")}],
+      bandas: bandaVencido,
       frecuencia: "M", unidad: "%", decimales: 2
     })
   })}
   ${panel({
     titulo: "Cobertura de la cartera improductiva",
     subtitulo: "Provisiones / cartera improductiva, %, bancos privados",
-    fuente: fuente("cobertura_bp"),
+    fuente: `${fuente("cobertura_bp")}; ${fuenteVencido}`,
+    nota: "Zona sombreada: entre marzo de 2020 y diciembre de 2022 la cartera pasaba a vencida a los 60 días de mora y no a los 30. Con menos cartera improductiva registrada, la cobertura de ese período se ve más alta y no es comparable.",
     contenido: grafico({
       series: [{nombre: "Cobertura", datos: s("cobertura_bp")}],
+      bandas: bandaVencido,
       frecuencia: "M", unidad: "%", decimales: 0, referencia: 100
     })
   })}
   ${panel({
     titulo: "Morosidad por segmento de crédito",
     subtitulo: "% de la cartera bruta del segmento, bancos privados",
-    fuente: fuente("morosidad_bp"),
+    fuente: `${fuente("morosidad_bp")}; ${fuenteVencido}`,
+    nota: notaVencido,
     ancho: true,
     contenido: grafico({
       series: [
         ...segmentosCartera.map(([id, nombre]) => ({nombre, datos: s(`morosidad_${id}_bp`, 2018)})),
         {nombre: "Total", datos: s("morosidad_bp", 2018), color: "tinta"}
       ],
+      bandas: bandaVencido,
       frecuencia: "M", unidad: "%", decimales: 2, altura: 340
     })
   })}
@@ -264,44 +272,20 @@ display(html`<div class="paneles">
 
 ## Liquidez, solvencia y rentabilidad
 
-La liquidez de primera y segunda línea son los indicadores regulatorios. El indicador de fondos disponibles frente a los depósitos a corto plazo, que publican la Superintendencia de Bancos y Asobanca, es una medida estricta: solo cuenta el efectivo y los depósitos en el BCE y en otras entidades, y deja fuera las inversiones y otros activos de alta calidad que se pueden vender rápido. El fondeo estable neto compara el fondeo estable disponible con el requerido por los activos.
+La liquidez de primera y segunda línea son aproximaciones, con información pública, a los indicadores regulatorios. El indicador de fondos disponibles frente a los depósitos a corto plazo, que publican la Superintendencia de Bancos y Asobanca, es una medida estricta: solo cuenta el efectivo y los depósitos en el BCE y en otras entidades, y deja fuera las inversiones y otros activos de alta calidad que se pueden vender rápido.
 
 ```js
 display(html`<div class="paneles">
   ${panel({
     titulo: "Liquidez",
     subtitulo: "%, bancos privados",
-    fuente: fuente("liquidez_inmediata_bp"),
+    fuente: `${fuente("liquidez_primera_bp")}; ${fuente("liquidez_bp")}`,
+    nota: "Primera y segunda línea: aproximaciones a los indicadores regulatorios calculadas con información pública. Fondos disponibles / depósitos a corto plazo (a la vista y a plazo hasta 90 días): solo cuenta efectivo y depósitos en el BCE y en otras entidades; no incluye inversiones ni otros activos líquidos, por lo que subestima la liquidez.",
     contenido: grafico({
       series: [
-        {nombre: "Inmediata", datos: s("liquidez_inmediata_bp")},
         {nombre: "Primera línea", datos: s("liquidez_primera_bp")},
-        {nombre: "Segunda línea", datos: s("liquidez_segunda_bp")}
-      ],
-      frecuencia: "M", unidad: "%", decimales: 1
-    })
-  })}
-  ${panel({
-    titulo: "Fondos disponibles / depósitos a corto plazo",
-    subtitulo: "Depósitos a la vista y a plazo hasta 90 días, %, bancos privados; con el portafolio de inversiones, promedio de 12 meses",
-    fuente: `${fuente("liquidez_bp")}; ${fuente("fondos_portafolio_bp")}`,
-    nota: "La línea de disponibles solo cuenta fondos disponibles (efectivo y depósitos en el BCE y en otras entidades); no incluye inversiones ni otros activos líquidos que se pueden vender rápido, por lo que subestima la liquidez real. La línea con portafolio suma parte de esas inversiones.",
-    contenido: grafico({
-      series: [
-        {nombre: "Con portafolio (12m)", datos: s("fondos_portafolio_bp")},
-        {nombre: "Disponibles", datos: s("liquidez_bp")}
-      ],
-      frecuencia: "M", unidad: "%", decimales: 1
-    })
-  })}
-  ${panel({
-    titulo: "Fondos disponibles y fondeo estable",
-    subtitulo: "Fondeo estable disponible / requerido y fondos disponibles / activos, %, bancos privados",
-    fuente: fuente("nsfr_bp"),
-    contenido: grafico({
-      series: [
-        {nombre: "Fondeo estable neto", datos: s("nsfr_bp")},
-        {nombre: "Disponibles / activos", datos: s("fondos_activos_bp")}
+        {nombre: "Segunda línea", datos: s("liquidez_segunda_bp")},
+        {nombre: "Disponibles / dep. CP", datos: s("liquidez_bp")}
       ],
       frecuencia: "M", unidad: "%", decimales: 1
     })
