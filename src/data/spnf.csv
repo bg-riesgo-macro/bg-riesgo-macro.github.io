@@ -154,13 +154,14 @@ fecha,codigo,concepto,valor
 2025-09-01,1,Total Ingresos,3761.444
 2025-10-01,1,Total Ingresos,3985.705
 2025-11-01,1,Total Ingresos,3661.566
-2025-12-01,1,Total Ingresos,3991.531
-2026-01-01,1,Total Ingresos,4290.533
-2026-02-01,1,Total Ingresos,3609.573
-2026-03-01,1,Total Ingresos,4608.495
-2026-04-01,1,Total Ingresos,5404.541
-2026-05-01,1,Total Ingresos,4494.027
-2026-06-01,1,Total Ingresos,4365.631
+2025-12-01,1,Total Ingresos,3991.54
+2026-01-01,1,Total Ingresos,4291.953
+2026-02-01,1,Total Ingresos,3613.011
+2026-03-01,1,Total Ingresos,4611.337
+2026-04-01,1,Total Ingresos,5409.349
+2026-05-01,1,Total Ingresos,4552.76
+2026-06-01,1,Total Ingresos,4393.583
+2026-07-01,1,Total Ingresos,4758.317
 2013-01-01,11,Ingresos Petroleros,1409.253
 2013-02-01,11,Ingresos Petroleros,912.046
 2013-03-01,11,Ingresos Petroleros,1121.216
@@ -320,9 +321,10 @@ fecha,codigo,concepto,valor
 2026-01-01,11,Ingresos Petroleros,1050.693
 2026-02-01,11,Ingresos Petroleros,1003.579
 2026-03-01,11,Ingresos Petroleros,1217.499
-2026-04-01,11,Ingresos Petroleros,1576.933
-2026-05-01,11,Ingresos Petroleros,1503.3
-2026-06-01,11,Ingresos Petroleros,1635.366
+2026-04-01,11,Ingresos Petroleros,1577.05
+2026-05-01,11,Ingresos Petroleros,1553.638
+2026-06-01,11,Ingresos Petroleros,1626.267
+2026-07-01,11,Ingresos Petroleros,1732.403
 2013-01-01,111,Exportación,1170.253
 2013-02-01,111,Exportación,731.826
 2013-03-01,111,Exportación,892.706
@@ -482,9 +484,10 @@ fecha,codigo,concepto,valor
 2026-01-01,111,Exportación,567.071
 2026-02-01,111,Exportación,528.169
 2026-03-01,111,Exportación,650.309
-2026-04-01,111,Exportación,848.973
-2026-05-01,111,Exportación,846.985
-2026-06-01,111,Exportación,913.843
+2026-04-01,111,Exportación,849.091
+2026-05-01,111,Exportación,897.324
+2026-06-01,111,Exportación,904.744
+2026-07-01,111,Exportación,960.525
 2013-01-01,112,Venta Doméstica,239.0
 2013-02-01,112,Venta Doméstica,180.22
 2013-03-01,112,Venta Doméstica,228.51
@@ -647,6 +650,7 @@ fecha,codigo,concepto,valor
 2026-04-01,112,Venta Doméstica,727.96
 2026-05-01,112,Venta Doméstica,656.315
 2026-06-01,112,Venta Doméstica,721.523
+2026-07-01,112,Venta Doméstica,771.878
 2013-01-01,12,Ingresos no petroleros,2007.717
 2013-02-01,12,Ingresos no petroleros,1503.438
 2013-03-01,12,Ingresos no petroleros,1861.449
@@ -802,13 +806,14 @@ fecha,codigo,concepto,valor
 2025-09-01,12,Ingresos no petroleros,2647.608
 2025-10-01,12,Ingresos no petroleros,2640.99
 2025-11-01,12,Ingresos no petroleros,2704.01
-2025-12-01,12,Ingresos no petroleros,2719.277
-2026-01-01,12,Ingresos no petroleros,3239.839
-2026-02-01,12,Ingresos no petroleros,2605.995
-2026-03-01,12,Ingresos no petroleros,3390.995
-2026-04-01,12,Ingresos no petroleros,3827.608
-2026-05-01,12,Ingresos no petroleros,2990.728
-2026-06-01,12,Ingresos no petroleros,2730.265
+2025-12-01,12,Ingresos no petroleros,2719.286
+2026-01-01,12,Ingresos no petroleros,3241.259
+2026-02-01,12,Ingresos no petroleros,2609.432
+2026-03-01,12,Ingresos no petroleros,3393.838
+2026-04-01,12,Ingresos no petroleros,3832.298
+2026-05-01,12,Ingresos no petroleros,2999.122
+2026-06-01,12,Ingresos no petroleros,2767.316
+2026-07-01,12,Ingresos no petroleros,3025.914
 2013-01-01,121,Ingresos tributarios,1274.72
 2013-02-01,121,Ingresos tributarios,940.136
 2013-03-01,121,Ingresos tributarios,1023.215
@@ -971,6 +976,7 @@ fecha,codigo,concepto,valor
 2026-04-01,121,Ingresos tributarios,2180.373
 2026-05-01,121,Ingresos tributarios,1530.457
 2026-06-01,121,Ingresos tributarios,1552.463
+2026-07-01,121,Ingresos tributarios,1649.305
 2013-01-01,1211,Impuesto a la renta,330.713
 2013-02-01,1211,Impuesto a la renta,171.977
 2013-03-01,1211,Impuesto a la renta,256.168
@@ -1133,6 +1139,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1211,Impuesto a la renta,1063.94
 2026-05-01,1211,Impuesto a la renta,520.923
 2026-06-01,1211,Impuesto a la renta,455.671
+2026-07-01,1211,Impuesto a la renta,484.823
 2013-01-01,1212,IVA,606.753
 2013-02-01,1212,IVA,450.279
 2013-03-01,1212,IVA,449.87
@@ -1295,6 +1302,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1212,IVA,752.256
 2026-05-01,1212,IVA,696.968
 2026-06-01,1212,IVA,804.277
+2026-07-01,1212,IVA,876.179
 2013-01-01,1213,ICE,65.248
 2013-02-01,1213,ICE,63.164
 2013-03-01,1213,ICE,57.788
@@ -1457,6 +1465,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1213,ICE,64.165
 2026-05-01,1213,ICE,67.111
 2026-06-01,1213,ICE,67.735
+2026-07-01,1213,ICE,45.419
 2013-01-01,1214,Arancelarios,115.5
 2013-02-01,1214,Arancelarios,95.055
 2013-03-01,1214,Arancelarios,101.098
@@ -1619,6 +1628,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1214,Arancelarios,185.268
 2026-05-01,1214,Arancelarios,143.428
 2026-06-01,1214,Arancelarios,114.905
+2026-07-01,1214,Arancelarios,128.017
 2013-01-01,1215,Otros Impuestos,156.506
 2013-02-01,1215,Otros Impuestos,159.661
 2013-03-01,1215,Otros Impuestos,158.292
@@ -1781,6 +1791,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1215,Otros Impuestos,114.715
 2026-05-01,1215,Otros Impuestos,102.003
 2026-06-01,1215,Otros Impuestos,109.85
+2026-07-01,1215,Otros Impuestos,114.819
 2013-01-01,1216,Impuestos emergencia,0.0
 2013-02-01,1216,Impuestos emergencia,0.0
 2013-03-01,1216,Impuestos emergencia,0.0
@@ -1943,6 +1954,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1216,Impuestos emergencia,0.029
 2026-05-01,1216,Impuestos emergencia,0.025
 2026-06-01,1216,Impuestos emergencia,0.025
+2026-07-01,1216,Impuestos emergencia,0.047
 2013-01-01,122,Contribuciones a la Seguridad social,318.542
 2013-02-01,122,Contribuciones a la Seguridad social,215.643
 2013-03-01,122,Contribuciones a la Seguridad social,479.767
@@ -2105,6 +2117,7 @@ fecha,codigo,concepto,valor
 2026-04-01,122,Contribuciones a la Seguridad social,535.752
 2026-05-01,122,Contribuciones a la Seguridad social,608.612
 2026-06-01,122,Contribuciones a la Seguridad social,381.045
+2026-07-01,122,Contribuciones a la Seguridad social,618.64
 2013-01-01,1221,IESS,263.29
 2013-02-01,1221,IESS,162.768
 2013-03-01,1221,IESS,379.065
@@ -2267,6 +2280,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1221,IESS,472.201
 2026-05-01,1221,IESS,545.795
 2026-06-01,1221,IESS,318.174
+2026-07-01,1221,IESS,555.975
 2013-01-01,1222,ISSPOL,18.762
 2013-02-01,1222,ISSPOL,20.209
 2013-03-01,1222,ISSPOL,66.385
@@ -2429,6 +2443,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1222,ISSPOL,33.933
 2026-05-01,1222,ISSPOL,32.799
 2026-06-01,1222,ISSPOL,32.728
+2026-07-01,1222,ISSPOL,32.598
 2013-01-01,1223,ISSFA,36.489
 2013-02-01,1223,ISSFA,32.667
 2013-03-01,1223,ISSFA,34.318
@@ -2591,6 +2606,7 @@ fecha,codigo,concepto,valor
 2026-04-01,1223,ISSFA,29.618
 2026-05-01,1223,ISSFA,30.018
 2026-06-01,1223,ISSFA,30.143
+2026-07-01,1223,ISSFA,30.068
 2013-01-01,123,Transferencias,14.281
 2013-02-01,123,Transferencias,24.474
 2013-03-01,123,Transferencias,31.854
@@ -2753,6 +2769,7 @@ fecha,codigo,concepto,valor
 2026-04-01,123,Transferencias,117.373
 2026-05-01,123,Transferencias,73.802
 2026-06-01,123,Transferencias,56.002
+2026-07-01,123,Transferencias,86.401
 2013-01-01,124,Intereses ganados,37.659
 2013-02-01,124,Intereses ganados,41.305
 2013-03-01,124,Intereses ganados,43.948
@@ -2915,6 +2932,7 @@ fecha,codigo,concepto,valor
 2026-04-01,124,Intereses ganados,128.068
 2026-05-01,124,Intereses ganados,140.221
 2026-06-01,124,Intereses ganados,148.496
+2026-07-01,124,Intereses ganados,150.132
 2013-01-01,125,Otros Ingresos,362.514
 2013-02-01,125,Otros Ingresos,281.88
 2013-03-01,125,Otros Ingresos,282.664
@@ -3070,13 +3088,14 @@ fecha,codigo,concepto,valor
 2025-09-01,125,Otros Ingresos,576.534
 2025-10-01,125,Otros Ingresos,477.696
 2025-11-01,125,Otros Ingresos,579.9
-2025-12-01,125,Otros Ingresos,640.241
-2026-01-01,125,Otros Ingresos,670.11
-2026-02-01,125,Otros Ingresos,529.736
-2026-03-01,125,Otros Ingresos,655.272
-2026-04-01,125,Otros Ingresos,866.042
-2026-05-01,125,Otros Ingresos,637.635
-2026-06-01,125,Otros Ingresos,592.259
+2025-12-01,125,Otros Ingresos,640.249
+2026-01-01,125,Otros Ingresos,671.53
+2026-02-01,125,Otros Ingresos,533.173
+2026-03-01,125,Otros Ingresos,658.114
+2026-04-01,125,Otros Ingresos,870.732
+2026-05-01,125,Otros Ingresos,646.029
+2026-06-01,125,Otros Ingresos,629.31
+2026-07-01,125,Otros Ingresos,521.436
 2013-01-01,2,Total Erogaciones,2551.748
 2013-02-01,2,Total Erogaciones,3236.619
 2013-03-01,2,Total Erogaciones,3553.218
@@ -3233,12 +3252,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2,Total Erogaciones,4173.059
 2025-11-01,2,Total Erogaciones,4817.919
 2025-12-01,2,Total Erogaciones,5638.119
-2026-01-01,2,Total Erogaciones,3666.993
-2026-02-01,2,Total Erogaciones,3975.722
-2026-03-01,2,Total Erogaciones,4431.315
-2026-04-01,2,Total Erogaciones,4048.167
-2026-05-01,2,Total Erogaciones,4238.427
-2026-06-01,2,Total Erogaciones,4344.139
+2026-01-01,2,Total Erogaciones,3668.024
+2026-02-01,2,Total Erogaciones,3978.609
+2026-03-01,2,Total Erogaciones,4433.272
+2026-04-01,2,Total Erogaciones,4050.211
+2026-05-01,2,Total Erogaciones,4302.791
+2026-06-01,2,Total Erogaciones,4381.09
+2026-07-01,2,Total Erogaciones,5306.119
 2013-01-01,21,Erogación Permanente,1771.328
 2013-02-01,21,Erogación Permanente,2183.751
 2013-03-01,21,Erogación Permanente,2431.563
@@ -3395,12 +3415,13 @@ fecha,codigo,concepto,valor
 2025-10-01,21,Erogación Permanente,3489.105
 2025-11-01,21,Erogación Permanente,3894.131
 2025-12-01,21,Erogación Permanente,4363.892
-2026-01-01,21,Erogación Permanente,3335.55
-2026-02-01,21,Erogación Permanente,3157.227
-2026-03-01,21,Erogación Permanente,3762.833
-2026-04-01,21,Erogación Permanente,3433.75
-2026-05-01,21,Erogación Permanente,3552.589
-2026-06-01,21,Erogación Permanente,3574.334
+2026-01-01,21,Erogación Permanente,3336.369
+2026-02-01,21,Erogación Permanente,3159.257
+2026-03-01,21,Erogación Permanente,3764.197
+2026-04-01,21,Erogación Permanente,3434.159
+2026-05-01,21,Erogación Permanente,3604.517
+2026-06-01,21,Erogación Permanente,3572.599
+2026-07-01,21,Erogación Permanente,4369.273
 2013-01-01,211,Sueldos y salarios,627.289
 2013-02-01,211,Sueldos y salarios,714.73
 2013-03-01,211,Sueldos y salarios,818.282
@@ -3557,12 +3578,13 @@ fecha,codigo,concepto,valor
 2025-10-01,211,Sueldos y salarios,1061.466
 2025-11-01,211,Sueldos y salarios,1390.728
 2025-12-01,211,Sueldos y salarios,1147.994
-2026-01-01,211,Sueldos y salarios,871.988
-2026-02-01,211,Sueldos y salarios,974.776
-2026-03-01,211,Sueldos y salarios,1050.886
-2026-04-01,211,Sueldos y salarios,976.318
-2026-05-01,211,Sueldos y salarios,963.392
-2026-06-01,211,Sueldos y salarios,950.235
+2026-01-01,211,Sueldos y salarios,872.47
+2026-02-01,211,Sueldos y salarios,975.747
+2026-03-01,211,Sueldos y salarios,1051.806
+2026-04-01,211,Sueldos y salarios,976.657
+2026-05-01,211,Sueldos y salarios,964.99
+2026-06-01,211,Sueldos y salarios,959.321
+2026-07-01,211,Sueldos y salarios,973.531
 2013-01-01,212,Compra de bienes y servicios,774.76
 2013-02-01,212,Compra de bienes y servicios,1022.218
 2013-03-01,212,Compra de bienes y servicios,1070.484
@@ -3719,12 +3741,13 @@ fecha,codigo,concepto,valor
 2025-10-01,212,Compra de bienes y servicios,1218.064
 2025-11-01,212,Compra de bienes y servicios,1122.425
 2025-12-01,212,Compra de bienes y servicios,1319.2
-2026-01-01,212,Compra de bienes y servicios,876.753
-2026-02-01,212,Compra de bienes y servicios,868.888
-2026-03-01,212,Compra de bienes y servicios,1206.0
-2026-04-01,212,Compra de bienes y servicios,1083.301
-2026-05-01,212,Compra de bienes y servicios,1061.228
-2026-06-01,212,Compra de bienes y servicios,1355.168
+2026-01-01,212,Compra de bienes y servicios,876.903
+2026-02-01,212,Compra de bienes y servicios,869.932
+2026-03-01,212,Compra de bienes y servicios,1206.175
+2026-04-01,212,Compra de bienes y servicios,1083.441
+2026-05-01,212,Compra de bienes y servicios,1111.651
+2026-06-01,212,Compra de bienes y servicios,1343.025
+2026-07-01,212,Compra de bienes y servicios,1536.256
 2013-01-01,213,Intereses,30.282
 2013-02-01,213,Intereses,36.181
 2013-03-01,213,Intereses,109.142
@@ -3881,12 +3904,13 @@ fecha,codigo,concepto,valor
 2025-10-01,213,Intereses,140.745
 2025-11-01,213,Intereses,296.9
 2025-12-01,213,Intereses,202.218
-2026-01-01,213,Intereses,605.794
-2026-02-01,213,Intereses,216.821
-2026-03-01,213,Intereses,247.881
-2026-04-01,213,Intereses,170.349
-2026-05-01,213,Intereses,317.991
-2026-06-01,213,Intereses,187.974
+2026-01-01,213,Intereses,605.98
+2026-02-01,213,Intereses,216.823
+2026-03-01,213,Intereses,248.193
+2026-04-01,213,Intereses,171.362
+2026-05-01,213,Intereses,317.967
+2026-06-01,213,Intereses,188.454
+2026-07-01,213,Intereses,682.336
 2013-01-01,2131,Externos,19.683
 2013-02-01,2131,Externos,26.898
 2013-03-01,2131,Externos,92.142
@@ -4049,6 +4073,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2131,Externos,92.844
 2026-05-01,2131,Externos,256.368
 2026-06-01,2131,Externos,150.912
+2026-07-01,2131,Externos,612.076
 2013-01-01,2132,Internos,10.599
 2013-02-01,2132,Internos,9.282
 2013-03-01,2132,Internos,17.0
@@ -4205,12 +4230,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2132,Internos,55.52
 2025-11-01,2132,Internos,45.068
 2025-12-01,2132,Internos,43.658
-2026-01-01,2132,Internos,98.501
-2026-02-01,2132,Internos,23.335
-2026-03-01,2132,Internos,98.236
-2026-04-01,2132,Internos,77.506
-2026-05-01,2132,Internos,61.623
-2026-06-01,2132,Internos,37.062
+2026-01-01,2132,Internos,98.686
+2026-02-01,2132,Internos,23.337
+2026-03-01,2132,Internos,98.548
+2026-04-01,2132,Internos,78.518
+2026-05-01,2132,Internos,61.599
+2026-06-01,2132,Internos,37.542
+2026-07-01,2132,Internos,70.26
 2013-01-01,214,Transferencias,138.053
 2013-02-01,214,Transferencias,146.276
 2013-03-01,214,Transferencias,135.741
@@ -4368,11 +4394,12 @@ fecha,codigo,concepto,valor
 2025-11-01,214,Transferencias,230.903
 2025-12-01,214,Transferencias,226.177
 2026-01-01,214,Transferencias,158.098
-2026-02-01,214,Transferencias,195.952
-2026-03-01,214,Transferencias,193.18
-2026-04-01,214,Transferencias,313.507
-2026-05-01,214,Transferencias,199.836
-2026-06-01,214,Transferencias,188.313
+2026-02-01,214,Transferencias,195.965
+2026-03-01,214,Transferencias,193.137
+2026-04-01,214,Transferencias,312.426
+2026-05-01,214,Transferencias,199.767
+2026-06-01,214,Transferencias,189.155
+2026-07-01,214,Transferencias,230.783
 2013-01-01,215,Prestaciones de seguridad social social,197.088
 2013-02-01,215,Prestaciones de seguridad social social,245.995
 2013-03-01,215,Prestaciones de seguridad social social,270.369
@@ -4535,6 +4562,7 @@ fecha,codigo,concepto,valor
 2026-04-01,215,Prestaciones de seguridad social social,728.645
 2026-05-01,215,Prestaciones de seguridad social social,817.371
 2026-06-01,215,Prestaciones de seguridad social social,774.851
+2026-07-01,215,Prestaciones de seguridad social social,791.798
 2013-01-01,2151,IESS,140.907
 2013-02-01,2151,IESS,149.813
 2013-03-01,2151,IESS,200.187
@@ -4697,6 +4725,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2151,IESS,608.895
 2026-05-01,2151,IESS,697.169
 2026-06-01,2151,IESS,660.339
+2026-07-01,2151,IESS,657.327
 2013-01-01,2152,ISSPOL,16.35
 2013-02-01,2152,ISSPOL,49.108
 2013-03-01,2152,ISSPOL,16.46
@@ -4859,6 +4888,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2152,ISSPOL,44.853
 2026-05-01,2152,ISSPOL,47.777
 2026-06-01,2152,ISSPOL,46.197
+2026-07-01,2152,ISSPOL,48.137
 2013-01-01,2153,ISSFA,39.832
 2013-02-01,2153,ISSFA,47.073
 2013-03-01,2153,ISSFA,53.722
@@ -5021,6 +5051,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2153,ISSFA,74.898
 2026-05-01,2153,ISSFA,72.425
 2026-06-01,2153,ISSFA,68.315
+2026-07-01,2153,ISSFA,86.334
 2013-01-01,216,Otros Gastos Permanentes,3.856
 2013-02-01,216,Otros Gastos Permanentes,18.351
 2013-03-01,216,Otros Gastos Permanentes,27.544
@@ -5183,6 +5214,7 @@ fecha,codigo,concepto,valor
 2026-04-01,216,Otros Gastos Permanentes,161.628
 2026-05-01,216,Otros Gastos Permanentes,192.77
 2026-06-01,216,Otros Gastos Permanentes,117.793
+2026-07-01,216,Otros Gastos Permanentes,154.569
 2013-01-01,22,Erogación No Permanente,780.42
 2013-02-01,22,Erogación No Permanente,1052.868
 2013-03-01,22,Erogación No Permanente,1121.655
@@ -5339,12 +5371,13 @@ fecha,codigo,concepto,valor
 2025-10-01,22,Erogación No Permanente,683.954
 2025-11-01,22,Erogación No Permanente,923.789
 2025-12-01,22,Erogación No Permanente,1274.227
-2026-01-01,22,Erogación No Permanente,331.444
-2026-02-01,22,Erogación No Permanente,818.496
-2026-03-01,22,Erogación No Permanente,668.481
-2026-04-01,22,Erogación No Permanente,614.417
-2026-05-01,22,Erogación No Permanente,685.838
-2026-06-01,22,Erogación No Permanente,769.806
+2026-01-01,22,Erogación No Permanente,331.655
+2026-02-01,22,Erogación No Permanente,819.352
+2026-03-01,22,Erogación No Permanente,669.075
+2026-04-01,22,Erogación No Permanente,616.052
+2026-05-01,22,Erogación No Permanente,698.274
+2026-06-01,22,Erogación No Permanente,808.49
+2026-07-01,22,Erogación No Permanente,936.846
 2013-01-01,221,Inversión en activos no financieros,282.858
 2013-02-01,221,Inversión en activos no financieros,372.56
 2013-03-01,221,Inversión en activos no financieros,434.877
@@ -5501,12 +5534,13 @@ fecha,codigo,concepto,valor
 2025-10-01,221,Inversión en activos no financieros,204.555
 2025-11-01,221,Inversión en activos no financieros,231.85
 2025-12-01,221,Inversión en activos no financieros,483.719
-2026-01-01,221,Inversión en activos no financieros,44.813
-2026-02-01,221,Inversión en activos no financieros,121.844
-2026-03-01,221,Inversión en activos no financieros,177.136
-2026-04-01,221,Inversión en activos no financieros,193.293
-2026-05-01,221,Inversión en activos no financieros,205.683
-2026-06-01,221,Inversión en activos no financieros,210.936
+2026-01-01,221,Inversión en activos no financieros,44.858
+2026-02-01,221,Inversión en activos no financieros,121.896
+2026-03-01,221,Inversión en activos no financieros,177.222
+2026-04-01,221,Inversión en activos no financieros,184.097
+2026-05-01,221,Inversión en activos no financieros,211.106
+2026-06-01,221,Inversión en activos no financieros,224.822
+2026-07-01,221,Inversión en activos no financieros,222.44
 2013-01-01,2211,Gobierno Central,190.794
 2013-02-01,2211,Gobierno Central,248.919
 2013-03-01,2211,Gobierno Central,284.147
@@ -5669,6 +5703,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2211,Gobierno Central,58.39
 2026-05-01,2211,Gobierno Central,52.892
 2026-06-01,2211,Gobierno Central,77.424
+2026-07-01,2211,Gobierno Central,57.667
 2013-01-01,2212,GADS,80.923
 2013-02-01,2212,GADS,112.489
 2013-03-01,2212,GADS,130.838
@@ -5825,12 +5860,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2212,GADS,120.773
 2025-11-01,2212,GADS,153.405
 2025-12-01,2212,GADS,321.756
-2026-01-01,2212,GADS,42.972
-2026-02-01,2212,GADS,103.239
-2026-03-01,2212,GADS,128.248
-2026-04-01,2212,GADS,120.512
-2026-05-01,2212,GADS,150.299
-2026-06-01,2212,GADS,125.635
+2026-01-01,2212,GADS,43.018
+2026-02-01,2212,GADS,103.291
+2026-03-01,2212,GADS,128.335
+2026-04-01,2212,GADS,121.07
+2026-05-01,2212,GADS,152.701
+2026-06-01,2212,GADS,141.03
+2026-07-01,2212,GADS,160.217
 2013-01-01,2213,Fondos de Seguridad Social,0.284
 2013-02-01,2213,Fondos de Seguridad Social,1.507
 2013-03-01,2213,Fondos de Seguridad Social,3.695
@@ -5993,6 +6029,7 @@ fecha,codigo,concepto,valor
 2026-04-01,2213,Fondos de Seguridad Social,3.764
 2026-05-01,2213,Fondos de Seguridad Social,1.167
 2026-06-01,2213,Fondos de Seguridad Social,4.705
+2026-07-01,2213,Fondos de Seguridad Social,2.44
 2013-01-01,2214,Empresas Publicas No Financieras,10.857
 2013-02-01,2214,Empresas Publicas No Financieras,9.645
 2013-03-01,2214,Empresas Publicas No Financieras,16.198
@@ -6152,9 +6189,10 @@ fecha,codigo,concepto,valor
 2026-01-01,2214,Empresas Publicas No Financieras,0.01
 2026-02-01,2214,Empresas Publicas No Financieras,0.413
 2026-03-01,2214,Empresas Publicas No Financieras,1.811
-2026-04-01,2214,Empresas Publicas No Financieras,10.626
-2026-05-01,2214,Empresas Publicas No Financieras,1.324
-2026-06-01,2214,Empresas Publicas No Financieras,3.172
+2026-04-01,2214,Empresas Publicas No Financieras,0.872
+2026-05-01,2214,Empresas Publicas No Financieras,4.346
+2026-06-01,2214,Empresas Publicas No Financieras,1.663
+2026-07-01,2214,Empresas Publicas No Financieras,2.116
 2013-01-01,222,Transferencias no permanentes,124.889
 2013-02-01,222,Transferencias no permanentes,308.352
 2013-03-01,222,Transferencias no permanentes,198.254
@@ -6312,11 +6350,12 @@ fecha,codigo,concepto,valor
 2025-11-01,222,Transferencias no permanentes,197.888
 2025-12-01,222,Transferencias no permanentes,183.017
 2026-01-01,222,Transferencias no permanentes,29.744
-2026-02-01,222,Transferencias no permanentes,228.026
-2026-03-01,222,Transferencias no permanentes,48.395
-2026-04-01,222,Transferencias no permanentes,44.199
-2026-05-01,222,Transferencias no permanentes,43.611
-2026-06-01,222,Transferencias no permanentes,116.248
+2026-02-01,222,Transferencias no permanentes,228.028
+2026-03-01,222,Transferencias no permanentes,48.408
+2026-04-01,222,Transferencias no permanentes,44.209
+2026-05-01,222,Transferencias no permanentes,43.939
+2026-06-01,222,Transferencias no permanentes,118.371
+2026-07-01,222,Transferencias no permanentes,135.972
 2013-01-01,223,Otro gasto no permanente,372.673
 2013-02-01,223,Otro gasto no permanente,371.956
 2013-03-01,223,Otro gasto no permanente,488.524
@@ -6473,12 +6512,13 @@ fecha,codigo,concepto,valor
 2025-10-01,223,Otro gasto no permanente,390.625
 2025-11-01,223,Otro gasto no permanente,494.051
 2025-12-01,223,Otro gasto no permanente,607.491
-2026-01-01,223,Otro gasto no permanente,256.887
-2026-02-01,223,Otro gasto no permanente,468.626
-2026-03-01,223,Otro gasto no permanente,442.951
-2026-04-01,223,Otro gasto no permanente,376.926
-2026-05-01,223,Otro gasto no permanente,436.545
-2026-06-01,223,Otro gasto no permanente,442.621
+2026-01-01,223,Otro gasto no permanente,257.052
+2026-02-01,223,Otro gasto no permanente,469.428
+2026-03-01,223,Otro gasto no permanente,443.445
+2026-04-01,223,Otro gasto no permanente,387.746
+2026-05-01,223,Otro gasto no permanente,443.229
+2026-06-01,223,Otro gasto no permanente,465.297
+2026-07-01,223,Otro gasto no permanente,578.434
 2013-01-01,2231,Egresos en personal de inversión no permanentes,53.635
 2013-02-01,2231,Egresos en personal de inversión no permanentes,94.22
 2013-03-01,2231,Egresos en personal de inversión no permanentes,87.624
@@ -6635,12 +6675,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2231,Egresos en personal de inversión no permanentes,82.909
 2025-11-01,2231,Egresos en personal de inversión no permanentes,136.633
 2025-12-01,2231,Egresos en personal de inversión no permanentes,172.428
-2026-01-01,2231,Egresos en personal de inversión no permanentes,55.857
-2026-02-01,2231,Egresos en personal de inversión no permanentes,84.498
-2026-03-01,2231,Egresos en personal de inversión no permanentes,97.635
-2026-04-01,2231,Egresos en personal de inversión no permanentes,82.44
-2026-05-01,2231,Egresos en personal de inversión no permanentes,153.988
-2026-06-01,2231,Egresos en personal de inversión no permanentes,142.227
+2026-01-01,2231,Egresos en personal de inversión no permanentes,55.881
+2026-02-01,2231,Egresos en personal de inversión no permanentes,84.675
+2026-03-01,2231,Egresos en personal de inversión no permanentes,97.801
+2026-04-01,2231,Egresos en personal de inversión no permanentes,82.785
+2026-05-01,2231,Egresos en personal de inversión no permanentes,155.826
+2026-06-01,2231,Egresos en personal de inversión no permanentes,150.365
+2026-07-01,2231,Egresos en personal de inversión no permanentes,156.48
 2013-01-01,2232,Bienes y servicios en inversión no permanentes,39.79
 2013-02-01,2232,Bienes y servicios en inversión no permanentes,58.516
 2013-03-01,2232,Bienes y servicios en inversión no permanentes,107.145
@@ -6797,12 +6838,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2232,Bienes y servicios en inversión no permanentes,104.492
 2025-11-01,2232,Bienes y servicios en inversión no permanentes,133.28
 2025-12-01,2232,Bienes y servicios en inversión no permanentes,200.277
-2026-01-01,2232,Bienes y servicios en inversión no permanentes,31.236
-2026-02-01,2232,Bienes y servicios en inversión no permanentes,74.549
-2026-03-01,2232,Bienes y servicios en inversión no permanentes,90.947
-2026-04-01,2232,Bienes y servicios en inversión no permanentes,94.178
-2026-05-01,2232,Bienes y servicios en inversión no permanentes,84.153
-2026-06-01,2232,Bienes y servicios en inversión no permanentes,79.563
+2026-01-01,2232,Bienes y servicios en inversión no permanentes,31.334
+2026-02-01,2232,Bienes y servicios en inversión no permanentes,74.631
+2026-03-01,2232,Bienes y servicios en inversión no permanentes,91.121
+2026-04-01,2232,Bienes y servicios en inversión no permanentes,94.897
+2026-05-01,2232,Bienes y servicios en inversión no permanentes,86.713
+2026-06-01,2232,Bienes y servicios en inversión no permanentes,91.83
+2026-07-01,2232,Bienes y servicios en inversión no permanentes,97.268
 2013-01-01,2233,Otros,279.248
 2013-02-01,2233,Otros,219.22
 2013-03-01,2233,Otros,293.754
@@ -6959,12 +7001,13 @@ fecha,codigo,concepto,valor
 2025-10-01,2233,Otros,203.225
 2025-11-01,2233,Otros,224.139
 2025-12-01,2233,Otros,234.787
-2026-01-01,2233,Otros,169.795
-2026-02-01,2233,Otros,309.579
-2026-03-01,2233,Otros,254.369
-2026-04-01,2233,Otros,200.308
-2026-05-01,2233,Otros,198.403
-2026-06-01,2233,Otros,220.832
+2026-01-01,2233,Otros,169.837
+2026-02-01,2233,Otros,310.121
+2026-03-01,2233,Otros,254.523
+2026-04-01,2233,Otros,210.064
+2026-05-01,2233,Otros,200.69
+2026-06-01,2233,Otros,223.102
+2026-07-01,2233,Otros,324.686
 2013-01-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),865.222
 2013-02-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-821.135
 2013-03-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-570.553
@@ -7120,13 +7163,14 @@ fecha,codigo,concepto,valor
 2025-09-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-283.959
 2025-10-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-187.354
 2025-11-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-1156.354
-2025-12-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-1646.588
-2026-01-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),623.539
-2026-02-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-366.149
-2026-03-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),177.18
-2026-04-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),1356.374
-2026-05-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),255.601
-2026-06-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),21.492
+2025-12-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-1646.579
+2026-01-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),623.929
+2026-02-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-365.598
+2026-03-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),178.065
+2026-04-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),1359.137
+2026-05-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),249.969
+2026-06-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),12.493
+2026-07-01,3,Resultado Global (Préstamo/Endeudamiento Neto) /(1-2),-547.802
 2013-01-01,31,Resultado Operativo Bruto (1-21-222-223),1148.08
 2013-02-01,31,Resultado Operativo Bruto (1-21-222-223),-448.575
 2013-03-01,31,Resultado Operativo Bruto (1-21-222-223),-135.676
@@ -7282,13 +7326,14 @@ fecha,codigo,concepto,valor
 2025-09-01,31,Resultado Operativo Bruto (1-21-222-223),-28.342
 2025-10-01,31,Resultado Operativo Bruto (1-21-222-223),17.201
 2025-11-01,31,Resultado Operativo Bruto (1-21-222-223),-924.504
-2025-12-01,31,Resultado Operativo Bruto (1-21-222-223),-1162.87
-2026-01-01,31,Resultado Operativo Bruto (1-21-222-223),668.352
-2026-02-01,31,Resultado Operativo Bruto (1-21-222-223),-244.305
-2026-03-01,31,Resultado Operativo Bruto (1-21-222-223),354.315
-2026-04-01,31,Resultado Operativo Bruto (1-21-222-223),1549.667
-2026-05-01,31,Resultado Operativo Bruto (1-21-222-223),461.283
-2026-06-01,31,Resultado Operativo Bruto (1-21-222-223),232.428
+2025-12-01,31,Resultado Operativo Bruto (1-21-222-223),-1162.861
+2026-01-01,31,Resultado Operativo Bruto (1-21-222-223),668.787
+2026-02-01,31,Resultado Operativo Bruto (1-21-222-223),-243.702
+2026-03-01,31,Resultado Operativo Bruto (1-21-222-223),355.288
+2026-04-01,31,Resultado Operativo Bruto (1-21-222-223),1543.234
+2026-05-01,31,Resultado Operativo Bruto (1-21-222-223),461.076
+2026-06-01,31,Resultado Operativo Bruto (1-21-222-223),237.315
+2026-07-01,31,Resultado Operativo Bruto (1-21-222-223),-325.363
 2013-01-01,4,Resultado Primario (3+213),895.505
 2013-02-01,4,Resultado Primario (3+213),-784.954
 2013-03-01,4,Resultado Primario (3+213),-461.411
@@ -7444,13 +7489,14 @@ fecha,codigo,concepto,valor
 2025-09-01,4,Resultado Primario (3+213),-54.037
 2025-10-01,4,Resultado Primario (3+213),-46.609
 2025-11-01,4,Resultado Primario (3+213),-859.453
-2025-12-01,4,Resultado Primario (3+213),-1444.37
-2026-01-01,4,Resultado Primario (3+213),1229.334
-2026-02-01,4,Resultado Primario (3+213),-149.329
-2026-03-01,4,Resultado Primario (3+213),425.06
-2026-04-01,4,Resultado Primario (3+213),1526.724
-2026-05-01,4,Resultado Primario (3+213),573.592
-2026-06-01,4,Resultado Primario (3+213),209.466
+2025-12-01,4,Resultado Primario (3+213),-1444.361
+2026-01-01,4,Resultado Primario (3+213),1229.909
+2026-02-01,4,Resultado Primario (3+213),-148.775
+2026-03-01,4,Resultado Primario (3+213),426.258
+2026-04-01,4,Resultado Primario (3+213),1530.499
+2026-05-01,4,Resultado Primario (3+213),567.936
+2026-06-01,4,Resultado Primario (3+213),200.948
+2026-07-01,4,Resultado Primario (3+213),134.534
 2013-01-01,41,Resultado primario no petrolero (4+23-11),408.618
 2013-02-01,41,Resultado primario no petrolero (4+23-11),-663.621
 2013-03-01,41,Resultado primario no petrolero (4+23-11),-472.788
@@ -7606,13 +7652,14 @@ fecha,codigo,concepto,valor
 2025-09-01,41,Resultado primario no petrolero (4+23-11),-170.951
 2025-10-01,41,Resultado primario no petrolero (4+23-11),-190.247
 2025-11-01,41,Resultado primario no petrolero (4+23-11),-828.898
-2025-12-01,41,Resultado primario no petrolero (4+23-11),-1681.132
-2026-01-01,41,Resultado primario no petrolero (4+23-11),1170.064
-2026-02-01,41,Resultado primario no petrolero (4+23-11),-313.249
-2026-03-01,41,Resultado primario no petrolero (4+23-11),369.44
-2026-04-01,41,Resultado primario no petrolero (4+23-11),972.371
-2026-05-01,41,Resultado primario no petrolero (4+23-11),75.183
-2026-06-01,41,Resultado primario no petrolero (4+23-11),-151.406
+2025-12-01,41,Resultado primario no petrolero (4+23-11),-1681.123
+2026-01-01,41,Resultado primario no petrolero (4+23-11),1170.639
+2026-02-01,41,Resultado primario no petrolero (4+23-11),-312.696
+2026-03-01,41,Resultado primario no petrolero (4+23-11),370.638
+2026-04-01,41,Resultado primario no petrolero (4+23-11),976.146
+2026-05-01,41,Resultado primario no petrolero (4+23-11),69.528
+2026-06-01,41,Resultado primario no petrolero (4+23-11),-164.431
+2026-07-01,41,Resultado primario no petrolero (4+23-11),-128.946
 2013-01-01,23,Erogación Petrolera SPNF (231+232+233+55),922.367
 2013-02-01,23,Erogación Petrolera SPNF (231+232+233+55),1033.38
 2013-03-01,23,Erogación Petrolera SPNF (231+232+233+55),1109.839
@@ -7772,9 +7819,10 @@ fecha,codigo,concepto,valor
 2026-01-01,23,Erogación Petrolera SPNF (231+232+233+55),991.424
 2026-02-01,23,Erogación Petrolera SPNF (231+232+233+55),839.658
 2026-03-01,23,Erogación Petrolera SPNF (231+232+233+55),1161.879
-2026-04-01,23,Erogación Petrolera SPNF (231+232+233+55),1022.58
-2026-05-01,23,Erogación Petrolera SPNF (231+232+233+55),1004.891
-2026-06-01,23,Erogación Petrolera SPNF (231+232+233+55),1274.494
+2026-04-01,23,Erogación Petrolera SPNF (231+232+233+55),1022.698
+2026-05-01,23,Erogación Petrolera SPNF (231+232+233+55),1055.23
+2026-06-01,23,Erogación Petrolera SPNF (231+232+233+55),1260.888
+2026-07-01,23,Erogación Petrolera SPNF (231+232+233+55),1468.923
 2013-01-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),144.698
 2013-02-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),128.659
 2013-03-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),139.278
@@ -7934,9 +7982,10 @@ fecha,codigo,concepto,valor
 2026-01-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),169.89
 2026-02-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),91.06
 2026-03-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),144.434
-2026-04-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),106.674
-2026-05-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),113.129
-2026-06-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),122.712
+2026-04-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),106.792
+2026-05-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),163.468
+2026-06-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),109.106
+2026-07-01,231,Pago tarifa de contratos de prestación servicios y participación (GC),145.28
 2013-01-01,232,Importación de derivados (CFDD),385.301
 2013-02-01,232,Importación de derivados (CFDD),532.329
 2013-03-01,232,Importación de derivados (CFDD),526.129
@@ -8099,6 +8148,7 @@ fecha,codigo,concepto,valor
 2026-04-01,232,Importación de derivados (CFDD),577.098
 2026-05-01,232,Importación de derivados (CFDD),524.356
 2026-06-01,232,Importación de derivados (CFDD),722.875
+2026-07-01,232,Importación de derivados (CFDD),936.301
 2013-01-01,233,Erogación no operativa petrolero EPNF,262.825
 2013-02-01,233,Erogación no operativa petrolero EPNF,198.646
 2013-03-01,233,Erogación no operativa petrolero EPNF,276.271
@@ -8261,6 +8311,7 @@ fecha,codigo,concepto,valor
 2026-04-01,233,Erogación no operativa petrolero EPNF,181.432
 2026-05-01,233,Erogación no operativa petrolero EPNF,180.454
 2026-06-01,233,Erogación no operativa petrolero EPNF,201.799
+2026-07-01,233,Erogación no operativa petrolero EPNF,217.26
 2013-01-01,51,Ingreso Operativo EPNF,504.563
 2013-02-01,51,Ingreso Operativo EPNF,487.968
 2013-03-01,51,Ingreso Operativo EPNF,340.216
@@ -8417,12 +8468,13 @@ fecha,codigo,concepto,valor
 2025-10-01,51,Ingreso Operativo EPNF,496.618
 2025-11-01,51,Ingreso Operativo EPNF,353.562
 2025-12-01,51,Ingreso Operativo EPNF,443.846
-2026-01-01,51,Ingreso Operativo EPNF,307.719
-2026-02-01,51,Ingreso Operativo EPNF,388.174
-2026-03-01,51,Ingreso Operativo EPNF,380.24
+2026-01-01,51,Ingreso Operativo EPNF,308.989
+2026-02-01,51,Ingreso Operativo EPNF,390.666
+2026-03-01,51,Ingreso Operativo EPNF,382.154
 2026-04-01,51,Ingreso Operativo EPNF,651.065
-2026-05-01,51,Ingreso Operativo EPNF,399.191
-2026-06-01,51,Ingreso Operativo EPNF,518.867
+2026-05-01,51,Ingreso Operativo EPNF,399.998
+2026-06-01,51,Ingreso Operativo EPNF,519.268
+2026-07-01,51,Ingreso Operativo EPNF,494.082
 2013-01-01,52,Erogación Operativa EPNF,186.968
 2013-02-01,52,Erogación Operativa EPNF,239.809
 2013-03-01,52,Erogación Operativa EPNF,231.967
@@ -8579,12 +8631,13 @@ fecha,codigo,concepto,valor
 2025-10-01,52,Erogación Operativa EPNF,286.956
 2025-11-01,52,Erogación Operativa EPNF,244.517
 2025-12-01,52,Erogación Operativa EPNF,285.997
-2026-01-01,52,Erogación Operativa EPNF,169.313
-2026-02-01,52,Erogación Operativa EPNF,174.265
-2026-03-01,52,Erogación Operativa EPNF,234.703
+2026-01-01,52,Erogación Operativa EPNF,169.911
+2026-02-01,52,Erogación Operativa EPNF,176.17
+2026-03-01,52,Erogación Operativa EPNF,235.689
 2026-04-01,52,Erogación Operativa EPNF,213.117
-2026-05-01,52,Erogación Operativa EPNF,252.058
-2026-06-01,52,Erogación Operativa EPNF,290.846
+2026-05-01,52,Erogación Operativa EPNF,252.304
+2026-06-01,52,Erogación Operativa EPNF,291.084
+2026-07-01,52,Erogación Operativa EPNF,220.911
 2013-01-01,53,Resultado Operacional EPNF,317.595
 2013-02-01,53,Resultado Operacional EPNF,248.159
 2013-03-01,53,Resultado Operacional EPNF,108.249
@@ -8741,12 +8794,13 @@ fecha,codigo,concepto,valor
 2025-10-01,53,Resultado Operacional EPNF,209.662
 2025-11-01,53,Resultado Operacional EPNF,109.045
 2025-12-01,53,Resultado Operacional EPNF,157.85
-2026-01-01,53,Resultado Operacional EPNF,138.406
-2026-02-01,53,Resultado Operacional EPNF,213.909
-2026-03-01,53,Resultado Operacional EPNF,145.537
+2026-01-01,53,Resultado Operacional EPNF,139.077
+2026-02-01,53,Resultado Operacional EPNF,214.497
+2026-03-01,53,Resultado Operacional EPNF,146.464
 2026-04-01,53,Resultado Operacional EPNF,437.947
-2026-05-01,53,Resultado Operacional EPNF,147.132
-2026-06-01,53,Resultado Operacional EPNF,228.02
+2026-05-01,53,Resultado Operacional EPNF,147.693
+2026-06-01,53,Resultado Operacional EPNF,228.184
+2026-07-01,53,Resultado Operacional EPNF,273.171
 2013-01-01,54,Ingresos Petroleros EPNF,429.446
 2013-02-01,54,Ingresos Petroleros EPNF,404.853
 2013-03-01,54,Ingresos Petroleros EPNF,255.991
@@ -8909,6 +8963,7 @@ fecha,codigo,concepto,valor
 2026-04-01,54,Ingresos Petroleros EPNF,556.443
 2026-05-01,54,Ingresos Petroleros EPNF,281.608
 2026-06-01,54,Ingresos Petroleros EPNF,417.841
+2026-07-01,54,Ingresos Petroleros EPNF,399.951
 2013-01-01,55,Erogación Operativa Petrolera EPNF,129.543
 2013-02-01,55,Erogación Operativa Petrolera EPNF,173.746
 2013-03-01,55,Erogación Operativa Petrolera EPNF,168.162
@@ -9071,6 +9126,7 @@ fecha,codigo,concepto,valor
 2026-04-01,55,Erogación Operativa Petrolera EPNF,157.376
 2026-05-01,55,Erogación Operativa Petrolera EPNF,186.952
 2026-06-01,55,Erogación Operativa Petrolera EPNF,227.108
+2026-07-01,55,Erogación Operativa Petrolera EPNF,170.081
 2013-01-01,56,Resultado Operativo Petrolera EPNF,299.903
 2013-02-01,56,Resultado Operativo Petrolera EPNF,231.106
 2013-03-01,56,Resultado Operativo Petrolera EPNF,87.83
@@ -9233,6 +9289,7 @@ fecha,codigo,concepto,valor
 2026-04-01,56,Resultado Operativo Petrolera EPNF,399.067
 2026-05-01,56,Resultado Operativo Petrolera EPNF,94.656
 2026-06-01,56,Resultado Operativo Petrolera EPNF,190.733
+2026-07-01,56,Resultado Operativo Petrolera EPNF,229.87
 2018-01-01,57,Subsidios a los combustibles,254.604
 2018-02-01,57,Subsidios a los combustibles,220.535
 2018-03-01,57,Subsidios a los combustibles,247.06
@@ -9335,3 +9392,4 @@ fecha,codigo,concepto,valor
 2026-04-01,57,Subsidios a los combustibles,428.803
 2026-05-01,57,Subsidios a los combustibles,464.888
 2026-06-01,57,Subsidios a los combustibles,314.578
+2026-07-01,57,Subsidios a los combustibles,234.216

@@ -17,6 +17,8 @@ const referencias = [
   {etiqueta: "12 meses", t: Date.UTC(anio - 1, new Date(corte).getUTCMonth(), new Date(corte).getUTCDate())}
 ];
 const desde = (id, t) => mercados.serie(id).filter(([x]) => x >= t);
+// Fuentes de un conjunto de series, sin repetir.
+const fuentes = (...ids) => [...new Set(ids.flat().map((id) => mercados.meta(id).fuente))].join("; ");
 
 // Cambio desde una fecha: % para precios e índices, puntos básicos para tasas.
 function cambio(id, t) {
@@ -83,7 +85,7 @@ display(html`<div class="paneles">
     titulo: "Principales índices bursátiles",
     ancho: true,
     subtitulo: `Variación, % · al ${formatoPeriodo(corte, "D")}`,
-    fuente: "Bloomberg",
+    fuente: fuentes("spx"),
     contenido: tablaDesempeno([
       ["Estados Unidos", ["spx", "nasdaq", "dow"]],
       ["Europa", ["stoxx50", "dax", "ftse", "cac", "ibex"]],
@@ -95,7 +97,7 @@ display(html`<div class="paneles">
     titulo: "Desempeño de las bolsas en los últimos 12 meses",
     ancho: true,
     subtitulo: "Índice, base 100 hace 12 meses",
-    fuente: "Bloomberg",
+    fuente: fuentes("spx"),
     contenido: grafico({
       series: [
         {nombre: "S&P 500", datos: base100("spx", referencias[2].t)},
@@ -122,8 +124,8 @@ const pendiente = combinar(mercados.serie("us_10a"), mercados.serie("us_2a"), (a
 display(html`<div class="paneles">
   ${panel({
     titulo: "Tasas de política monetaria",
-    subtitulo: "%, diario",
-    fuente: "Bloomberg",
+    subtitulo: `%, diario; de la Fed se grafica el límite superior de su rango objetivo (hoy ${formatoNumero(mercados.ultimo("fed_inf")[1], 2)}–${formatoNumero(mercados.ultimo("fed")[1], 2)}%)`,
+    fuente: fuentes(politica),
     contenido: grafico({
       series: politica.map((id) => ({nombre: mercados.meta(id).corto, datos: mercados.serie(id), escalon: true})),
       frecuencia: "D", soloImagen: true, unidad: "%", decimales: 2
@@ -132,7 +134,7 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Curva de rendimientos del Tesoro de EE. UU.",
     subtitulo: "Rendimiento por plazo, %",
-    fuente: "Bloomberg",
+    fuente: `Departamento del Tesoro de EE. UU., vía ${fuentes("us_10a")}`,
     contenido: graficoCategorias({
       categorias: plazosUS,
       series: [
@@ -146,7 +148,7 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Curvas soberanas por país",
     subtitulo: `Rendimiento por plazo, %, al ${formatoPeriodo(corte, "D")}`,
-    fuente: "Bloomberg",
+    fuente: fuentes(curvas.map((c) => `${c.id}_${c.plazos[0].toLowerCase()}`)),
     contenido: graficoCategorias({
       categorias: todosPlazos,
       series: curvas.map((c) => ({nombre: c.pais, datos: curvaPais(c)})),
@@ -156,7 +158,8 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Pendiente de la curva de EE. UU.",
     subtitulo: "Rendimiento a 10 años menos 2 años, puntos básicos",
-    fuente: "Bloomberg; cálculo propio",
+    fuente: `${fuentes("us_10a")}; cálculo propio`,
+    nota: "Cuando es negativa (curva invertida), los plazos cortos rinden más que los largos: el mercado espera recortes de tasas, algo que históricamente ha antecedido a desaceleraciones de la economía de EE. UU.",
     contenido: grafico({
       series: [{nombre: "10 años – 2 años", datos: pendiente}],
       frecuencia: "D", soloImagen: true, unidad: "pb", decimales: 0, cero: true
@@ -165,12 +168,13 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Tasas de referencia en dólares",
     subtitulo: "Nivel, % · cambios en puntos básicos",
-    fuente: "Bloomberg",
+    fuente: fuentes("fed", "boe", "boj"),
     ancho: true,
+    nota: "La SOFR a un día es la tasa observada en las operaciones del día hábil anterior. La SOFR a plazo (Term SOFR), que mira hacia adelante, la publica CME con licencia y no se incluye; como referencia pública de las tasas en dólares a 1, 3, 6 y 12 meses se muestran las letras del Tesoro, que también reflejan las expectativas de tasas, aunque suelen diferir de la Term SOFR en algunos puntos básicos.",
     contenido: tablaDesempeno([
-      ["Política monetaria", ["fed", "fed_efectiva", "bce_tasa", "boe", "boj"]],
-      ["Term SOFR", ["sofr_1m", "sofr_3m", "sofr_6m", "sofr_12m"]],
-      ["Tesoro de EE. UU.", ["us_3m", "us_2a", "us_5a", "us_10a", "us_30a"]]
+      ["Política monetaria", ["fed", "fed_inf", "fed_efectiva", "bce_tasa", "boe", "boj"]],
+      ["Corto plazo: SOFR y letras del Tesoro", ["sofr", "us_1m", "us_3m", "us_6m", "us_1a"]],
+      ["Bonos del Tesoro de EE. UU.", ["us_2a", "us_5a", "us_10a", "us_30a"]]
     ], {unidad: false})
   })}
 </div>`);
@@ -184,7 +188,8 @@ display(html`<div class="paneles">
     titulo: "Índice del dólar (DXY)",
     ancho: true,
     subtitulo: "Índice, diario",
-    fuente: "Bloomberg",
+    fuente: fuentes("dxy"),
+    nota: "Mide el valor del dólar frente a seis monedas: euro (58% del índice), yen, libra, dólar canadiense, corona sueca y franco suizo. Si sube, el dólar se fortalece: para una economía dolarizada como la ecuatoriana, sus exportaciones se encarecen frente a las de países con moneda propia y las importaciones desde esos países se abaratan. Si baja, ocurre lo contrario.",
     contenido: grafico({
       series: [{nombre: "DXY", datos: mercados.serie("dxy")}],
       frecuencia: "D", soloImagen: true, unidad: "", decimales: 2
@@ -194,7 +199,7 @@ display(html`<div class="paneles">
     titulo: "Tipos de cambio",
     ancho: true,
     subtitulo: "Variación, %; en los pares USD/XXX un aumento es apreciación del dólar",
-    fuente: "Bloomberg",
+    fuente: fuentes("dxy"),
     contenido: tablaDesempeno([
       [null, ["dxy", "eurusd", "gbpusd", "usdjpy", "usdcny", "usdcop", "usdbrl", "usdmxn"]]
     ])
@@ -211,18 +216,18 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Precios de materias primas",
     subtitulo: `Variación, % · al ${formatoPeriodo(corte, "D")}`,
-    fuente: "Bloomberg",
+    fuente: fuentes("wti"),
     ancho: true,
     contenido: tablaDesempeno([
       ["Energía", ["wti", "brent", "gasolina", "diesel", "gas_natural"]],
-      ["Agrícolas", ["cacao", "soya", "palma", "trigo", "maiz"]],
+      ["Agrícolas", ["cacao", "soya", "trigo", "maiz"]],
       ["Metales", ["oro", "cobre"]]
     ])
   })}
   ${panel({
     titulo: "Petróleo",
     subtitulo: "USD por barril, primer futuro",
-    fuente: "Bloomberg",
+    fuente: fuentes("wti"),
     ancho: true,
     contenido: grafico({
       series: [
@@ -235,7 +240,7 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Cacao",
     subtitulo: "USD por tonelada, ICE Nueva York",
-    fuente: "Bloomberg",
+    fuente: fuentes("wti"),
     contenido: grafico({
       series: [{nombre: "Cacao", datos: mercados.serie("cacao")}],
       frecuencia: "D", soloImagen: true, unidad: "USD/t", decimales: 0
@@ -244,7 +249,7 @@ display(html`<div class="paneles">
   ${panel({
     titulo: "Oro",
     subtitulo: "USD por onza troy, COMEX",
-    fuente: "Bloomberg",
+    fuente: fuentes("wti"),
     contenido: grafico({
       series: [{nombre: "Oro", datos: mercados.serie("oro")}],
       frecuencia: "D", soloImagen: true, unidad: "USD/oz", decimales: 1
@@ -252,23 +257,23 @@ display(html`<div class="paneles">
   })}
   ${panel({
     titulo: "Cobre",
-    subtitulo: "Centavos de USD por libra, COMEX",
-    fuente: "Bloomberg",
+    subtitulo: "USD por libra, COMEX",
+    fuente: fuentes("wti"),
     contenido: grafico({
       series: [{nombre: "Cobre", datos: mercados.serie("cobre")}],
-      frecuencia: "D", soloImagen: true, unidad: "¢/libra", decimales: 1
+      frecuencia: "D", soloImagen: true, unidad: "USD/libra", decimales: 2
     })
   })}
   ${panel({
     titulo: "Derivados de petróleo",
-    subtitulo: "Centavos de USD por galón, Nymex",
-    fuente: "Bloomberg",
+    subtitulo: "USD por galón, Nymex",
+    fuente: fuentes("wti"),
     contenido: grafico({
       series: [
         {nombre: "Gasolina RBOB", datos: mercados.serie("gasolina")},
         {nombre: "Diésel (heating oil)", datos: mercados.serie("diesel")}
       ],
-      frecuencia: "D", soloImagen: true, unidad: "¢/galón", decimales: 1
+      frecuencia: "D", soloImagen: true, unidad: "USD/galón", decimales: 2
     })
   })}
 </div>`);

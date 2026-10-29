@@ -20,9 +20,11 @@
    "id": "de",
    "pais": "Alemania",
    "plazos": [
+    "1A",
     "2A",
     "5A",
     "10A",
+    "20A",
     "30A"
    ]
   },
@@ -30,21 +32,15 @@
    "id": "uk",
    "pais": "Reino Unido",
    "plazos": [
-    "1A",
-    "2A",
     "5A",
-    "7A",
     "10A",
-    "15A",
-    "20A",
-    "30A"
+    "20A"
    ]
   },
   {
    "id": "jp",
    "pais": "Japón",
    "plazos": [
-    "3M",
     "1A",
     "2A",
     "3A",
@@ -66,8 +62,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "SPX Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^GSPC"
   },
   {
    "id": "nasdaq",
@@ -78,8 +74,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "CCMP Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^IXIC"
   },
   {
    "id": "dow",
@@ -90,8 +86,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "INDU Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^DJI"
   },
   {
    "id": "stoxx50",
@@ -102,8 +98,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "SX5E Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^STOXX50E"
   },
   {
    "id": "dax",
@@ -114,8 +110,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "DAX Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^GDAXI"
   },
   {
    "id": "ftse",
@@ -126,8 +122,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "UKX Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^FTSE"
   },
   {
    "id": "cac",
@@ -138,8 +134,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "CAC Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^FCHI"
   },
   {
    "id": "ibex",
@@ -150,8 +146,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "IBEX Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^IBEX"
   },
   {
    "id": "nikkei",
@@ -162,8 +158,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "NKY Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^N225"
   },
   {
    "id": "hangseng",
@@ -174,8 +170,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "HSI Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^HSI"
   },
   {
    "id": "shanghai",
@@ -186,8 +182,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "SHCOMP Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "000001.SS"
   },
   {
    "id": "bovespa",
@@ -198,8 +194,8 @@
    "unidad": "puntos",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "IBOV Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "^BVSP"
   },
   {
    "id": "fed",
@@ -210,8 +206,20 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "FDTR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DFEDTARU"
+  },
+  {
+   "id": "fed_inf",
+   "sector": "internacional",
+   "grupo": "politica",
+   "nombre": "Fed: tasa de fondos federales (límite inferior)",
+   "corto": "Fed, límite inferior",
+   "unidad": "%",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DFEDTARL"
   },
   {
    "id": "fed_efectiva",
@@ -222,8 +230,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "FEDL01 Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DFF"
   },
   {
    "id": "bce_tasa",
@@ -234,8 +242,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "EURR002W Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "ECBMRRFR"
   },
   {
    "id": "boe",
@@ -246,68 +254,32 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "UKBRBASE Index"
+   "fuente": "Banco de Inglaterra",
+   "codigo": "IUDBEDR"
   },
   {
    "id": "boj",
    "sector": "internacional",
    "grupo": "politica",
-   "nombre": "Banco de Japón: tasa de política",
+   "nombre": "Banco de Japón: tasa call a un día sin garantía (promedio)",
    "corto": "BoJ (Japón)",
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "BOJDTR Index"
+   "fuente": "Banco de Japón",
+   "codigo": "STRDCLUCON"
   },
   {
-   "id": "sofr_1m",
+   "id": "sofr",
    "sector": "internacional",
    "grupo": "politica",
-   "nombre": "Term SOFR 1 mes",
-   "corto": "Term SOFR 1M",
+   "nombre": "SOFR a un día",
+   "corto": "SOFR a un día",
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "TSFR1M INDEX"
-  },
-  {
-   "id": "sofr_3m",
-   "sector": "internacional",
-   "grupo": "politica",
-   "nombre": "Term SOFR 3 meses",
-   "corto": "Term SOFR 3M",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "TSFR3M INDEX"
-  },
-  {
-   "id": "sofr_6m",
-   "sector": "internacional",
-   "grupo": "politica",
-   "nombre": "Term SOFR 6 meses",
-   "corto": "Term SOFR 6M",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "TSFR6M INDEX"
-  },
-  {
-   "id": "sofr_12m",
-   "sector": "internacional",
-   "grupo": "politica",
-   "nombre": "Term SOFR 12 meses",
-   "corto": "Term SOFR 12M",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "TSFR12M INDEX"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "SOFR"
   },
   {
    "id": "dxy",
@@ -318,8 +290,8 @@
    "unidad": "índice",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "DXY Index"
+   "fuente": "Yahoo Finance",
+   "codigo": "DX-Y.NYB"
   },
   {
    "id": "eurusd",
@@ -330,8 +302,8 @@
    "unidad": "USD por EUR",
    "frecuencia": "D",
    "decimales": 4,
-   "fuente": "Bloomberg",
-   "ticker": "EURUSD Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "EURUSD=X"
   },
   {
    "id": "gbpusd",
@@ -342,8 +314,8 @@
    "unidad": "USD por GBP",
    "frecuencia": "D",
    "decimales": 4,
-   "fuente": "Bloomberg",
-   "ticker": "GBPUSD Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "GBPUSD=X"
   },
   {
    "id": "usdjpy",
@@ -354,8 +326,8 @@
    "unidad": "JPY por USD",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "USDJPY Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "JPY=X"
   },
   {
    "id": "usdcny",
@@ -366,8 +338,8 @@
    "unidad": "CNY por USD",
    "frecuencia": "D",
    "decimales": 4,
-   "fuente": "Bloomberg",
-   "ticker": "USDCNY Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "CNY=X"
   },
   {
    "id": "usdcop",
@@ -378,8 +350,8 @@
    "unidad": "COP por USD",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "USDCOP Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "COP=X"
   },
   {
    "id": "usdbrl",
@@ -390,8 +362,8 @@
    "unidad": "BRL por USD",
    "frecuencia": "D",
    "decimales": 4,
-   "fuente": "Bloomberg",
-   "ticker": "USDBRL Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "BRL=X"
   },
   {
    "id": "usdmxn",
@@ -402,8 +374,8 @@
    "unidad": "MXN por USD",
    "frecuencia": "D",
    "decimales": 4,
-   "fuente": "Bloomberg",
-   "ticker": "USDMXN Curncy"
+   "fuente": "Yahoo Finance",
+   "codigo": "MXN=X"
   },
   {
    "id": "wti",
@@ -414,8 +386,8 @@
    "unidad": "USD/barril",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "CL1 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "CL=F"
   },
   {
    "id": "brent",
@@ -426,8 +398,8 @@
    "unidad": "USD/barril",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "CO1 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "BZ=F"
   },
   {
    "id": "gasolina",
@@ -435,11 +407,11 @@
    "grupo": "commodity",
    "nombre": "Gasolina RBOB (Nymex)",
    "corto": "Gasolina RBOB",
-   "unidad": "¢/galón",
+   "unidad": "USD/galón",
    "frecuencia": "D",
-   "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "XB1 Comdty"
+   "decimales": 2,
+   "fuente": "Yahoo Finance",
+   "codigo": "RB=F"
   },
   {
    "id": "diesel",
@@ -447,11 +419,11 @@
    "grupo": "commodity",
    "nombre": "Heating oil / diésel (Nymex)",
    "corto": "Diésel (HO)",
-   "unidad": "¢/galón",
+   "unidad": "USD/galón",
    "frecuencia": "D",
-   "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "HO1 Comdty"
+   "decimales": 2,
+   "fuente": "Yahoo Finance",
+   "codigo": "HO=F"
   },
   {
    "id": "gas_natural",
@@ -462,8 +434,8 @@
    "unidad": "USD/MMBtu",
    "frecuencia": "D",
    "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "NG1 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "NG=F"
   },
   {
    "id": "cacao",
@@ -474,8 +446,8 @@
    "unidad": "USD/t",
    "frecuencia": "D",
    "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "CC1 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "CC=F"
   },
   {
    "id": "oro",
@@ -486,8 +458,8 @@
    "unidad": "USD/oz",
    "frecuencia": "D",
    "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "GC1 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "GC=F"
   },
   {
    "id": "cobre",
@@ -495,215 +467,83 @@
    "grupo": "commodity",
    "nombre": "Cobre (COMEX, 1er futuro)",
    "corto": "Cobre",
-   "unidad": "¢/libra",
+   "unidad": "USD/libra",
    "frecuencia": "D",
-   "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "HG1 Comdty"
+   "decimales": 2,
+   "fuente": "Yahoo Finance",
+   "codigo": "HG=F"
   },
   {
    "id": "soya",
    "sector": "internacional",
    "grupo": "commodity",
-   "nombre": "Soya (CBOT)",
+   "nombre": "Soya (CBOT, 1er futuro)",
    "corto": "Soya",
    "unidad": "¢/bushel",
    "frecuencia": "D",
    "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "S 1 COMB Comdty"
-  },
-  {
-   "id": "palma",
-   "sector": "internacional",
-   "grupo": "commodity",
-   "nombre": "Aceite de palma (Bursa Malaysia)",
-   "corto": "Aceite de palma",
-   "unidad": "MYR/t",
-   "frecuencia": "D",
-   "decimales": 0,
-   "fuente": "Bloomberg",
-   "ticker": "KOX6 Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "ZS=F"
   },
   {
    "id": "trigo",
    "sector": "internacional",
    "grupo": "commodity",
-   "nombre": "Trigo (CBOT, dic-26)",
+   "nombre": "Trigo (CBOT, 1er futuro)",
    "corto": "Trigo",
    "unidad": "¢/bushel",
    "frecuencia": "D",
    "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "W Z6 COMB Comdty"
+   "fuente": "Yahoo Finance",
+   "codigo": "ZW=F"
   },
   {
    "id": "maiz",
    "sector": "internacional",
    "grupo": "commodity",
-   "nombre": "Maíz (Euronext, nov-26)",
+   "nombre": "Maíz (CBOT, 1er futuro)",
    "corto": "Maíz",
-   "unidad": "EUR/t",
+   "unidad": "¢/bushel",
    "frecuencia": "D",
    "decimales": 1,
-   "fuente": "Bloomberg",
-   "ticker": "EPX6 Comdty"
-  },
-  {
-   "id": "ec2030_px",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2030: precio",
-   "corto": "Ecuador 2030",
-   "unidad": "USD por 100",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2094456 Corp"
-  },
-  {
-   "id": "ec2034_px",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2034: precio",
-   "corto": "Ecuador 2034",
-   "unidad": "USD por 100",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "YI4276048 Corp"
-  },
-  {
-   "id": "ec2035_px",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2035: precio",
-   "corto": "Ecuador 2035",
-   "unidad": "USD por 100",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2104214 Corp"
-  },
-  {
-   "id": "ec2039_px",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2039: precio",
-   "corto": "Ecuador 2039",
-   "unidad": "USD por 100",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "YI4276055 Corp"
-  },
-  {
-   "id": "ec2040_px",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2040: precio",
-   "corto": "Ecuador 2040",
-   "unidad": "USD por 100",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2104560 Corp"
-  },
-  {
-   "id": "ec2030_ytm",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2030: rendimiento",
-   "corto": "Ecuador 2030",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2094456 Corp"
-  },
-  {
-   "id": "ec2034_ytm",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2034: rendimiento",
-   "corto": "Ecuador 2034",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "YI4276048 Corp"
-  },
-  {
-   "id": "ec2035_ytm",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2035: rendimiento",
-   "corto": "Ecuador 2035",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2104214 Corp"
-  },
-  {
-   "id": "ec2039_ytm",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2039: rendimiento",
-   "corto": "Ecuador 2039",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "YI4276055 Corp"
-  },
-  {
-   "id": "ec2040_ytm",
-   "sector": "internacional",
-   "grupo": "ecuador",
-   "nombre": "Bono Ecuador 2040: rendimiento",
-   "corto": "Ecuador 2040",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 2,
-   "fuente": "Bloomberg",
-   "ticker": "ZO2104560 Corp"
+   "fuente": "Yahoo Finance",
+   "codigo": "ZC=F"
   },
   {
    "id": "us_1m",
    "sector": "internacional",
    "grupo": "curva_us",
-   "nombre": "Bono soberano EE. UU. 1M",
+   "nombre": "Letra del Tesoro EE. UU. 1M",
    "corto": "EE. UU. 1M",
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG1M Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS1MO"
   },
   {
    "id": "us_3m",
    "sector": "internacional",
    "grupo": "curva_us",
-   "nombre": "Bono soberano EE. UU. 3M",
+   "nombre": "Letra del Tesoro EE. UU. 3M",
    "corto": "EE. UU. 3M",
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG3M Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS3MO"
   },
   {
    "id": "us_6m",
    "sector": "internacional",
    "grupo": "curva_us",
-   "nombre": "Bono soberano EE. UU. 6M",
+   "nombre": "Letra del Tesoro EE. UU. 6M",
    "corto": "EE. UU. 6M",
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG6M Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS6MO"
   },
   {
    "id": "us_1a",
@@ -714,8 +554,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG12M Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS1"
   },
   {
    "id": "us_2a",
@@ -726,8 +566,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG2YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS2"
   },
   {
    "id": "us_3a",
@@ -738,8 +578,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG3YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS3"
   },
   {
    "id": "us_5a",
@@ -750,8 +590,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG5YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS5"
   },
   {
    "id": "us_7a",
@@ -762,8 +602,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG7YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS7"
   },
   {
    "id": "us_10a",
@@ -774,8 +614,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG10YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS10"
   },
   {
    "id": "us_30a",
@@ -786,8 +626,20 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "USGG30YR Index"
+   "fuente": "FRED (Reserva Federal de St. Louis)",
+   "codigo": "DGS30"
+  },
+  {
+   "id": "de_1a",
+   "sector": "internacional",
+   "grupo": "curva_de",
+   "nombre": "Bono soberano Alemania 1A",
+   "corto": "Alemania 1A",
+   "unidad": "%",
+   "frecuencia": "D",
+   "decimales": 3,
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R01XX.R.A.A._Z._Z.A"
   },
   {
    "id": "de_2a",
@@ -798,8 +650,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BV020910 BVLI INDEX"
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R02XX.R.A.A._Z._Z.A"
   },
   {
    "id": "de_5a",
@@ -810,8 +662,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BV050910 BVLI INDEX"
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R05XX.R.A.A._Z._Z.A"
   },
   {
    "id": "de_10a",
@@ -822,8 +674,20 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BV100910 BVLI INDEX"
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R10XX.R.A.A._Z._Z.A"
+  },
+  {
+   "id": "de_20a",
+   "sector": "internacional",
+   "grupo": "curva_de",
+   "nombre": "Bono soberano Alemania 20A",
+   "corto": "Alemania 20A",
+   "unidad": "%",
+   "frecuencia": "D",
+   "decimales": 3,
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R20XX.R.A.A._Z._Z.A"
   },
   {
    "id": "de_30a",
@@ -834,32 +698,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BV300910 BVLI INDEX"
-  },
-  {
-   "id": "uk_1a",
-   "sector": "internacional",
-   "grupo": "curva_uk",
-   "nombre": "Bono soberano Reino Unido 1A",
-   "corto": "Reino Unido 1A",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG1 Index"
-  },
-  {
-   "id": "uk_2a",
-   "sector": "internacional",
-   "grupo": "curva_uk",
-   "nombre": "Bono soberano Reino Unido 2A",
-   "corto": "Reino Unido 2A",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG2 Index"
+   "fuente": "Deutsche Bundesbank",
+   "codigo": "BBSIS/D.I.ZST.ZI.EUR.S1311.B.A604.R30XX.R.A.A._Z._Z.A"
   },
   {
    "id": "uk_5a",
@@ -870,20 +710,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG5 Index"
-  },
-  {
-   "id": "uk_7a",
-   "sector": "internacional",
-   "grupo": "curva_uk",
-   "nombre": "Bono soberano Reino Unido 7A",
-   "corto": "Reino Unido 7A",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG7 Index"
+   "fuente": "Banco de Inglaterra",
+   "codigo": "IUDSNPY"
   },
   {
    "id": "uk_10a",
@@ -894,20 +722,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG10 Index"
-  },
-  {
-   "id": "uk_15a",
-   "sector": "internacional",
-   "grupo": "curva_uk",
-   "nombre": "Bono soberano Reino Unido 15A",
-   "corto": "Reino Unido 15A",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG15 Index"
+   "fuente": "Banco de Inglaterra",
+   "codigo": "IUDMNPY"
   },
   {
    "id": "uk_20a",
@@ -918,32 +734,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG20 Index"
-  },
-  {
-   "id": "uk_30a",
-   "sector": "internacional",
-   "grupo": "curva_uk",
-   "nombre": "Bono soberano Reino Unido 30A",
-   "corto": "Reino Unido 30A",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "GUKG30 Index"
-  },
-  {
-   "id": "jp_3m",
-   "sector": "internacional",
-   "grupo": "curva_jp",
-   "nombre": "Bono soberano Japón 3M",
-   "corto": "Japón 3M",
-   "unidad": "%",
-   "frecuencia": "D",
-   "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI3M BVLI INDEX"
+   "fuente": "Banco de Inglaterra",
+   "codigo": "IUDLNPY"
   },
   {
    "id": "jp_1a",
@@ -954,8 +746,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI01 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "1Y"
   },
   {
    "id": "jp_2a",
@@ -966,8 +758,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI02 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "2Y"
   },
   {
    "id": "jp_3a",
@@ -978,8 +770,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI03 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "3Y"
   },
   {
    "id": "jp_5a",
@@ -990,8 +782,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI05 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "5Y"
   },
   {
    "id": "jp_7a",
@@ -1002,8 +794,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI07 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "7Y"
   },
   {
    "id": "jp_10a",
@@ -1014,8 +806,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI10 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "10Y"
   },
   {
    "id": "jp_20a",
@@ -1026,8 +818,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI20 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "20Y"
   },
   {
    "id": "jp_30a",
@@ -1038,8 +830,8 @@
    "unidad": "%",
    "frecuencia": "D",
    "decimales": 3,
-   "fuente": "Bloomberg",
-   "ticker": "BVCSEI30 BVLI INDEX"
+   "fuente": "Ministerio de Finanzas de Japón",
+   "codigo": "30Y"
   }
  ]
 }

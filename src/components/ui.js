@@ -2,7 +2,7 @@
 
 import {html} from "npm:htl";
 import {cambioAnual, etiquetaAcumulado, formatoCambio, formatoNumero, formatoPeriodo} from "./datos.js";
-import {minigrafico} from "./graficos.js";
+import {graficoCategorias, minigrafico} from "./graficos.js";
 
 /**
  * Tarjeta de indicador (KPI).
@@ -108,8 +108,11 @@ function botonPantallaCompleta() {
   return boton;
 }
 
-/** Panel con título, subtítulo, gráfico y fuente; se puede ver en pantalla completa. */
-export function panel({titulo, subtitulo, fuente, contenido, ancho = false, enlace}) {
+/**
+ * Panel con título, subtítulo, gráfico y fuente; se puede ver en pantalla completa.
+ * `nota` explica cómo leer el indicador (para lectores no especializados).
+ */
+export function panel({titulo, subtitulo, fuente, contenido, ancho = false, enlace, nota}) {
   return html`<section class="panel${ancho ? " ancho" : ""}">
     <div class="panel-cabeza">
       <h3>${titulo}</h3>
@@ -120,6 +123,7 @@ export function panel({titulo, subtitulo, fuente, contenido, ancho = false, enla
     </div>
     ${subtitulo ? html`<p class="panel-sub">${subtitulo}</p>` : null}
     ${contenido}
+    ${nota ? html`<p class="panel-nota">${nota}</p>` : null}
     ${fuente ? html`<p class="panel-pie">Fuente: ${fuente}.</p>` : null}
     <p class="panel-marca"><span class="marca-cuadro" aria-hidden="true"></span><strong>BG</strong> Riesgo Macro</p>
   </section>`;
@@ -159,8 +163,30 @@ export function cuadroComparativo({filas, columnaA, columnaB, participacion = tr
   </table></div>`;
 }
 
+// --- Previsiones de crecimiento ---------------------------------------------
+
+/** Columnas de crecimiento previsto: instituciones en el eje y una serie por año. */
+export function graficoPrevisiones(previsiones, anios, {altura = 300} = {}) {
+  return graficoCategorias({
+    categorias: previsiones.map((p) => p.institucion),
+    series: anios.map((a, i) => ({nombre: `${a}`, datos: previsiones.map((p) => p.valores.get(a) ?? null), color: i})),
+    tipo: "column", unidad: "%", decimales: 1, cero: true, altura
+  });
+}
+
+/** Cuadro de previsiones: institución (con su informe) y crecimiento previsto por año. */
+export function tablaPrevisiones(previsiones, anios) {
+  return html`<div class="tabla-wrap"><table class="tablero cuadro">
+    <thead><tr><th>Institución e informe</th>${anios.map((a) => html`<th>${a}</th>`)}</tr></thead>
+    <tbody>${previsiones.map((p) => html`<tr class="fila-item nivel-0">
+      <td><b>${p.institucion}</b><span class="celda-nota">${p.informe}</span></td>
+      ${anios.map((a) => html`<td>${p.valores.has(a) ? `${formatoNumero(p.valores.get(a), 1)}%` : "–"}</td>`)}
+    </tr>`)}</tbody>
+  </table></div>`;
+}
+
 /** Cabecera de página con antetítulo, título, bajada y fecha de corte. */
-export function cabecera({antetitulo, titulo, bajada, corte, frecuencia = "M", aviso = "Versión preliminar"}) {
+export function cabecera({antetitulo, titulo, bajada, corte, frecuencia = "M", aviso}) {
   return html`<header class="cabecera">
     <p class="antetitulo">${antetitulo}</p>
     <h1>${titulo}</h1>

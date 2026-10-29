@@ -1,4 +1,4 @@
-// Series diarias de mercados (Bloomberg). Se cargan solo en las páginas que las usan.
+// Series diarias de mercados internacionales. Se cargan solo en las páginas que las usan.
 import {FileAttachment} from "observablehq:stdlib";
 import {crearBase} from "./datos.js";
 

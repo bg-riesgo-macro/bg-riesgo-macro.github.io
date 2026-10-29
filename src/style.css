@@ -224,28 +224,99 @@ h3 {
   font-weight: 500;
 }
 
-/* ------------------------------------------------------------------ Mensajes clave */
-.mensajes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0 1.75rem;
+/* ------------------------------------------------------------------ Lectura del mes */
+.lectura {
   margin: 0 0 2.5rem;
-  padding: 1.25rem 0 0.25rem;
+  padding: 0.9rem 0 0.2rem;
   border-top: 2px solid var(--tinta);
+  border-bottom: 1px solid var(--linea);
 }
-.mensaje h3 {
-  margin-bottom: 0.25rem;
-}
-.mensaje p {
-  margin: 0 0 1rem;
-  color: var(--tinta-2);
-  font-size: 0.92rem;
-}
-
-.nota-sector {
-  margin: 0.5rem 0 1rem;
-  font-size: 0.82rem;
+#observablehq-main .lectura p.lectura-firma {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
   color: var(--tinta-suave);
+}
+#observablehq-main .lectura-sintesis p {
+  max-width: 52rem;
+  margin: 0 0 0.9rem;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--tinta);
+}
+.lectura-detalle summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.9rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--acento);
+}
+.lectura-detalle summary::-webkit-details-marker {
+  display: none;
+}
+.lectura-detalle summary::after {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: -0.2rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s;
+}
+.lectura-detalle[open] summary::after {
+  margin-top: 0.2rem;
+  transform: rotate(-135deg);
+}
+.lectura-detalle .separador {
+  margin: 0 0.15rem;
+  font-weight: 400;
+  color: var(--tinta-suave);
+}
+.lectura-detalle summary:hover {
+  text-decoration: underline;
+}
+.lectura-detalle .cerrar,
+.lectura-detalle[open] .abrir {
+  display: none;
+}
+.lectura-detalle[open] .cerrar {
+  display: inline;
+}
+.lectura-columnas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 2.5rem;
+}
+#observablehq-main .lectura h3 {
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+}
+.lectura ul {
+  margin: 0 0 0.8rem;
+  padding-left: 1.1rem;
+}
+#observablehq-main .lectura li {
+  margin: 0 0 0.55rem;
+  max-width: none;
+  font-size: 0.92rem;
+  color: var(--tinta-2);
+  line-height: 1.55;
+}
+.lectura li strong {
+  color: var(--tinta);
+}
+@media (max-width: 900px) {
+  .lectura-columnas {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ------------------------------------------------------------------ KPI */
@@ -456,6 +527,19 @@ h3 {
 .panel-enlace:hover {
   text-decoration: underline;
 }
+.panel-nota {
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--tinta-2);
+  background: var(--fondo-alt);
+  border-left: 3px solid var(--linea);
+  border-radius: 0 4px 4px 0;
+}
+#observablehq-main .panel-nota {
+  max-width: none;
+}
 .panel-pie {
   margin: 0.4rem 0 0;
   font-size: 0.72rem;
@@ -546,6 +630,11 @@ table.cuadro tr.fila-item td {
 }
 table.cuadro tr.fila-item td:first-child {
   color: var(--tinta);
+}
+table.cuadro .celda-nota {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--tinta-suave);
 }
 .panel table.cuadro {
   font-size: 0.85rem;

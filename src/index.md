@@ -4,11 +4,11 @@ toc: false
 ---
 
 ```js
-import {db} from "./components/base.js";
+import {db, previsiones} from "./components/base.js";
 import {mercados} from "./components/mercados.js";
 import {acumuladoAnual, etiquetaAcumulado, mesUltimo, variacion, cambioAnual, haceUnAno, formatoNumero, formatoCambio, formatoPeriodo} from "./components/datos.js";
 import {grafico} from "./components/graficos.js";
-import {kpiSerie, panel, cabecera, kpiAcumulado as kpiAcumuladoBase} from "./components/ui.js";
+import {kpiSerie, panel, cabecera, graficoPrevisiones, tablaPrevisiones, kpiAcumulado as kpiAcumuladoBase} from "./components/ui.js";
 
 const desde = (serie, anio) => serie.filter(([t]) => t >= Date.UTC(anio, 0, 1));
 ```
@@ -17,103 +17,109 @@ const desde = (serie, anio) => serie.filter(([t]) => t >= Date.UTC(anio, 0, 1));
 // Comercio exterior acumulado de enero al último mes disponible.
 const mes = mesUltimo(db.serie("x_total"));
 const acum = (id) => desde(acumuladoAnual(db.serie(id), mes), 2018);
-const anioComercio = new Date(db.ultimo("x_total")[0]).getUTCFullYear();
 const etiqueta = (t) => etiquetaAcumulado(mes, new Date(t).getUTCFullYear());
-const ultimoYPrevio = (serie) => [serie[serie.length - 1][1], serie[serie.length - 2][1]];
 
 const kpiAcumulado = (titulo, datos, opciones = {}) => kpiAcumuladoBase({titulo, datos, mes, ...opciones});
+
+// Sector fiscal: acumulado del SPNF a su propio mes de corte.
+const mesFiscal = mesUltimo(db.serie("spnf_resultado_global"));
+const acumFiscal = (id) => desde(acumuladoAnual(db.serie(id), mesFiscal), 2018);
+
+// Primer año con previsiones (el año en curso).
+const anioPrevision = Math.min(...previsiones.flatMap((p) => [...p.valores.keys()]));
 ```
 
 ```js
 display(cabecera({
-  antetitulo: "Panorama macroeconómico",
-  titulo: "Ecuador en cuatro sectores",
-  bajada: "Lo esencial de la economía real, el sistema financiero, las finanzas públicas, el sector externo y el entorno internacional, con la última información disponible.",
+  antetitulo: "Resumen",
+  titulo: "Economía ecuatoriana: últimas cifras",
+  bajada: "Lectura del mes del área y los indicadores macroeconómicos que explican el entorno del negocio: actividad, entrada de dólares, riesgo soberano, hogares y entorno internacional.",
   corte: mercados.corte(),
   frecuencia: "D"
 }));
 ```
 
-```js
-// Mensajes clave: frases construidas a partir de los últimos datos.
-const [tPib, pib] = db.ultimo("pib_real_aa");
-const [tImae, imae] = db.ultimo("imaec_aa");
-const [tInf, inf] = db.ultimo("inflacion_aa");
-const dep = cambioAnual(db.serie("depositos_bp"), "USD mm").valor;
-const car = cambioAnual(db.serie("cartera_bp"), "USD mm").valor;
-const [, mora] = db.ultimo("morosidad_sf");
-const [tRi, ri] = db.ultimo("reservas");
-const [tEmbi, embi] = db.ultimo("embi");
-const [x, xAnt] = ultimoYPrevio(acum("x_total"));
-const [xnp, xnpAnt] = ultimoYPrevio(acum("x_no_pet"));
-const [bal] = ultimoYPrevio(acum("bc_total"));
-const [, ust10] = mercados.ultimo("us_10a");
-const [, fed] = mercados.ultimo("fed");
-const [, wti] = mercados.ultimo("wti");
-const [, cacao] = mercados.ultimo("cacao");
+<!--
+  Lectura del mes: la escribe el área cada mes. Es texto Markdown: para actualizarla, edita la
+  fecha de la línea "lectura-firma", la síntesis (siempre visible) y las viñetas de cada sección
+  (se muestran al pulsar "Leer más"). Deja las líneas en blanco alrededor del
+  Markdown dentro de los bloques <div>, o no se interpretará.
+-->
 
-// Sector fiscal: acumulado del SPNF a su propio mes de corte.
-const mesFiscal = mesUltimo(db.serie("spnf_resultado_global"));
-const acumFiscal = (id) => desde(acumuladoAnual(db.serie(id), mesFiscal), 2018);
-const anioFiscal = new Date(db.ultimo("spnf_resultado_global")[0]).getUTCFullYear();
-const [rg, rgAnt] = ultimoYPrevio(acumFiscal("spnf_resultado_global"));
-const [tDeuda, deudaPib] = db.ultimo("deuda_pib");
-const saldo = (v) => `${v >= 0 ? "superávit" : "déficit"} de USD ${formatoNumero(Math.abs(v), 0)} millones`;
-const pct = (a, b) => formatoCambio((a / b - 1) * 100, 1, "%");
-const periodoComercio = `enero y ${etiquetaAcumulado(mes).replace("ene–", "")} de ${anioComercio}`;
+## Lectura del mes
 
-const mensajes = [
-  {
-    sector: "Real",
-    texto: `El PIB ${pib >= 0 ? "creció" : "se contrajo"} ${formatoNumero(Math.abs(pib), 1)}% anual en el ${formatoPeriodo(tPib, "T")}. El IMAEc varió ${formatoCambio(imae, 1, "%")} en ${formatoPeriodo(tImae, "M")} y la inflación anual fue ${formatoNumero(inf, 2)}% en ${formatoPeriodo(tInf, "M")}.`
-  },
-  {
-    sector: "Financiero",
-    texto: `Las reservas internacionales suman USD ${formatoNumero(ri, 0)} millones (${formatoPeriodo(tRi, "D")}) y el riesgo país se ubicó en ${formatoNumero(embi, 0)} pb (${formatoPeriodo(tEmbi, "D")}). Los depósitos de los bancos privados crecen ${formatoNumero(dep, 1)}% anual y la cartera ${formatoNumero(car, 1)}%.`
-  },
-  {
-    sector: "Fiscal",
-    texto: `Entre enero y ${etiquetaAcumulado(mesFiscal).replace("ene–", "")} de ${anioFiscal}, el SPNF registró un ${saldo(rg)}, frente a un ${saldo(rgAnt)} en el mismo período de ${anioFiscal - 1}. La deuda pública equivale a ${formatoNumero(deudaPib, 1)}% del PIB (${formatoPeriodo(tDeuda, "M")}).`
-  },
-  {
-    sector: "Externo",
-    texto: `Entre ${periodoComercio}, las exportaciones sumaron USD ${formatoNumero(x, 0)} millones (${pct(x, xAnt)}); las no petroleras, USD ${formatoNumero(xnp, 0)} millones (${pct(xnp, xnpAnt)}). La balanza comercial acumula un ${bal >= 0 ? "superávit" : "déficit"} de USD ${formatoNumero(Math.abs(bal), 0)} millones.`
-  },
-  {
-    sector: "Internacional",
-    texto: `El Tesoro de EE. UU. a 10 años rinde ${formatoNumero(ust10, 2)}% y la Fed mantiene su tasa en ${formatoNumero(fed, 2)}%. El WTI cotiza en USD ${formatoNumero(wti, 2)} por barril y el cacao en USD ${formatoNumero(cacao, 0)} por tonelada.`
-  }
-];
+<div class="lectura">
 
-display(html`<div class="mensajes">${mensajes.map((m) => html`<div class="mensaje"><h3>${m.sector}</h3><p>${m.texto}</p></div>`)}</div>`);
-```
+<p class="lectura-firma">Octubre de 2026 · Riesgo Macroeconómico y Sectorial</p>
+
+<div class="lectura-sintesis">
+
+**En síntesis:** la economía crece a un ritmo moderado y siguen entrando dólares, pero el panorama se vuelve más exigente: el riesgo país repunta, los depósitos se desaceleran y ya crecen menos que el crédito. El Niño y el déficit eléctrico amenazan la actividad de los próximos meses.
+
+</div>
+
+<details class="lectura-detalle">
+<summary><span class="abrir">Leer más <span class="separador">|</span> Cifras y riesgos</span><span class="cerrar">Ocultar</span></summary>
+<div class="lectura-columnas">
+<div>
+
+### Lo que muestran las cifras
+
+- **Crecimiento moderado.** El PIB creció 2.1% anual en el segundo trimestre y el IMAEc 3.5% en agosto. Las previsiones para 2026 van de 2.5% a 2.7%, con una inflación baja (1.34% en septiembre).
+- **Siguen entrando dólares.** Las exportaciones crecen 9.8% entre enero y agosto, con el petróleo cerca de USD 100 por barril, y las reservas internacionales suman USD 2,911 millones más que en diciembre.
+- **El riesgo país repunta.** El EMBI llegó a 587 pb, 87 pb más que al cierre de 2025 y unos 200 pb sobre su mínimo de junio (383 pb). En septiembre la Fed volvió a subir su tasa, lo que encarece el financiamiento externo.
+- **Los depósitos se desaceleran.** Crecen 12.0% anual, frente a 19.0% en marzo de 2025, y desde junio avanzan más lento que la cartera (13.2%). Entre enero y septiembre, los bancos captaron USD 4,095 millones, menos que los USD 4,719 millones del mismo período de 2025.
+
+</div>
+<div>
+
+### Riesgos a vigilar
+
+- **El Niño.** Mantuvo su intensidad en octubre (índice RONI, región Niño 3.4) y el mar frente a la costa ecuatoriana sigue más cálido de lo normal (región Niño 1+2). Hasta ahora los eventos extremos han sido intensos pero puntuales, como la inundación de Guayaquil del 26 de octubre y las lluvias con granizo en Quito; el riesgo es que se vuelvan frecuentes con la temporada de lluvias de la Costa, que empieza en diciembre. El BCE estima que un evento fuerte restaría 1.4 puntos al crecimiento de 2027 (0.5 si es moderado), aunque aclara que son escenarios y no una predicción. Lo más expuesto: cultivos, vías y la capacidad de pago de hogares y empresas de las provincias costeras.
+- **Energía.** El déficit de generación, estimado entre 1,000 y 1,200 MW, se ha enfrentado sobre todo con racionamientos que el Gobierno concentró en las industrias: en octubre ordenó desconexiones periódicas de las conectadas en alto voltaje (AV1), de dos y luego tres días por semana, y a fines de mes también de algunas de medio voltaje. Las importaciones desde Colombia, suspendidas a inicios de mes, se reanudaron el 16 de octubre en volúmenes mínimos. Con el embalse de Mazar cerca de su cota mínima, el abastecimiento depende de las lluvias en la vertiente amazónica, donde está la mayor parte de la generación hidroeléctrica, y El Niño no las garantiza. A diferencia de 2024, cuando para octubre ya había apagones generalizados, este año los cortes se han limitado a la industria; pero el margen es estrecho: un retraso de las lluvias podría extenderlos a hogares y comercios.
+
+</div>
+</div>
+</details>
+
+</div>
+
+
+## Indicadores principales
 
 ```js
+// Ventas locales acumuladas a su propio mes de corte.
+const mesVentas = mesUltimo(db.serie("ventas_locales"));
+
 display(html`<div class="kpis-sectores">
   <div class="kpi-columna">
-    <h3><a href="./real">Sector real</a></h3>
+    <h3><a href="./real">¿Cómo va la economía?</a></h3>
     ${kpiSerie(db, "pib_real_aa", {cambio: null})}
-    ${kpiSerie(db, "inflacion_aa")}
+    ${kpiSerie(db, "imaec_aa", {titulo: "Actividad mensual (IMAEc)", cambio: null})}
+    ${kpiAcumuladoBase({titulo: "Ventas locales (SRI)", datos: desde(acumuladoAnual(db.serie("ventas_locales"), mesVentas), 2018), mes: mesVentas})}
   </div>
   <div class="kpi-columna">
-    <h3><a href="./financiero">Sector financiero</a></h3>
-    ${kpiSerie(db, "embi")}
+    <h3><a href="./externo">¿Entran dólares?</a></h3>
+    ${kpiAcumulado("Exportaciones", acum("x_total"))}
+    ${kpiSerie(db, "remesas_recibidas")}
     ${kpiSerie(db, "reservas")}
   </div>
   <div class="kpi-columna">
-    <h3><a href="./fiscal">Sector fiscal</a></h3>
+    <h3><a href="./fiscal">¿Cómo está el riesgo soberano?</a></h3>
+    ${kpiSerie(db, "embi")}
     ${kpiAcumuladoBase({titulo: "Resultado global del SPNF", datos: acumFiscal("spnf_resultado_global"), mes: mesFiscal, nivel: false})}
     ${kpiSerie(db, "deuda_pib")}
   </div>
   <div class="kpi-columna">
-    <h3><a href="./externo">Sector externo</a></h3>
-    ${kpiAcumulado("Exportaciones", acum("x_total"))}
-    ${kpiAcumulado("Balanza comercial", acum("bc_total"), {nivel: false})}
+    <h3><a href="./real">¿Cómo están los hogares?</a></h3>
+    ${kpiSerie(db, "inflacion_aa")}
+    ${kpiSerie(db, "empleo_adecuado")}
+    ${kpiSerie(db, "icc", {titulo: "Confianza del consumidor"})}
   </div>
 </div>`);
 ```
 
-## Indicadores clave por sector
+## Evolución reciente
 
 ```js
 display(html`<div class="paneles">
@@ -123,21 +129,8 @@ display(html`<div class="paneles">
     fuente: db.meta("pib_real_aa").fuente,
     enlace: {href: "./real", texto: "Sector real"},
     contenido: grafico({
-      series: [{nombre: "PIB real", datos: desde(db.serie("pib_real_aa"), 2015)}],
-      frecuencia: "T", unidad: "%", decimales: 1, tipo: "column", cero: true
-    })
-  })}
-  ${panel({
-    titulo: "Crecimiento de depósitos y cartera",
-    subtitulo: "Variación anual, %, bancos privados",
-    fuente: db.meta("depositos_bp").fuente,
-    enlace: {href: "./financiero", texto: "Sector financiero"},
-    contenido: grafico({
-      series: [
-        {nombre: "Depósitos", datos: desde(variacion(db.serie("depositos_bp"), 12), 2015)},
-        {nombre: "Cartera", datos: desde(variacion(db.serie("cartera_bp"), 12), 2015)}
-      ],
-      frecuencia: "M", unidad: "%", decimales: 1, cero: true
+      series: [{nombre: "PIB real", datos: db.serie("pib_real_aa")}],
+      frecuencia: "T", unidad: "%", decimales: 1, tipo: "column", cero: true, navegador: true, rango: "10a"
     })
   })}
   ${panel({
@@ -158,10 +151,48 @@ display(html`<div class="paneles">
     subtitulo: "Puntos básicos, diario",
     fuente: db.meta("embi").fuente,
     enlace: {href: "./financiero", texto: "Sector financiero"},
+    nota: "Diferencia entre el rendimiento de los bonos de Ecuador en dólares y el de los bonos del Tesoro de EE. UU. (100 pb = 1 punto porcentual). Cuando sube, al Estado le cuesta más financiarse en los mercados internacionales, y ese mayor costo tiende a trasladarse a bancos y empresas.",
     contenido: grafico({
-      series: [{nombre: "EMBI Ecuador", datos: desde(db.serie("embi"), 2018)}],
-      frecuencia: "D", unidad: "pb", decimales: 0
+      series: [{nombre: "EMBI Ecuador", datos: db.serie("embi")}],
+      frecuencia: "D", unidad: "pb", decimales: 0, navegador: true, rango: "10a"
     })
+  })}
+  ${panel({
+    titulo: "Crecimiento de depósitos y cartera",
+    subtitulo: "Variación anual, %, bancos privados",
+    fuente: db.meta("depositos_bp").fuente,
+    enlace: {href: "./financiero", texto: "Sector financiero"},
+    nota: "En una economía dolarizada, los depósitos crecen cuando entran dólares (exportaciones, remesas, inversión y financiamiento externos) y se frenan cuando salen; por eso este gráfico se lee junto con el sector externo.",
+    contenido: grafico({
+      series: [
+        {nombre: "Depósitos", datos: variacion(db.serie("depositos_bp"), 12)},
+        {nombre: "Cartera", datos: variacion(db.serie("cartera_bp"), 12)}
+      ],
+      frecuencia: "M", unidad: "%", decimales: 1, cero: true, navegador: true, rango: "10a"
+    })
+  })}
+</div>`);
+```
+
+## Previsiones de crecimiento
+
+```js
+const aniosPrevision = [anioPrevision, anioPrevision + 1];
+
+display(html`<div class="paneles">
+  ${panel({
+    titulo: "Previsiones de crecimiento del PIB real",
+    subtitulo: `Variación anual, %, ${aniosPrevision.join(" y ")}`,
+    fuente: previsiones.map((p) => p.institucion).join(", "),
+    enlace: {href: "./real", texto: "Sector real"},
+    contenido: graficoPrevisiones(previsiones, aniosPrevision)
+  })}
+  ${panel({
+    titulo: "Previsiones por institución",
+    subtitulo: "Crecimiento real del PIB, %",
+    fuente: previsiones.map((p) => p.institucion).join(", "),
+    enlace: {href: "./real", texto: "Sector real"},
+    contenido: tablaPrevisiones(previsiones, aniosPrevision)
   })}
 </div>`);
 ```
@@ -172,11 +203,12 @@ display(html`<div class="paneles">
 
 ```js
 const grupos = [
-  ["Sector real", db, ["pib_real_aa", "imaec_aa", "inflacion_aa", "desempleo", "empleo_adecuado", "subempleo"]],
-  ["Sector financiero", db, ["embi", "reservas", "depositos_bp", "cartera_bp", "ltd_bp", "morosidad_sf", "liquidez_bp", "solvencia_sf", "tpr"]],
-  ["Sector fiscal", db, ["resultado_global_pib", "resultado_primario_pib", "deuda_total", "deuda_pib"]],
-  ["Sector externo", db, ["terminos_intercambio", "remesas_recibidas", "ied", "cuenta_corriente_pib"]],
-  ["Economía internacional", mercados, ["fed", "us_2a", "us_10a", "dxy", "wti", "cacao", "oro"]]
+  ["¿Cómo va la economía?", db, ["pib_real_aa", "vab_no_petrolero_aa", "imaec_aa", "ventas_locales"]],
+  ["¿Entran dólares?", db, ["x_total", "x_no_pet", "m_total", "remesas_recibidas", "ied", "cuenta_corriente_pib", "terminos_intercambio", "reservas"]],
+  ["¿Cómo está el riesgo soberano?", db, ["embi", "resultado_global_pib", "resultado_primario_pib", "deuda_total", "deuda_pib"]],
+  ["¿Cómo están los hogares?", db, ["inflacion_aa", "desempleo", "empleo_adecuado", "subempleo", "icc"]],
+  ["Sistema financiero (bancos privados)", db, ["depositos_bp", "cartera_bp", "morosidad_bp", "liquidez_bp", "tasa_pasiva", "tasa_activa"]],
+  ["Entorno internacional", mercados, ["fed", "fed_inf", "us_3m", "us_10a", "dxy", "wti", "cacao", "oro"]]
 ];
 
 function fila(base, id) {
@@ -191,7 +223,7 @@ function fila(base, id) {
     <td>${formatoPeriodo(t, m.frecuencia)}</td>
     <td><b>${formatoNumero(v, m.decimales)}</b></td>
     <td>${ant ? formatoNumero(ant[1], m.decimales) : "–"}</td>
-    <td>${c ? formatoCambio(c.valor, c.decimales ?? 1, c.unidad) : "–"}</td>
+    <td>${c ? formatoCambio(c.valor, c.decimales ?? (c.unidad === "pp" ? m.decimales : 1), c.unidad) : "–"}</td>
   </tr>`;
 }
 

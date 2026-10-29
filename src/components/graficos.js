@@ -204,7 +204,7 @@ function base(t, {altura, frecuencia, unidad, decimales, encabezado, soloImagen 
     exporting: {
       buttons: {
         contextButton: {
-          // Datos con licencia (Bloomberg): solo se ofrece la imagen del gráfico.
+          // Datos con licencia (Yahoo Finance): solo se ofrece la imagen del gráfico.
           menuItems: soloImagen
             ? ["downloadPNG", "downloadSVG"]
             : ["downloadPNG", "downloadSVG", "separator", "downloadCSV", "downloadXLS", "viewData"]
@@ -222,6 +222,7 @@ function opcionesStock(t, rangoInicial) {
     {type: "year", count: 1, text: "1a"},
     {type: "year", count: 3, text: "3a"},
     {type: "year", count: 5, text: "5a"},
+    {type: "year", count: 10, text: "10a"},
     {type: "all", text: "Todo"}
   ];
   return {
@@ -289,7 +290,7 @@ function separarEtiquetas() {
  * @param {"line"|"column"|"area"} [o.tipo="line"]
  * @param {boolean} [o.apilado=false]
  * @param {boolean} [o.navegador=false] usa Highcharts Stock con navegador y selector de rango
- * @param {string} [o.rango="5a"]       rango inicial del selector ("1a", "3a", "5a", "Todo")
+ * @param {string} [o.rango="5a"]       rango inicial del selector ("1a", "3a", "5a", "10a", "Todo")
  * @param {boolean} [o.cero=false]      línea de referencia en cero
  * @param {number} [o.referencia]       línea de referencia en otro valor (p. ej. 50 en índices de difusión)
  * @param {boolean} [o.soloImagen=false] menú sin descarga de datos (para fuentes con licencia)

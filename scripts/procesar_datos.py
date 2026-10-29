@@ -1,19 +1,22 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pandas>=2.2", "openpyxl>=3.1", "duckdb>=1.1"]
+# dependencies = ["pandas>=2.2", "openpyxl>=3.1", "python-calamine>=0.2", "duckdb>=1.1"]
 # ///
 """Convierte los archivos de data_raw/ en los archivos livianos que usa el sitio.
 
-Uso (desde la raíz del repositorio):
+Uso (desde la raíz del repositorio; descargar_datos.py actualiza antes los mercados y las
+previsiones del FMI y del Banco Mundial):
 
+    uv run scripts/descargar_datos.py
     uv run scripts/procesar_datos.py
 
 Salidas en src/data/:
     series.csv / catalogo.json     series macro en formato largo (id, fecha, valor)
-    mercados.csv / mercados.json   series diarias de Bloomberg en formato ancho
+    mercados.csv / mercados.json   series diarias de mercados internacionales en formato ancho
+    previsiones.csv                previsiones de crecimiento del PIB por institución
     exportaciones.csv / .json      exportaciones mensuales por producto (clasificación BCE)
     importaciones.csv / .json      importaciones mensuales por CUODE
-    ventas_sector.csv              ventas SRI mensuales por sección CIIU
+    ventas_sector.csv              ventas locales SRI mensuales por sección CIIU (y división en comercio)
     ipc_incidencias.csv            incidencia mensual por división del IPC (último mes)
     spnf.csv                       operaciones mensuales del SPNF por partida (MEF)
     vencimientos.csv               perfil de vencimientos de la deuda pública (MEF)
@@ -27,6 +30,8 @@ from pathlib import Path
 
 import duckdb
 import pandas as pd
+
+from catalogo_mercados import CURVAS, FUENTES, MERCADOS
 
 RAIZ = Path(__file__).resolve().parent.parent
 RAW = RAIZ / "data_raw"
@@ -76,8 +81,16 @@ def hoja_cn(ruta: Path, hoja: str) -> pd.DataFrame:
     return datos.iloc[:, 1:].apply(pd.to_numeric, errors="coerce")
 
 
+def mas_reciente(carpeta: Path, patron: str) -> Path:
+    """Último archivo de una serie de publicaciones (el modificado más recientemente)."""
+    rutas = list(carpeta.glob(patron))
+    if not rutas:
+        raise FileNotFoundError(f"No hay archivos {patron} en {carpeta}")
+    return max(rutas, key=lambda r: r.stat().st_mtime)
+
+
 def hoja_imaec(hoja: str) -> pd.DataFrame:
-    df = pd.read_excel(RAW / "IMAEc" / "IMAEc_202607.xlsx", sheet_name=hoja, header=None)
+    df = pd.read_excel(mas_reciente(RAW / "IMAEc", "IMAEc_*.xlsx"), sheet_name=hoja, header=None)
     fila_cab = next(i for i in range(20) if limpiar(df.iat[i, 0]) == "Fecha")
     datos = df.iloc[fila_cab + 1:].copy()
     datos.columns = [limpiar(c) for c in df.iloc[fila_cab]]
@@ -86,15 +99,39 @@ def hoja_imaec(hoja: str) -> pd.DataFrame:
     return datos.drop(columns="Fecha").apply(pd.to_numeric, errors="coerce")
 
 
-def ipc_ancho(hoja: str) -> pd.Series:
-    """Cuadros del IPC con años en filas y meses en columnas → serie mensual."""
-    df = pd.read_excel(RAW / "IPC incidencias.xlsx", sheet_name=hoja, header=7)
-    df = df[pd.to_numeric(df["Periodo"], errors="coerce").notna()]
-    meses = list(MESES_LARGOS)
-    largo = df.melt(id_vars="Periodo", value_vars=[m.capitalize() for m in meses])
-    largo["fecha"] = [pd.Timestamp(int(a), MESES_LARGOS[m.lower()], 1)
-                      for a, m in zip(largo["Periodo"], largo["variable"])]
-    return largo.set_index("fecha")["value"].astype(float).dropna().sort_index()
+def cuadro_bce(ruta: Path) -> dict[str, pd.DataFrame]:
+    """Cuadro de BCEData (series en filas, meses en columnas) → {bloque: DataFrame por fecha}.
+
+    Un cuadro trae uno o más bloques, cada uno con su fila 'Serie' de fechas ('Ene 2006').
+    Las filas sin valores son subtítulos ('Variación Mensual…', 'Segmento Consumo'): dan nombre
+    al bloque que sigue. Los bloques que no son mensuales (p. ej. semanales) se omiten.
+    """
+    df = pd.read_excel(ruta, header=None, dtype=str)
+    bloques, actual, titulo, fechas = {}, None, "", None
+    for i in range(len(df)):
+        etiqueta = limpiar(df.iat[i, 0]) if pd.notna(df.iat[i, 0]) else ""
+        valores = df.iloc[i, 1:]
+        if etiqueta == "Serie":
+            cols = {j: c for j, c in valores.items() if isinstance(c, str) and re.fullmatch(r"[A-Z][a-z]{2} \d{4}", c)}
+            fechas = {j: pd.Timestamp(int(c[4:]), MESES[c[:3].lower()], 1) for j, c in cols.items()} or None
+            titulo, actual = "", None
+        elif not etiqueta or etiqueta.startswith(("Unidad", "Frecuencia")):
+            fechas = None if etiqueta.startswith("Frecuencia") else fechas
+        elif fechas and valores.isna().all():
+            titulo, actual = etiqueta, None
+        elif fechas:
+            if actual is None:
+                actual = bloques.setdefault(titulo, {})
+            actual[etiqueta] = pd.Series(
+                [float(str(valores[j]).replace(",", ".")) if pd.notna(valores[j]) else None for j in fechas],
+                index=list(fechas.values()), dtype=float)
+    return {t: pd.DataFrame(s) for t, s in bloques.items()}
+
+
+def slug(texto: str) -> str:
+    import unicodedata
+    plano = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", "_", plano).strip("_")
 
 
 # ============================================================== SECTOR REAL
@@ -162,29 +199,43 @@ for col_, id_, corto in [
               nombre=f"IMAEc {corto}, variación anual", corto=corto, unidad="%", frecuencia="M",
               decimales=1, fuente=FUENTE_IMAE)
 
-# Inflación
-FUENTE_IPC = "INEC, Índice de Precios al Consumidor"
-for hoja, id_, nombre, corto in [
-    ("3.Var_anu", "inflacion_aa", "Inflación anual (IPC)", "Inflación anual"),
-    ("2.Var_mens", "inflacion_mm", "Inflación mensual (IPC)", "Inflación mensual"),
-    ("4.Var_acum", "inflacion_acum", "Inflación acumulada en el año (IPC)", "Inflación acumulada"),
+# Inflación: cuadro 4.2.1 del BCE (índice y variaciones del IPC general y por división).
+FUENTE_IPC = "BCE, con datos del INEC (Índice de Precios al Consumidor)"
+ipc = cuadro_bce(RAW / "IPC BCE.xlsx")
+GENERAL = "Índice General - IPC"
+for bloque, id_, nombre, corto in [
+    ("Variación Anual del Índice de Precios al Consumidor", "inflacion_aa", "Inflación anual (IPC)", "Inflación anual"),
+    ("Variación Mensual del Índice de Precios al Consumidor", "inflacion_mm", "Inflación mensual (IPC)", "Inflación mensual"),
+    ("Variación Acumulada del Índice de Precios al Consumidor", "inflacion_acum", "Inflación acumulada en el año (IPC)",
+     "Inflación acumulada"),
 ]:
-    s = ipc_ancho(hoja)
+    s = ipc[bloque][GENERAL].dropna()
     s = s[s.index >= "2010-01-01"]
     registrar(id_, s.index, s, sector="real", nombre=nombre, corto=corto, unidad="%",
               frecuencia="M", decimales=2, fuente=FUENTE_IPC)
 
-inc = pd.read_excel(RAW / "IPC nacional.xlsx", sheet_name="1.Inc_mens", header=7)
-mes_inc = inc.columns[-1]
-inc = inc[inc["Nivel"] == "División"]
+# Incidencia por división en el último mes (índice de Laspeyres):
+#   incidencia_i = ponderación_i × (índice_i / índice general)_{t−1} × variación mensual_i,t
+# Las ponderaciones de la canasta vienen del cuadro de incidencias del INEC; las divisiones
+# están en el mismo orden (CCIF 01 a 13) en ambos archivos.
+pond = pd.read_excel(RAW / "IPC nacional.xlsx", sheet_name="1.Inc_mens", header=7)
+pond = pond[pond["Nivel"] == "División"]
+indices = ipc[""]
+var_mm = ipc["Variación Mensual del Índice de Precios al Consumidor"]
+divisiones = [c for c in indices.columns if c != GENERAL]
+assert len(divisiones) == len(pond) == 13, "Las divisiones del IPC del BCE y del INEC no coinciden"
+fecha_incidencias = var_mm[GENERAL].dropna().index.max()
+previo_ipc = indices.loc[fecha_incidencias - pd.DateOffset(months=1)]
+incidencia = [p * previo_ipc[d] / previo_ipc[GENERAL] * var_mm.at[fecha_incidencias, d]
+              for p, d in zip(pond["Ponderación"], divisiones)]
+residuo = abs(sum(incidencia) - var_mm.at[fecha_incidencias, GENERAL])
+assert residuo < 0.01, f"Las incidencias del IPC no suman la inflación mensual (diferencia {residuo:.4f})"
 pd.DataFrame({
-    "ccif": inc["CCIF"].astype(str).str.zfill(2),
-    "division": inc["Descripción CCIF"].map(limpiar),
-    "ponderacion": (inc["Ponderación"] * 100).round(3),
-    "incidencia": inc[mes_inc].astype(float).round(4),
+    "ccif": pond["CCIF"].astype(str).str.zfill(2).values,
+    "division": pond["Descripción CCIF"].map(limpiar).values,
+    "ponderacion": (pond["Ponderación"] * 100).round(3).values,
+    "incidencia": [round(x, 4) for x in incidencia],
 }).to_csv(OUT / "ipc_incidencias.csv", index=False)
-mm, aa = str(mes_inc).split("-")
-fecha_incidencias = pd.Timestamp(2000 + int(aa), MESES[mm[:3]], 1)
 
 # Mercado laboral (microdatos ENEMDU, ponderados con el factor de expansión)
 con = duckdb.connect()
@@ -261,68 +312,129 @@ SECCIONES = {
     "O": "Administración pública", "P": "Enseñanza", "Q": "Salud", "R": "Artes y recreación",
     "S": "Otros servicios", "T": "Hogares", "U": "Organizaciones extraterritoriales",
 }
+# Ventas locales: total de ventas y exportaciones (casillero 419) menos exportaciones de bienes (417)
+# y de servicios (418). Por sección CIIU y, en comercio, por división (G45 vehículos, G46 al por mayor,
+# G47 al por menor).
+DIVISIONES_COMERCIO = {"G45": "Vehículos y motocicletas", "G46": "Comercio al por mayor",
+                       "G47": "Comercio al por menor"}
 ventas = con.execute(f"""
     select cast("ANIO FISCAL" as int) anio, cast("MES FISCAL" as int) mes,
-           upper(left("ACTIVIDAD ECONÓMICA", 1)) seccion,
-           sum("TOTAL VENTAS Y EXPORTACIONES (419)") / 1e6 ventas
-    from '{RAW / "ventas-saiku-ciiu6.parquet"}' group by all order by all
+           upper(left("ACTIVIDAD ECONÓMICA", 3)) division,
+           sum("TOTAL VENTAS Y EXPORTACIONES (419)" - coalesce("EXPORTACIONES DE BIENES (417)", 0)
+               - coalesce("EXPORTACIONES DE SERVICIOS (418)", 0)) / 1e6 ventas
+    from '{RAW / "ventas-saiku-ciiu6.parquet"}' group by all
 """).df()
 ventas["fecha"] = [pd.Timestamp(a, m, 1) for a, m in zip(ventas["anio"], ventas["mes"])]
-ventas["nombre"] = ventas["seccion"].map(SECCIONES).fillna("Sin clasificar")
-ventas[["fecha", "seccion", "nombre", "ventas"]].assign(
+ventas["seccion"] = ventas["division"].str[0]
+por_seccion = ventas.groupby(["fecha", "seccion"], as_index=False)["ventas"].sum()
+por_seccion["codigo"] = por_seccion["seccion"]
+por_seccion["nombre"] = por_seccion["seccion"].map(SECCIONES).fillna("Sin clasificar")
+comercio = ventas[ventas["division"].isin(DIVISIONES_COMERCIO)].groupby(["fecha", "division"], as_index=False)["ventas"].sum()
+comercio["codigo"] = comercio["division"]
+comercio["nombre"] = comercio["division"].map(DIVISIONES_COMERCIO)
+pd.concat([por_seccion, comercio])[["fecha", "codigo", "nombre", "ventas"]].sort_values(["fecha", "codigo"]).assign(
     fecha=lambda d: d["fecha"].dt.strftime("%Y-%m-%d"), ventas=lambda d: d["ventas"].round(3)
 ).to_csv(OUT / "ventas_sector.csv", index=False)
-total_ventas = ventas.groupby("fecha")["ventas"].sum()
-registrar("ventas_sri", total_ventas.index, total_ventas, sector="real",
-          nombre="Ventas totales y exportaciones declaradas (formulario 104, casillero 419)",
-          corto="Ventas SRI", unidad="USD mm", frecuencia="M", decimales=0, fuente="SRI, Saiku")
+total_ventas = por_seccion.groupby("fecha")["ventas"].sum()
+registrar("ventas_locales", total_ventas.index, total_ventas, sector="real",
+          nombre="Ventas locales declaradas (formulario 104: casillero 419 menos exportaciones, 417 y 418)",
+          corto="Ventas locales", unidad="USD mm", frecuencia="M", decimales=0, fuente="SRI, Saiku")
 
 # ============================================================== SECTOR FINANCIERO
+# Sistema de bancos privados: indicadores internos con datos de la Superintendencia de Bancos.
+# Un panel por fecha y banco (miles de USD y razones); el total del sistema es la fila del
+# segmento "BANCOS PRIVADOS" sin banco. Los ceros marcan meses sin dato (p. ej. la solvencia
+# antes de 2020 o los segmentos de crédito antes de su creación).
 FUENTE_SB = "Superintendencia de Bancos (compilación interna)"
-dep = pd.read_excel(RAW / "tendencias_depósitos_macro.xlsx", sheet_name="indicadores bancos")
-dep.index = pd.to_datetime(dep.iloc[:, 0])
-registrar("depositos_bp", dep.index, dep["Depósitos"], sector="financiero",
-          nombre="Depósitos del público, bancos privados", corto="Depósitos", unidad="USD mm",
-          frecuencia="M", decimales=0, fuente=FUENTE_SB, escala=1 / 1000)
-registrar("cartera_bp", dep.index, dep["Cartera"], sector="financiero",
-          nombre="Cartera bruta, bancos privados", corto="Cartera", unidad="USD mm", frecuencia="M",
-          decimales=0, fuente=FUENTE_SB, escala=1 / 1000)
-registrar("ltd_bp", dep.index, dep["LTD ratio"], sector="financiero",
-          nombre="Relación cartera / depósitos (LTD), bancos privados", corto="Cartera / depósitos",
-          unidad="%", frecuencia="M", decimales=1, fuente=FUENTE_SB, escala=100)
-registrar("dep_vista_pct", dep.index, dep["% vista"], sector="financiero",
-          nombre="Depósitos a la vista, % del total, bancos privados", corto="Depósitos a la vista",
-          unidad="%", frecuencia="M", decimales=1, fuente=FUENTE_SB, escala=100)
+ib = pd.read_excel(mas_reciente(RAW / "sb", "indicadores_banco*.xlsx"), sheet_name="Sheet1", engine="calamine")
+ib = ib[(ib["Segmento"] == "BANCOS PRIVADOS") & ib["Banco"].isna()]
+ib = ib.set_index(pd.to_datetime(ib["Fecha"]).dt.to_period("M").dt.to_timestamp()).sort_index()
+ib = ib.apply(pd.to_numeric, errors="coerce").replace(0, float("nan"))
+ib["ltd"] = ib["Cartera Bruta Total"] / ib["Obligaciones Pub"]
 
-sf = pd.read_excel(RAW / "tendencias_depósitos_macro.xlsx", sheet_name="bancos+coop")
-sf.index = pd.to_datetime(sf.iloc[:, 0])
+SEGMENTOS_SB = [("Productivo", "productivo", "Productivo"), ("Consumo", "consumo", "Consumo"),
+                ("Inmobiliario", "inmobiliario", "Inmobiliario"), ("Microcredito", "microcredito", "Microcrédito")]
 for col_, id_, nombre, corto, unidad, esc, dec in [
-    ("depositos_total", "depositos_sf", "Depósitos del sistema financiero privado", "Depósitos", "USD mm", 1, 0),
-    ("cartera_total", "cartera_sf", "Cartera bruta del sistema financiero privado", "Cartera", "USD mm", 1, 0),
-    ("activos_liquidos", "activos_liquidos_sf", "Activos líquidos del sistema financiero privado",
-     "Activos líquidos", "USD mm", 1, 0),
-    ("morosidad_total", "morosidad_sf", "Morosidad de la cartera, sistema financiero privado",
+    ("Obligaciones Pub", "depositos_bp", "Depósitos del público, bancos privados", "Depósitos", "USD mm", 1e-3, 0),
+    ("Depositos Monetarios", "dep_monetarios_bp", "Depósitos monetarios, bancos privados", "Monetarios", "USD mm", 1e-3, 0),
+    ("Depositos Ahorro", "dep_ahorro_bp", "Depósitos de ahorro, bancos privados", "Ahorro", "USD mm", 1e-3, 0),
+    ("Depositos Plazo", "dep_plazo_bp", "Depósitos a plazo, bancos privados", "Plazo", "USD mm", 1e-3, 0),
+    ("Cartera Bruta Total", "cartera_bp", "Cartera bruta, bancos privados", "Cartera", "USD mm", 1e-3, 0),
+    *[(f"Cartera Bruta {c}", f"cartera_{i}_bp", f"Cartera bruta {n.lower()}, bancos privados", n, "USD mm", 1e-3, 0)
+      for c, i, n in SEGMENTOS_SB],
+    ("Activos", "activos_bp", "Activos totales, bancos privados", "Activos", "USD mm", 1e-3, 0),
+    ("ltd", "ltd_bp", "Relación cartera / depósitos (LTD), bancos privados", "Cartera / depósitos", "%", 100, 1),
+    ("Proporcion Vista", "dep_vista_pct", "Depósitos a la vista, % del total, bancos privados",
+     "Depósitos a la vista", "%", 100, 1),
+    ("Morosidad Total", "morosidad_bp", "Morosidad de la cartera (improductiva / bruta), bancos privados",
      "Morosidad", "%", 100, 2),
-    ("morosidad_productivo", "morosidad_productivo", "Morosidad, segmento productivo", "Productivo", "%", 100, 2),
-    ("morosidad_comercial", "morosidad_comercial", "Morosidad, segmento comercial", "Comercial", "%", 100, 2),
-    ("morosidad_microcredito", "morosidad_microcredito", "Morosidad, microcrédito", "Microcrédito", "%", 100, 2),
-    ("morosidad_vivienda", "morosidad_vivienda", "Morosidad, vivienda", "Vivienda", "%", 100, 2),
-    ("solvencia", "solvencia_sf", "Índice de solvencia, sistema financiero privado", "Solvencia", "%", 100, 1),
-    ("liquidez_bancospriv", "liquidez_bp", "Liquidez de bancos privados", "Liquidez bancos", "%", 100, 1),
-    ("liquidez_coac1", "liquidez_coac1", "Liquidez de cooperativas segmento 1", "Liquidez COAC 1", "%", 100, 1),
+    *[(f"Morosidad {c}", f"morosidad_{i}_bp", f"Morosidad de la cartera {n.lower()}, bancos privados", n, "%", 100, 2)
+      for c, i, n in SEGMENTOS_SB],
+    ("Npl Castigos12m Total", "morosidad_castigos_bp",
+     "Morosidad ajustada por castigos de 12 meses, bancos privados", "Morosidad con castigos", "%", 100, 2),
+    ("Cobertura Total", "cobertura_bp", "Cobertura de la cartera improductiva (provisiones / improductiva), bancos privados",
+     "Cobertura", "%", 100, 0),
+    ("Pt Activos Contingente Riesgo", "solvencia_bp",
+     "Solvencia (patrimonio técnico / activos y contingentes ponderados por riesgo), bancos privados",
+     "Solvencia", "%", 100, 1),
+    ("Perlas Liquidez Imnediata", "liquidez_inmediata_bp", "Liquidez inmediata, bancos privados",
+     "Liquidez inmediata", "%", 100, 1),
+    ("Liquidez Primera Linea", "liquidez_primera_bp", "Liquidez de primera línea, bancos privados",
+     "Primera línea", "%", 100, 1),
+    ("Liquidez Segunda Linea", "liquidez_segunda_bp", "Liquidez de segunda línea, bancos privados",
+     "Segunda línea", "%", 100, 1),
+    # Las columnas "Camel" son promedios de 12 meses (Camel Liquidez es el promedio del indicador
+    # oficial de liquidez que sigue más abajo).
+    ("Camel Fondos Port", "fondos_portafolio_bp",
+     "Fondos disponibles y portafolio de inversiones / depósitos de corto plazo, promedio de 12 meses, bancos privados",
+     "Disponibles + portafolio (prom. 12 meses)", "%", 100, 1),
+    ("Act Liquidos", "fondos_activos_bp", "Fondos disponibles / activos totales, bancos privados",
+     "Fondos disponibles / activos", "%", 100, 1),
+    ("Perlas Nsfr", "nsfr_bp", "Fondeo estable neto (fondeo estable disponible / requerido), bancos privados",
+     "Fondeo estable neto", "%", 100, 1),
+    ("Roe", "roe_bp", "Rentabilidad sobre patrimonio (ROE), bancos privados", "ROE", "%", 100, 1),
+    ("Camel Roa", "roa_bp", "Rentabilidad sobre activos (ROA), bancos privados", "ROA", "%", 100, 2),
 ]:
-    registrar(id_, sf.index, sf[col_], sector="financiero", nombre=nombre, corto=corto, unidad=unidad,
+    registrar(id_, ib.index, ib[col_], sector="financiero", nombre=nombre, corto=corto, unidad=unidad,
               frecuencia="M", decimales=dec, fuente=FUENTE_SB, escala=esc)
 
-tpr = pd.read_excel(RAW / "tpr.xlsx")
-tpr.index = pd.to_datetime(tpr["semana"], format="%d/%m/%Y")
+# Liquidez oficial de la SB (la que reporta Asobanca): fondos disponibles / total de depósitos a
+# corto plazo (a la vista y a plazo hasta 90 días), del archivo mensual de series del subsistema
+# de bancos privados (hoja INDICAD, una columna por mes).
+# El nombre termina en AAAA_MM: se usa el último mes.
+series_sb = pd.read_excel(max((RAW / "sb").glob("SERIES SUBSISTEMA BANCA PRIVADA*.xlsx")), sheet_name="INDICAD",
+                          header=None, engine="calamine")
+i = next(i for i in range(len(series_sb))
+         if limpiar(series_sb.iat[i, 0]).upper() == "FONDOS DISPONIBLES / TOTAL DEPOSITOS A CORTO PLAZO")
+k = next(k for k in range(i, -1, -1) if sum(hasattr(c, "year") for c in series_sb.iloc[k]) > 3)
+cols = [j for j, c in enumerate(series_sb.iloc[k]) if hasattr(c, "year")]
+registrar("liquidez_bp", [pd.Timestamp(series_sb.iat[k, j]).to_period("M").to_timestamp() for j in cols],
+          [series_sb.iat[i, j] for j in cols], sector="financiero",
+          nombre="Fondos disponibles / depósitos a corto plazo (no incluye otros activos líquidos), bancos privados",
+          corto="Fondos disponibles / depósitos CP",
+          unidad="%", frecuencia="M", decimales=2, escala=100,
+          fuente="Superintendencia de Bancos, Series del subsistema de bancos privados")
+
+# Tasas de interés (BCE): referenciales mensuales y activas efectivas por segmento de crédito.
+ref = cuadro_bce(RAW / "tasas" / "tasas_referenciales.xlsx")[""]
 for col_, id_, nombre, corto in [
-    ("tpr", "tpr", "Tasa pasiva referencial", "Tasa pasiva referencial"),
-    ("tpr_bpriv", "tpr_bp", "Tasa pasiva referencial, bancos privados", "Bancos privados"),
-    ("tpr_coop", "tpr_coop", "Tasa pasiva referencial, cooperativas", "Cooperativas"),
+    ("Pasiva", "tasa_pasiva", "Tasa pasiva referencial", "Tasa pasiva referencial"),
+    ("Activa", "tasa_activa", "Tasa activa referencial", "Tasa activa referencial"),
 ]:
-    registrar(id_, tpr.index, tpr[col_], sector="financiero", nombre=nombre, corto=corto, unidad="%",
-              frecuencia="S", decimales=2, fuente="BCE")
+    registrar(id_, ref.index, ref[col_], sector="financiero", nombre=nombre, corto=corto, unidad="%",
+              frecuencia="M", decimales=2, fuente="BCE, Tasas de interés referenciales")
+
+# Cada segmento trae la tasa efectiva referencial y la máxima ("Máxima Consumo"):
+# id tasa_<subsegmento> y tasa_max_<subsegmento>.
+for df in cuadro_bce(RAW / "tasas" / "tasas_activas_efectivas_maximas.xlsx").values():
+    for col_ in df.columns:
+        maxima = col_.startswith("Máxima ")
+        sub = col_.removeprefix("Máxima ")
+        sub = sub[:1] + sub[1:].lower().replace("pymes", "PYMES")  # "Productivo Corporativo" → "Productivo corporativo"
+        registrar(f"tasa_{'max_' if maxima else ''}{slug(sub)}", df.index, df[col_], sector="financiero",
+                  nombre=f"Tasa activa {'máxima' if maxima else 'efectiva referencial'}: {sub}",
+                  corto=sub, unidad="%", frecuencia="M", decimales=2,
+                  fuente="BCE, Tasas de interés activas efectivas referenciales y máximas")
 
 # Riesgo país: el archivo trae días calendario (fines de semana repetidos); se dejan días hábiles.
 embi = pd.read_excel(RAW / "bce_riesgo_país2.xlsx")
@@ -330,6 +442,16 @@ embi["Fecha"] = pd.to_datetime(embi["Fecha"])
 embi = embi[embi["Fecha"].dt.dayofweek < 5]
 registrar("embi", embi["Fecha"], embi["Valor"], sector="financiero", nombre="Riesgo país (EMBI Ecuador)",
           corto="Riesgo país", unidad="pb", frecuencia="D", decimales=0, fuente="BCE, con datos de JP Morgan")
+
+# Bonos globales: precios del BCE (descargar_datos.py); como en el riesgo país, se dejan días hábiles.
+bonos = pd.DataFrame(json.loads((RAW / "bonos_soberanos.json").read_text())["view_ind_bonos"])
+bonos["Fecha"] = pd.to_datetime(bonos["Fecha"])
+bonos = bonos[bonos["Fecha"].dt.dayofweek < 5]
+for vencimiento, df in bonos.groupby("Indicador"):
+    df = df.sort_values("Fecha")
+    registrar(f"bono_{vencimiento}", df["Fecha"], df["Valor"], sector="financiero",
+              nombre=f"Bono global Ecuador {vencimiento}: precio", corto=f"Ecuador {vencimiento}",
+              unidad="USD por 100", frecuencia="D", decimales=2, fuente="BCE, Bonos soberanos")
 
 # Reservas internacionales semanales. Códigos del BCE:
 #   c1 posición neta en divisas (c11 caja en divisas; c12 depósitos netos en bancos e
@@ -360,7 +482,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module="openpyxl")
 
 # Operaciones del SPNF (MEF): columnas anuales, trimestrales y mensuales; se usan las mensuales.
 FUENTE_SPNF = "MEF, Operaciones del Sector Público No Financiero"
-op = pd.read_excel(RAW / "mef_spnf" / "8.Operaciones-de-Ingresos-y-Gastos-SPNF-2013-2026.xlsx",
+op = pd.read_excel(mas_reciente(RAW / "mef_spnf", "*Operaciones-de-Ingresos-y-Gastos-SPNF*.xlsx"),
                    sheet_name="SPNF", header=None)
 fila_fechas = op.iloc[4]
 cols_mes = [j for j, v in enumerate(fila_fechas) if isinstance(v, pd.Timestamp) or hasattr(v, "month")]
@@ -639,108 +761,26 @@ x_bc = pd.Series(pd.to_numeric(bc["bc_total_exp"]).values, index=fechas)
 dif = (x_detalle - x_bc.reindex(x_detalle.index)).abs().max()
 print(f"Exportaciones: diferencia máxima detalle vs. balanza comercial = USD {dif:.1f} mm")
 
-# ============================================================== MERCADOS (Bloomberg)
-# id, ticker, campo, nombre, corto, grupo, unidad, decimales
-MERCADOS = [
-    # Índices bursátiles
-    ("spx", "SPX Index", "PX_LAST", "S&P 500", "S&P 500", "bolsa", "puntos", 0),
-    ("nasdaq", "CCMP Index", "PX_LAST", "Nasdaq Composite", "Nasdaq", "bolsa", "puntos", 0),
-    ("dow", "INDU Index", "PX_LAST", "Dow Jones Industrial Average", "Dow Jones", "bolsa", "puntos", 0),
-    ("stoxx50", "SX5E Index", "PX_LAST", "Euro Stoxx 50", "Euro Stoxx 50", "bolsa", "puntos", 0),
-    ("dax", "DAX Index", "PX_LAST", "DAX (Alemania)", "DAX", "bolsa", "puntos", 0),
-    ("ftse", "UKX Index", "PX_LAST", "FTSE 100 (Reino Unido)", "FTSE 100", "bolsa", "puntos", 0),
-    ("cac", "CAC Index", "PX_LAST", "CAC 40 (Francia)", "CAC 40", "bolsa", "puntos", 0),
-    ("ibex", "IBEX Index", "PX_LAST", "IBEX 35 (España)", "IBEX 35", "bolsa", "puntos", 0),
-    ("nikkei", "NKY Index", "PX_LAST", "Nikkei 225 (Japón)", "Nikkei 225", "bolsa", "puntos", 0),
-    ("hangseng", "HSI Index", "PX_LAST", "Hang Seng (Hong Kong)", "Hang Seng", "bolsa", "puntos", 0),
-    ("shanghai", "SHCOMP Index", "PX_LAST", "Shanghai Composite (China)", "Shanghai", "bolsa", "puntos", 0),
-    ("bovespa", "IBOV Index", "PX_LAST", "Bovespa (Brasil)", "Bovespa", "bolsa", "puntos", 0),
-    # Tasas de política monetaria
-    ("fed", "FDTR Index", "PX_LAST", "Fed: tasa de fondos federales (límite superior)", "Fed (EE. UU.)", "politica", "%", 2),
-    ("fed_efectiva", "FEDL01 Index", "PX_LAST", "Tasa efectiva de fondos federales", "Fed funds efectiva", "politica", "%", 2),
-    ("bce_tasa", "EURR002W Index", "PX_LAST", "BCE: tasa de operaciones principales de financiación", "BCE (zona euro)", "politica", "%", 2),
-    ("boe", "UKBRBASE Index", "PX_LAST", "Banco de Inglaterra: Bank Rate", "BoE (Reino Unido)", "politica", "%", 2),
-    ("boj", "BOJDTR Index", "PX_LAST", "Banco de Japón: tasa de política", "BoJ (Japón)", "politica", "%", 2),
-    ("sofr_1m", "TSFR1M INDEX", "PX_LAST", "Term SOFR 1 mes", "Term SOFR 1M", "politica", "%", 2),
-    ("sofr_3m", "TSFR3M INDEX", "PX_LAST", "Term SOFR 3 meses", "Term SOFR 3M", "politica", "%", 2),
-    ("sofr_6m", "TSFR6M INDEX", "PX_LAST", "Term SOFR 6 meses", "Term SOFR 6M", "politica", "%", 2),
-    ("sofr_12m", "TSFR12M INDEX", "PX_LAST", "Term SOFR 12 meses", "Term SOFR 12M", "politica", "%", 2),
-    # Monedas
-    ("dxy", "DXY Index", "PX_LAST", "Índice del dólar (DXY)", "DXY", "fx", "índice", 2),
-    ("eurusd", "EURUSD Curncy", "PX_LAST", "EUR/USD", "EUR/USD", "fx", "USD por EUR", 4),
-    ("gbpusd", "GBPUSD Curncy", "PX_LAST", "GBP/USD", "GBP/USD", "fx", "USD por GBP", 4),
-    ("usdjpy", "USDJPY Curncy", "PX_LAST", "USD/JPY", "USD/JPY", "fx", "JPY por USD", 2),
-    ("usdcny", "USDCNY Curncy", "PX_LAST", "USD/CNY", "USD/CNY", "fx", "CNY por USD", 4),
-    ("usdcop", "USDCOP Curncy", "PX_LAST", "USD/COP", "USD/COP", "fx", "COP por USD", 0),
-    ("usdbrl", "USDBRL Curncy", "PX_LAST", "USD/BRL", "USD/BRL", "fx", "BRL por USD", 4),
-    ("usdmxn", "USDMXN Curncy", "PX_LAST", "USD/MXN", "USD/MXN", "fx", "MXN por USD", 4),
-    # Commodities
-    ("wti", "CL1 Comdty", "PX_LAST", "Petróleo WTI (Nymex, 1er futuro)", "WTI", "commodity", "USD/barril", 2),
-    ("brent", "CO1 Comdty", "PX_LAST", "Petróleo Brent (ICE, 1er futuro)", "Brent", "commodity", "USD/barril", 2),
-    ("gasolina", "XB1 Comdty", "PX_LAST", "Gasolina RBOB (Nymex)", "Gasolina RBOB", "commodity", "¢/galón", 1),
-    ("diesel", "HO1 Comdty", "PX_LAST", "Heating oil / diésel (Nymex)", "Diésel (HO)", "commodity", "¢/galón", 1),
-    ("gas_natural", "NG1 Comdty", "PX_LAST", "Gas natural (Nymex)", "Gas natural", "commodity", "USD/MMBtu", 2),
-    ("cacao", "CC1 Comdty", "PX_LAST", "Cacao (ICE NY, 1er futuro)", "Cacao", "commodity", "USD/t", 0),
-    ("oro", "GC1 Comdty", "PX_LAST", "Oro (COMEX, 1er futuro)", "Oro", "commodity", "USD/oz", 1),
-    ("cobre", "HG1 Comdty", "PX_LAST", "Cobre (COMEX, 1er futuro)", "Cobre", "commodity", "¢/libra", 1),
-    ("soya", "S 1 COMB Comdty", "PX_LAST", "Soya (CBOT)", "Soya", "commodity", "¢/bushel", 1),
-    ("palma", "KOX6 Comdty", "PX_LAST", "Aceite de palma (Bursa Malaysia)", "Aceite de palma", "commodity", "MYR/t", 0),
-    ("trigo", "W Z6 COMB Comdty", "PX_LAST", "Trigo (CBOT, dic-26)", "Trigo", "commodity", "¢/bushel", 1),
-    ("maiz", "EPX6 Comdty", "PX_LAST", "Maíz (Euronext, nov-26)", "Maíz", "commodity", "EUR/t", 1),
-    # Bonos soberanos de Ecuador
-    ("ec2030_px", "ZO2094456 Corp", "PX_LAST", "Bono Ecuador 2030: precio", "Ecuador 2030", "ecuador", "USD por 100", 2),
-    ("ec2034_px", "YI4276048 Corp", "PX_LAST", "Bono Ecuador 2034: precio", "Ecuador 2034", "ecuador", "USD por 100", 2),
-    ("ec2035_px", "ZO2104214 Corp", "PX_LAST", "Bono Ecuador 2035: precio", "Ecuador 2035", "ecuador", "USD por 100", 2),
-    ("ec2039_px", "YI4276055 Corp", "PX_LAST", "Bono Ecuador 2039: precio", "Ecuador 2039", "ecuador", "USD por 100", 2),
-    ("ec2040_px", "ZO2104560 Corp", "PX_LAST", "Bono Ecuador 2040: precio", "Ecuador 2040", "ecuador", "USD por 100", 2),
-    ("ec2030_ytm", "ZO2094456 Corp", "YLD_YTM_MID", "Bono Ecuador 2030: rendimiento", "Ecuador 2030", "ecuador", "%", 2),
-    ("ec2034_ytm", "YI4276048 Corp", "YLD_YTM_MID", "Bono Ecuador 2034: rendimiento", "Ecuador 2034", "ecuador", "%", 2),
-    ("ec2035_ytm", "ZO2104214 Corp", "YLD_YTM_MID", "Bono Ecuador 2035: rendimiento", "Ecuador 2035", "ecuador", "%", 2),
-    ("ec2039_ytm", "YI4276055 Corp", "YLD_YTM_MID", "Bono Ecuador 2039: rendimiento", "Ecuador 2039", "ecuador", "%", 2),
-    ("ec2040_ytm", "ZO2104560 Corp", "YLD_YTM_MID", "Bono Ecuador 2040: rendimiento", "Ecuador 2040", "ecuador", "%", 2),
-]
-# Curvas soberanas: (prefijo, país, [(plazo, ticker)])
-CURVAS = [
-    ("us", "EE. UU.", [("1M", "USGG1M Index"), ("3M", "USGG3M Index"), ("6M", "USGG6M Index"),
-                       ("1A", "USGG12M Index"), ("2A", "USGG2YR Index"), ("3A", "USGG3YR Index"),
-                       ("5A", "USGG5YR Index"), ("7A", "USGG7YR Index"), ("10A", "USGG10YR Index"),
-                       ("30A", "USGG30YR Index")]),
-    ("de", "Alemania", [("2A", "BV020910 BVLI INDEX"), ("5A", "BV050910 BVLI INDEX"),
-                        ("10A", "BV100910 BVLI INDEX"), ("30A", "BV300910 BVLI INDEX")]),
-    ("uk", "Reino Unido", [("1A", "GUKG1 Index"), ("2A", "GUKG2 Index"), ("5A", "GUKG5 Index"),
-                           ("7A", "GUKG7 Index"), ("10A", "GUKG10 Index"), ("15A", "GUKG15 Index"),
-                           ("20A", "GUKG20 Index"), ("30A", "GUKG30 Index")]),
-    ("jp", "Japón", [("3M", "BVCSEI3M BVLI INDEX"), ("1A", "BVCSEI01 BVLI INDEX"), ("2A", "BVCSEI02 BVLI INDEX"),
-                     ("3A", "BVCSEI03 BVLI INDEX"), ("5A", "BVCSEI05 BVLI INDEX"), ("7A", "BVCSEI07 BVLI INDEX"),
-                     ("10A", "BVCSEI10 BVLI INDEX"), ("20A", "BVCSEI20 BVLI INDEX"), ("30A", "BVCSEI30 BVLI INDEX")]),
-]
-for pref, pais, plazos in CURVAS:
-    for plazo, ticker in plazos:
-        MERCADOS.append((f"{pref}_{plazo.lower()}", ticker, "PX_LAST", f"Bono soberano {pais} {plazo}",
-                         f"{pais} {plazo}", f"curva_{pref}", "%", 3))
-
-archivo_bbg = sorted(RAW.glob("series_bloomberg_*.csv"))[-1]
-bbg = pd.read_csv(archivo_bbg, parse_dates=["fecha"])
-bbg = bbg.drop_duplicates(["ticker", "campo", "fecha"])
-ancho = {}
-meta_mercados = []
-for id_, ticker, campo, nombre, corto, grupo, unidad, dec in MERCADOS:
-    s = bbg[(bbg["ticker"] == ticker) & (bbg["campo"] == campo)].set_index("fecha")["valor"]
-    if s.empty:
-        raise ValueError(f"Sin datos de Bloomberg para {ticker} {campo}")
-    ancho[id_] = s
-    meta_mercados.append(dict(id=id_, sector="internacional", grupo=grupo, nombre=nombre, corto=corto,
-                              unidad=unidad, frecuencia="D", decimales=dec, fuente="Bloomberg", ticker=ticker))
-mercados = pd.DataFrame(ancho).sort_index()
+# ============================================================== MERCADOS
+# Series descargadas por descargar_datos.py; el catálogo está en catalogo_mercados.py.
+largo = pd.read_csv(RAW / "mercados.csv", parse_dates=["fecha"])
+ancho = largo.pivot(index="fecha", columns="id", values="valor")
+faltan = [id_ for id_, *_ in MERCADOS if id_ not in ancho.columns]
+if faltan:
+    raise ValueError(f"Sin datos de mercado para: {', '.join(faltan)} (ejecuta descargar_datos.py)")
+mercados = ancho[[id_ for id_, *_ in MERCADOS]].sort_index()
 mercados = mercados[mercados.index.dayofweek < 5]
+meta_mercados = [dict(id=id_, sector="internacional", grupo=grupo, nombre=nombre, corto=corto, unidad=unidad,
+                      frecuencia="D", decimales=dec, fuente=FUENTES[fuente], codigo=codigo)
+                 for id_, fuente, codigo, nombre, corto, grupo, unidad, dec in MERCADOS]
 
-# Licencia de Bloomberg: el sitio publica solo lo que muestra. Las series que se grafican
-# completas viajan completas; las que solo aparecen en tablas o curvas viajan con los valores
-# de las fechas de referencia que usan las páginas (hoy, 1 mes, 3 meses, cierre del año
-# anterior y 12 meses).
-HISTORIA_COMPLETA = {"fed", "bce_tasa", "boe", "boj", "us_10a", "us_2a", "dxy", "wti", "brent", "cacao",
-                     "oro", "cobre", "gasolina", "diesel", "ec2030_ytm", "ec2035_ytm", "ec2040_ytm"}
-ULTIMO_ANIO = {"spx", "stoxx50", "nikkei", "bovespa"}
+# Las condiciones de uso de Yahoo Finance no permiten redistribuir sus datos, así que el sitio
+# publica solo lo que muestra: las series que se grafican completas viajan completas; las que
+# solo aparecen en tablas o curvas viajan con los valores de las fechas de referencia que usan
+# las páginas (hoy, 1 mes, 3 meses, cierre del año anterior y 12 meses).
+HISTORIA_COMPLETA = {"fed", "fed_inf", "bce_tasa", "boe", "boj", "us_10a", "us_2a", "dxy", "wti", "brent", "cacao",
+                     "oro", "cobre", "gasolina", "diesel"}
+ULTIMO_ANIO = {"spx", "stoxx50", "nikkei", "bovespa", "us_3m"}  # us_3m: el resumen lo compara con hace un año
 corte = mercados.index.max()
 referencias = [corte, corte - pd.Timedelta(days=30), corte - pd.Timedelta(days=91),
                pd.Timestamp(corte.year - 1, 12, 31), corte - pd.DateOffset(years=1)]
@@ -756,9 +796,56 @@ mercados = mercados.dropna(how="all")
 mercados.index = mercados.index.strftime("%Y-%m-%d")
 mercados.index.name = "fecha"
 mercados.round(4).to_csv(OUT / "mercados.csv")
-json.dump({"curvas": [{"id": p, "pais": n, "plazos": [t for t, _ in pl]} for p, n, pl in CURVAS],
+json.dump({"curvas": [{"id": p, "pais": n, "plazos": [t for t, _ in pl]} for p, n, _, pl in CURVAS],
            "series": meta_mercados},
           open(OUT / "mercados.json", "w"), ensure_ascii=False, indent=1)
+
+# ============================================================== PREVISIONES DE CRECIMIENTO
+# Crecimiento real del PIB previsto por institución. El BCE y el MEF llegan como Excel; el FMI
+# y el Banco Mundial los descarga descargar_datos.py; otras.csv se mantiene a mano (CEPAL u
+# otras instituciones), con las columnas institucion, informe, fecha, anio, valor.
+PREV = RAW / "previsiones"
+previsiones = [pd.read_csv(r) for r in sorted(PREV.glob("*.csv"))]
+
+
+def fila_anual(ruta: Path, hoja: str, etiqueta: str) -> dict[int, float]:
+    """Valores de una fila de un cuadro con años en columnas ('2026', '2026 (p)')."""
+    df = pd.read_excel(ruta, sheet_name=hoja, header=None)
+    i = next(i for i in range(len(df)) if any(limpiar(x).lower().startswith(etiqueta.lower())
+                                              for x in df.iloc[i] if isinstance(x, str)))
+    cab = next(df.iloc[k] for k in range(i - 1, -1, -1)
+               if sum(bool(re.match(r"^20\d\d", str(x))) for x in df.iloc[k]) >= 2)
+    return {int(str(c)[:4]): float(df.iat[i, j]) for j, c in cab.items()
+            if re.match(r"^20\d\d", str(c)) and pd.notna(df.iat[i, j])}
+
+
+# BCE, Previsiones macroeconómicas: PrevEconAAMM.xlsx, hoja 3 (tasas de variación anual).
+ruta = mas_reciente(PREV, "PrevEcon*.xlsx")
+aamm = re.search(r"(\d{2})(\d{2})", ruta.stem)
+pub = pd.Timestamp(2000 + int(aamm[1]), int(aamm[2]), 1)
+previsiones.append(pd.DataFrame([("BCE", f"Previsiones macroeconómicas, {list(MESES)[pub.month - 1]}-{pub.year}",
+                                  pub.strftime("%Y-%m-%d"), a, v)
+                                 for a, v in fila_anual(ruta, "3", "Producto Interno Bruto").items()],
+                                columns=["institucion", "informe", "fecha", "anio", "valor"]))
+
+# MEF, Programación macroeconómica: cuadro de mando de las proyecciones (solo años proyectados).
+# El archivo no trae fecha de publicación; se usa la del archivo.
+ruta = mas_reciente(PREV, "*Resumen-de-las-proyecciones*.xlsx")
+pub = pd.Timestamp(ruta.stat().st_mtime, unit="s").to_period("M").to_timestamp()
+anios = re.findall(r"20\d\d", ruta.stem)
+previsiones.append(pd.DataFrame([("MEF", f"Programación macroeconómica {anios[0]}–{anios[-1]}", pub.strftime("%Y-%m-%d"), a, v)
+                                 for a, v in fila_anual(ruta, "Anexo 1", "Crecimiento real del PIB").items()
+                                 if a >= int(anios[0])],
+                                columns=["institucion", "informe", "fecha", "anio", "valor"]))
+
+ORDEN_INSTITUCIONES = ["BCE", "MEF", "FMI", "Banco Mundial", "CEPAL"]
+previsiones = pd.concat(previsiones, ignore_index=True)
+previsiones["orden"] = [ORDEN_INSTITUCIONES.index(i) if i in ORDEN_INSTITUCIONES else 99
+                        for i in previsiones["institucion"]]
+previsiones = (previsiones[previsiones["anio"] >= pd.Timestamp.today().year]
+               .sort_values(["orden", "anio"]).drop(columns="orden"))
+previsiones["valor"] = previsiones["valor"].round(2)
+previsiones.to_csv(OUT / "previsiones.csv", index=False)
 
 # ============================================================== Escritura
 pd.DataFrame(filas, columns=["id", "fecha", "valor"]).to_csv(OUT / "series.csv", index=False)
@@ -769,5 +856,6 @@ json.dump({"incidencias_ipc": fecha_incidencias.strftime("%Y-%m-%d"),
 ids = [c["id"] for c in catalogo]
 assert len(ids) == len(set(ids)), "IDs duplicados en el catálogo"
 print(f"series.csv: {len(filas)} filas, {len(catalogo)} series")
-print(f"mercados.csv: {mercados.shape[0]} fechas × {mercados.shape[1]} series (archivo {archivo_bbg.name})")
+print(f"mercados.csv: {mercados.shape[0]} fechas × {mercados.shape[1]} series (corte {corte:%Y-%m-%d})")
+print(f"previsiones.csv: {previsiones['institucion'].nunique()} instituciones, {len(previsiones)} filas")
 print(f"exportaciones.csv: {len(exp)} filas · importaciones.csv: {len(imp)} filas")

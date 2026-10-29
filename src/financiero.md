@@ -4,8 +4,7 @@ title: Sector financiero
 
 ```js
 import {db} from "./components/base.js";
-import {mercados} from "./components/mercados.js";
-import {variacion, combinar, valorEn, formatoNumero, formatoCambio, formatoPeriodo} from "./components/datos.js";
+import {variacion, valorEn, formatoNumero, formatoCambio, formatoPeriodo} from "./components/datos.js";
 import {grafico} from "./components/graficos.js";
 import {kpiSerie, panel, cabecera} from "./components/ui.js";
 
@@ -24,8 +23,8 @@ function variacionEnElAnio(serie) {
 ```js
 display(cabecera({
   antetitulo: "Sector monetario y financiero",
-  titulo: "Riesgo soberano, liquidez y crédito",
-  bajada: "Riesgo país y reservas internacionales; depósitos, cartera, liquidez, solvencia y morosidad del sistema financiero privado; tasa pasiva referencial y bonos soberanos de Ecuador.",
+  titulo: "Riesgo soberano, liquidez, crédito y tasas",
+  bajada: "Riesgo país, bonos soberanos y reservas internacionales; depósitos, cartera, calidad de cartera, liquidez, solvencia y rentabilidad de los bancos privados; tasas de interés referenciales y por segmento de crédito.",
   corte: db.ultimo("depositos_bp")[0]
 }));
 
@@ -33,7 +32,7 @@ display(html`<div class="kpis">
   ${kpiSerie(db, "embi")}
   ${kpiSerie(db, "reservas")}
   ${kpiSerie(db, "depositos_bp", {titulo: "Depósitos, bancos privados"})}
-  ${kpiSerie(db, "morosidad_sf", {titulo: "Morosidad del sistema"})}
+  ${kpiSerie(db, "morosidad_bp", {titulo: "Morosidad, bancos privados"})}
 </div>`);
 ```
 
@@ -45,11 +44,62 @@ display(html`<div class="paneles">
     titulo: "Riesgo país (EMBI Ecuador)",
     subtitulo: "Puntos básicos, diario",
     fuente: fuente("embi"),
+    nota: "Diferencia entre el rendimiento de los bonos de Ecuador en dólares y el de los bonos del Tesoro de EE. UU. (100 pb = 1 punto porcentual). Cuando sube, al Estado le cuesta más financiarse en los mercados internacionales, y ese mayor costo tiende a trasladarse a bancos y empresas.",
     ancho: true,
     contenido: grafico({
       series: [{nombre: "EMBI Ecuador", datos: db.serie("embi")}],
       frecuencia: "D", unidad: "pb", decimales: 0, navegador: true, rango: "5a", altura: 420
     })
+  })}
+</div>`);
+```
+
+## Bonos soberanos de Ecuador
+
+Precio de los bonos globales en el mercado secundario, en dólares por cada 100 de valor nominal.
+
+```js
+const bonos = ["2030", "2034", "2035", "2039", "2040"];
+const [tBonos] = db.ultimo("bono_2035");
+const refBonos = [
+  {etiqueta: "Var. 1 mes", t: tBonos - 30 * 864e5},
+  {etiqueta: "Var. en el año", t: Date.UTC(new Date(tBonos).getUTCFullYear() - 1, 11, 31)},
+  {etiqueta: "Var. 12 meses", t: Date.UTC(new Date(tBonos).getUTCFullYear() - 1, new Date(tBonos).getUTCMonth(), new Date(tBonos).getUTCDate())}
+];
+
+display(html`<div class="paneles">
+  ${panel({
+    titulo: "Precio de los bonos globales",
+    subtitulo: "USD por 100 de valor nominal, diario",
+    fuente: fuente("bono_2035"),
+    nota: "Precio y rendimiento se mueven en sentido contrario: cuando el precio de un bono baja, el rendimiento que exige el mercado sube, y viceversa. Un precio por debajo de 100 indica que el mercado exige un rendimiento mayor que el cupón del bono.",
+    ancho: true,
+    contenido: grafico({
+      series: ["2030", "2035", "2040"].map((b) => ({nombre: `Ecuador ${b}`, datos: db.serie(`bono_${b}`)})),
+      frecuencia: "D", unidad: "USD por 100", decimales: 2, navegador: true, rango: "Todo"
+    })
+  })}
+  ${panel({
+    titulo: "Bonos globales de Ecuador",
+    subtitulo: `Precio y variación, %, al ${formatoPeriodo(tBonos, "D")}`,
+    fuente: fuente("bono_2035"),
+    ancho: true,
+    contenido: html`<div class="tabla-wrap"><table class="tablero cuadro">
+      <thead><tr><th>Bono</th><th>Precio</th>${refBonos.map((r) => html`<th>${r.etiqueta}</th>`)}</tr></thead>
+      <tbody>${bonos.map((b) => {
+        const s = db.serie(`bono_${b}`);
+        const actual = valorEn(s, tBonos);
+        return html`<tr class="fila-item nivel-0">
+          <td>Ecuador ${b}</td>
+          <td><b>${formatoNumero(actual, 2)}</b></td>
+          ${refBonos.map((r) => {
+            // Los bonos 2034 y 2039 se emitieron en 2026: sin precio antes de su emisión.
+            const ref = s[0][0] <= r.t ? valorEn(s, r.t) : undefined;
+            return html`<td>${ref != null ? formatoCambio((actual / ref - 1) * 100, 1, "%") : "–"}</td>`;
+          })}
+        </tr>`;
+      })}</tbody>
+    </table></div>`
   })}
 </div>`);
 ```
@@ -95,7 +145,11 @@ display(html`<div class="paneles">
 
 ## Depósitos y crédito
 
+Sistema de bancos privados.
+
 ```js
+const segmentosCartera = [["productivo", "Productivo"], ["consumo", "Consumo"], ["inmobiliario", "Inmobiliario"], ["microcredito", "Microcrédito"]];
+
 display(html`<div class="paneles">
   ${panel({
     titulo: "Depósitos y cartera",
@@ -122,6 +176,29 @@ display(html`<div class="paneles">
     })
   })}
   ${panel({
+    titulo: "Crecimiento de la cartera por segmento",
+    subtitulo: "Variación anual de la cartera bruta, %, bancos privados",
+    fuente: fuente("cartera_bp"),
+    contenido: grafico({
+      series: segmentosCartera.map(([id, nombre]) => ({nombre, datos: desde(variacion(db.serie(`cartera_${id}_bp`), 12), 2018)})),
+      frecuencia: "M", unidad: "%", decimales: 1, cero: true
+    })
+  })}
+  ${panel({
+    titulo: "Depósitos por tipo",
+    subtitulo: "Saldos, USD millones, bancos privados",
+    fuente: fuente("depositos_bp"),
+    nota: "Monetarios: depósitos a la vista (cuenta 2101) sin los de ahorro. Ahorro: depósitos de ahorro (210135). Plazo: depósitos a plazo y restringidos (2103 + 2105).",
+    contenido: grafico({
+      series: [
+        {nombre: "Monetarios", datos: s("dep_monetarios_bp")},
+        {nombre: "Ahorro", datos: s("dep_ahorro_bp")},
+        {nombre: "Plazo", datos: s("dep_plazo_bp")}
+      ],
+      frecuencia: "M", unidad: "USD mm", decimales: 0, tipo: "area", apilado: true
+    })
+  })}
+  ${panel({
     titulo: "Relación cartera / depósitos",
     subtitulo: "%, bancos privados",
     fuente: fuente("ltd_bp"),
@@ -142,45 +219,42 @@ display(html`<div class="paneles">
 </div>`);
 ```
 
-## Liquidez, solvencia y calidad de cartera
+## Calidad de cartera
 
-Sistema financiero privado: bancos, cooperativas y mutualistas.
+La morosidad es la cartera improductiva (vencida y que no devenga intereses) sobre la cartera bruta. La morosidad ajustada suma al numerador y al denominador los castigos de los últimos 12 meses.
 
 ```js
 display(html`<div class="paneles">
   ${panel({
-    titulo: "Liquidez",
-    subtitulo: "Fondos disponibles / depósitos de corto plazo, %",
-    fuente: fuente("liquidez_bp"),
+    titulo: "Morosidad de la cartera",
+    subtitulo: "%, bancos privados",
+    fuente: fuente("morosidad_bp"),
     contenido: grafico({
       series: [
-        {nombre: "Bancos privados", datos: s("liquidez_bp")},
-        {nombre: "Cooperativas segmento 1", datos: s("liquidez_coac1")}
+        {nombre: "Morosidad", datos: s("morosidad_bp")},
+        {nombre: "Ajustada por castigos", datos: s("morosidad_castigos_bp")}
       ],
-      frecuencia: "M", unidad: "%", decimales: 1
+      frecuencia: "M", unidad: "%", decimales: 2
     })
   })}
   ${panel({
-    titulo: "Solvencia",
-    subtitulo: "Patrimonio técnico / activos ponderados por riesgo, %",
-    fuente: fuente("solvencia_sf"),
+    titulo: "Cobertura de la cartera improductiva",
+    subtitulo: "Provisiones / cartera improductiva, %, bancos privados",
+    fuente: fuente("cobertura_bp"),
     contenido: grafico({
-      series: [{nombre: "Solvencia", datos: s("solvencia_sf")}],
-      frecuencia: "M", unidad: "%", decimales: 1
+      series: [{nombre: "Cobertura", datos: s("cobertura_bp")}],
+      frecuencia: "M", unidad: "%", decimales: 0, referencia: 100
     })
   })}
   ${panel({
     titulo: "Morosidad por segmento de crédito",
-    subtitulo: "% de la cartera bruta del segmento",
-    fuente: fuente("morosidad_sf"),
+    subtitulo: "% de la cartera bruta del segmento, bancos privados",
+    fuente: fuente("morosidad_bp"),
     ancho: true,
     contenido: grafico({
       series: [
-        {nombre: "Productivo", datos: s("morosidad_productivo", 2018)},
-        {nombre: "Comercial", datos: s("morosidad_comercial", 2018)},
-        {nombre: "Microcrédito", datos: s("morosidad_microcredito", 2018)},
-        {nombre: "Vivienda", datos: s("morosidad_vivienda", 2018)},
-        {nombre: "Total", datos: s("morosidad_sf", 2018), color: "tinta"}
+        ...segmentosCartera.map(([id, nombre]) => ({nombre, datos: s(`morosidad_${id}_bp`, 2018)})),
+        {nombre: "Total", datos: s("morosidad_bp", 2018), color: "tinta"}
       ],
       frecuencia: "M", unidad: "%", decimales: 2, altura: 340
     })
@@ -188,84 +262,147 @@ display(html`<div class="paneles">
 </div>`);
 ```
 
-## Tasa pasiva referencial
+## Liquidez, solvencia y rentabilidad
+
+La liquidez de primera y segunda línea son los indicadores regulatorios. El indicador de fondos disponibles frente a los depósitos a corto plazo, que publican la Superintendencia de Bancos y Asobanca, es una medida estricta: solo cuenta el efectivo y los depósitos en el BCE y en otras entidades, y deja fuera las inversiones y otros activos de alta calidad que se pueden vender rápido. El fondeo estable neto compara el fondeo estable disponible con el requerido por los activos.
 
 ```js
 display(html`<div class="paneles">
   ${panel({
-    titulo: "Tasa pasiva referencial",
-    subtitulo: "%, semanal",
-    fuente: fuente("tpr"),
-    ancho: true,
+    titulo: "Liquidez",
+    subtitulo: "%, bancos privados",
+    fuente: fuente("liquidez_inmediata_bp"),
     contenido: grafico({
       series: [
-        {nombre: "Sistema", datos: db.serie("tpr"), color: "tinta"},
-        {nombre: "Bancos privados", datos: db.serie("tpr_bp")},
-        {nombre: "Cooperativas", datos: db.serie("tpr_coop")}
+        {nombre: "Inmediata", datos: s("liquidez_inmediata_bp")},
+        {nombre: "Primera línea", datos: s("liquidez_primera_bp")},
+        {nombre: "Segunda línea", datos: s("liquidez_segunda_bp")}
       ],
-      frecuencia: "S", unidad: "%", decimales: 2, navegador: true, rango: "5a"
+      frecuencia: "M", unidad: "%", decimales: 1
+    })
+  })}
+  ${panel({
+    titulo: "Fondos disponibles / depósitos a corto plazo",
+    subtitulo: "Depósitos a la vista y a plazo hasta 90 días, %, bancos privados; con el portafolio de inversiones, promedio de 12 meses",
+    fuente: `${fuente("liquidez_bp")}; ${fuente("fondos_portafolio_bp")}`,
+    nota: "La línea de disponibles solo cuenta fondos disponibles (efectivo y depósitos en el BCE y en otras entidades); no incluye inversiones ni otros activos líquidos que se pueden vender rápido, por lo que subestima la liquidez real. La línea con portafolio suma parte de esas inversiones.",
+    contenido: grafico({
+      series: [
+        {nombre: "Con portafolio (12m)", datos: s("fondos_portafolio_bp")},
+        {nombre: "Disponibles", datos: s("liquidez_bp")}
+      ],
+      frecuencia: "M", unidad: "%", decimales: 1
+    })
+  })}
+  ${panel({
+    titulo: "Fondos disponibles y fondeo estable",
+    subtitulo: "Fondeo estable disponible / requerido y fondos disponibles / activos, %, bancos privados",
+    fuente: fuente("nsfr_bp"),
+    contenido: grafico({
+      series: [
+        {nombre: "Fondeo estable neto", datos: s("nsfr_bp")},
+        {nombre: "Disponibles / activos", datos: s("fondos_activos_bp")}
+      ],
+      frecuencia: "M", unidad: "%", decimales: 1
+    })
+  })}
+  ${panel({
+    titulo: "Solvencia",
+    subtitulo: "Patrimonio técnico / activos y contingentes ponderados por riesgo, %; mínimo regulatorio: 9%",
+    fuente: fuente("solvencia_bp"),
+    contenido: grafico({
+      series: [{nombre: "Solvencia", datos: db.serie("solvencia_bp")}],
+      frecuencia: "M", unidad: "%", decimales: 1
+    })
+  })}
+  ${panel({
+    titulo: "Rentabilidad sobre patrimonio (ROE)",
+    subtitulo: "%, bancos privados",
+    fuente: fuente("roe_bp"),
+    contenido: grafico({
+      series: [{nombre: "ROE", datos: s("roe_bp")}],
+      frecuencia: "M", unidad: "%", decimales: 1
+    })
+  })}
+  ${panel({
+    titulo: "Rentabilidad sobre activos (ROA)",
+    subtitulo: "%, bancos privados",
+    fuente: fuente("roa_bp"),
+    contenido: grafico({
+      series: [{nombre: "ROA", datos: s("roa_bp")}],
+      frecuencia: "M", unidad: "%", decimales: 2
     })
   })}
 </div>`);
 ```
 
-## Bonos soberanos de Ecuador
+## Tasas de interés
 
-Rendimiento al vencimiento de los bonos globales. El diferencial del bono 2035 frente al Tesoro de EE. UU. a 10 años es una lectura complementaria del riesgo soberano, bono por bono.
+Tasas referenciales y tasas activas efectivas por segmento de crédito publicadas por el BCE, frente a las tasas máximas vigentes.
 
 ```js
-const bonos = ["2030", "2034", "2035", "2039", "2040"];
-const spread = combinar(mercados.serie("ec2035_ytm"), mercados.serie("us_10a"), (a, b) => (a - b) * 100);
-const [tBonos] = mercados.ultimo("ec2035_ytm");
-const hace = (dias) => tBonos - dias * 864e5;
-const inicioAnio = Date.UTC(new Date(tBonos).getUTCFullYear() - 1, 11, 31);
+// Subsegmentos de crédito: id de la tasa efectiva (la máxima es tasa_max_<subsegmento>).
+const segmentos = [
+  ["Productivo", ["productivo_corporativo", "productivo_empresarial", "productivo_pymes"]],
+  ["Consumo", ["consumo"]],
+  ["Microcrédito", ["microcredito_minorista", "microcredito_acumulacion_simple", "microcredito_acumulacion_ampliada"]],
+  ["Vivienda", ["inmobiliario", "vivienda_de_interes_publico"]],
+  ["Educativo", ["educativo"]]
+];
+const [tTasas] = db.ultimo("tasa_consumo");
+const enTasas = (id, t = tTasas) => valorEn(db.serie(id), t);
+const haceUnAnoTasas = Date.UTC(new Date(tTasas).getUTCFullYear() - 1, new Date(tTasas).getUTCMonth(), 1);
 
 display(html`<div class="paneles">
   ${panel({
-    titulo: "Rendimiento de los bonos soberanos",
-    subtitulo: "Rendimiento al vencimiento, %, diario",
-    fuente: "Bloomberg",
+    titulo: "Tasas referenciales pasiva y activa",
+    subtitulo: "%, mensual",
+    fuente: fuente("tasa_pasiva"),
     contenido: grafico({
       series: [
-        {nombre: "2030", datos: mercados.serie("ec2030_ytm")},
-        {nombre: "2035", datos: mercados.serie("ec2035_ytm")},
-        {nombre: "2040", datos: mercados.serie("ec2040_ytm")}
+        {nombre: "Activa", datos: db.serie("tasa_activa")},
+        {nombre: "Pasiva", datos: db.serie("tasa_pasiva")}
       ],
-      frecuencia: "D", unidad: "%", decimales: 2, soloImagen: true
+      frecuencia: "M", unidad: "%", decimales: 2
     })
   })}
   ${panel({
-    titulo: "Diferencial del bono 2035 frente al Tesoro a 10 años",
-    subtitulo: "Puntos básicos, diario",
-    fuente: "Bloomberg; cálculo propio",
+    titulo: "Tasas activas efectivas por segmento",
+    subtitulo: "Tasa efectiva referencial, %, mensual",
+    fuente: fuente("tasa_consumo"),
     contenido: grafico({
-      series: [{nombre: "Diferencial", datos: spread}],
-      frecuencia: "D", unidad: "pb", decimales: 0, soloImagen: true
+      series: [
+        {nombre: "Microcrédito minorista", datos: db.serie("tasa_microcredito_minorista")},
+        {nombre: "Consumo", datos: db.serie("tasa_consumo")},
+        {nombre: "Productivo PYMES", datos: db.serie("tasa_productivo_pymes")},
+        {nombre: "Productivo corporativo", datos: db.serie("tasa_productivo_corporativo")}
+      ],
+      frecuencia: "M", unidad: "%", decimales: 2
     })
   })}
   ${panel({
-    titulo: "Bonos globales de Ecuador",
-    subtitulo: `Al ${formatoPeriodo(tBonos, "D")}`,
-    fuente: "Bloomberg",
+    titulo: "Tasas activas efectivas y máximas por segmento",
+    subtitulo: `%, ${formatoPeriodo(tTasas, "M")}; el margen es la distancia a la tasa máxima`,
+    fuente: fuente("tasa_consumo"),
     ancho: true,
     contenido: html`<div class="tabla-wrap"><table class="tablero cuadro">
-      <thead><tr><th>Bono</th><th>Precio</th><th>Rendimiento</th><th>Var. 1 mes</th><th>Var. en el año</th></tr></thead>
-      <tbody>${bonos.map((b) => {
-        const px = mercados.serie(`ec${b}_px`);
-        const y = mercados.serie(`ec${b}_ytm`);
-        const actual = valorEn(y, tBonos);
-        const cambio = (t) => {
-          const ref = valorEn(y, t);
-          return ref == null ? "–" : formatoCambio((actual - ref) * 100, 0, "pb");
-        };
-        return html`<tr class="fila-item nivel-0">
-          <td>Ecuador ${b}</td>
-          <td>${formatoNumero(valorEn(px, tBonos), 2)}</td>
-          <td><b>${formatoNumero(actual, 2)}%</b></td>
-          <td>${cambio(hace(30))}</td>
-          <td>${cambio(inicioAnio)}</td>
-        </tr>`;
-      })}</tbody>
+      <thead><tr><th>Segmento</th><th>Efectiva</th><th>Máxima</th><th>Margen</th><th>Efectiva hace un año</th><th>Cambio</th></tr></thead>
+      <tbody>${segmentos.flatMap(([grupo, subs]) => [
+        html`<tr class="fila-grupo nivel-0"><td colspan="6">${grupo}</td></tr>`,
+        ...subs.map((s) => {
+          const ef = enTasas(`tasa_${s}`);
+          const max = enTasas(`tasa_max_${s}`);
+          const ant = enTasas(`tasa_${s}`, haceUnAnoTasas);
+          return html`<tr class="fila-item nivel-1">
+            <td>${db.meta(`tasa_${s}`).corto}</td>
+            <td><b>${formatoNumero(ef, 2)}</b></td>
+            <td>${formatoNumero(max, 2)}</td>
+            <td>${formatoCambio(ef - max, 2, "pp")}</td>
+            <td>${formatoNumero(ant, 2)}</td>
+            <td>${ant != null ? formatoCambio((ef - ant) * 100, 0, "pb") : "–"}</td>
+          </tr>`;
+        })
+      ])}</tbody>
     </table></div>`
   })}
 </div>`);

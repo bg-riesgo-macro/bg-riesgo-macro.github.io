@@ -88,6 +88,7 @@ display(html`<div class="paneles">
     titulo: "Términos de intercambio",
     subtitulo: "Índice, mensual",
     fuente: fuente("terminos_intercambio"),
+    nota: "Relación entre los precios de lo que Ecuador exporta y los de lo que importa. Si el índice sube, con el mismo volumen exportado el país puede pagar más importaciones: entran más dólares por exportaciones o salen menos por importaciones. Si baja, ocurre lo contrario. En Ecuador depende sobre todo del precio del petróleo y de productos como el camarón, el banano y el cacao.",
     contenido: grafico({
       series: [{nombre: "Términos de intercambio", datos: db.serie("terminos_intercambio").filter(([t]) => t >= Date.UTC(2015, 0, 1))}],
       frecuencia: "M", unidad: "", decimales: 1

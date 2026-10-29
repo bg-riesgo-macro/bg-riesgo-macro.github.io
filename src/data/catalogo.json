@@ -1,5 +1,5 @@
 {
- "incidencias_ipc": "2026-08-01",
+ "incidencias_ipc": "2026-09-01",
  "perfil_vencimientos": "2026-07-01",
  "series": [
   {
@@ -170,7 +170,7 @@
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 2,
-   "fuente": "INEC, Índice de Precios al Consumidor"
+   "fuente": "BCE, con datos del INEC (Índice de Precios al Consumidor)"
   },
   {
    "id": "inflacion_mm",
@@ -180,7 +180,7 @@
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 2,
-   "fuente": "INEC, Índice de Precios al Consumidor"
+   "fuente": "BCE, con datos del INEC (Índice de Precios al Consumidor)"
   },
   {
    "id": "inflacion_acum",
@@ -190,7 +190,7 @@
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 2,
-   "fuente": "INEC, Índice de Precios al Consumidor"
+   "fuente": "BCE, con datos del INEC (Índice de Precios al Consumidor)"
   },
   {
    "id": "desempleo",
@@ -333,10 +333,10 @@
    "fuente": "Empresas cementeras"
   },
   {
-   "id": "ventas_sri",
+   "id": "ventas_locales",
    "sector": "real",
-   "nombre": "Ventas totales y exportaciones declaradas (formulario 104, casillero 419)",
-   "corto": "Ventas SRI",
+   "nombre": "Ventas locales declaradas (formulario 104: casillero 419 menos exportaciones, 417 y 418)",
+   "corto": "Ventas locales",
    "unidad": "USD mm",
    "frecuencia": "M",
    "decimales": 0,
@@ -353,10 +353,90 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
+   "id": "dep_monetarios_bp",
+   "sector": "financiero",
+   "nombre": "Depósitos monetarios, bancos privados",
+   "corto": "Monetarios",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "dep_ahorro_bp",
+   "sector": "financiero",
+   "nombre": "Depósitos de ahorro, bancos privados",
+   "corto": "Ahorro",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "dep_plazo_bp",
+   "sector": "financiero",
+   "nombre": "Depósitos a plazo, bancos privados",
+   "corto": "Plazo",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
    "id": "cartera_bp",
    "sector": "financiero",
    "nombre": "Cartera bruta, bancos privados",
    "corto": "Cartera",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_productivo_bp",
+   "sector": "financiero",
+   "nombre": "Cartera bruta productivo, bancos privados",
+   "corto": "Productivo",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_consumo_bp",
+   "sector": "financiero",
+   "nombre": "Cartera bruta consumo, bancos privados",
+   "corto": "Consumo",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_inmobiliario_bp",
+   "sector": "financiero",
+   "nombre": "Cartera bruta inmobiliario, bancos privados",
+   "corto": "Inmobiliario",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "cartera_microcredito_bp",
+   "sector": "financiero",
+   "nombre": "Cartera bruta microcrédito, bancos privados",
+   "corto": "Microcrédito",
+   "unidad": "USD mm",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "activos_bp",
+   "sector": "financiero",
+   "nombre": "Activos totales, bancos privados",
+   "corto": "Activos",
    "unidad": "USD mm",
    "frecuencia": "M",
    "decimales": 0,
@@ -383,39 +463,9 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "depositos_sf",
+   "id": "morosidad_bp",
    "sector": "financiero",
-   "nombre": "Depósitos del sistema financiero privado",
-   "corto": "Depósitos",
-   "unidad": "USD mm",
-   "frecuencia": "M",
-   "decimales": 0,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "cartera_sf",
-   "sector": "financiero",
-   "nombre": "Cartera bruta del sistema financiero privado",
-   "corto": "Cartera",
-   "unidad": "USD mm",
-   "frecuencia": "M",
-   "decimales": 0,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "activos_liquidos_sf",
-   "sector": "financiero",
-   "nombre": "Activos líquidos del sistema financiero privado",
-   "corto": "Activos líquidos",
-   "unidad": "USD mm",
-   "frecuencia": "M",
-   "decimales": 0,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "morosidad_sf",
-   "sector": "financiero",
-   "nombre": "Morosidad de la cartera, sistema financiero privado",
+   "nombre": "Morosidad de la cartera (improductiva / bruta), bancos privados",
    "corto": "Morosidad",
    "unidad": "%",
    "frecuencia": "M",
@@ -423,9 +473,9 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "morosidad_productivo",
+   "id": "morosidad_productivo_bp",
    "sector": "financiero",
-   "nombre": "Morosidad, segmento productivo",
+   "nombre": "Morosidad de la cartera productivo, bancos privados",
    "corto": "Productivo",
    "unidad": "%",
    "frecuencia": "M",
@@ -433,19 +483,29 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "morosidad_comercial",
+   "id": "morosidad_consumo_bp",
    "sector": "financiero",
-   "nombre": "Morosidad, segmento comercial",
-   "corto": "Comercial",
+   "nombre": "Morosidad de la cartera consumo, bancos privados",
+   "corto": "Consumo",
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 2,
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "morosidad_microcredito",
+   "id": "morosidad_inmobiliario_bp",
    "sector": "financiero",
-   "nombre": "Morosidad, microcrédito",
+   "nombre": "Morosidad de la cartera inmobiliario, bancos privados",
+   "corto": "Inmobiliario",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "morosidad_microcredito_bp",
+   "sector": "financiero",
+   "nombre": "Morosidad de la cartera microcrédito, bancos privados",
    "corto": "Microcrédito",
    "unidad": "%",
    "frecuencia": "M",
@@ -453,19 +513,29 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "morosidad_vivienda",
+   "id": "morosidad_castigos_bp",
    "sector": "financiero",
-   "nombre": "Morosidad, vivienda",
-   "corto": "Vivienda",
+   "nombre": "Morosidad ajustada por castigos de 12 meses, bancos privados",
+   "corto": "Morosidad con castigos",
    "unidad": "%",
    "frecuencia": "M",
    "decimales": 2,
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
-   "id": "solvencia_sf",
+   "id": "cobertura_bp",
    "sector": "financiero",
-   "nombre": "Índice de solvencia, sistema financiero privado",
+   "nombre": "Cobertura de la cartera improductiva (provisiones / improductiva), bancos privados",
+   "corto": "Cobertura",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 0,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "solvencia_bp",
+   "sector": "financiero",
+   "nombre": "Solvencia (patrimonio técnico / activos y contingentes ponderados por riesgo), bancos privados",
    "corto": "Solvencia",
    "unidad": "%",
    "frecuencia": "M",
@@ -473,54 +543,374 @@
    "fuente": "Superintendencia de Bancos (compilación interna)"
   },
   {
+   "id": "liquidez_inmediata_bp",
+   "sector": "financiero",
+   "nombre": "Liquidez inmediata, bancos privados",
+   "corto": "Liquidez inmediata",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "liquidez_primera_bp",
+   "sector": "financiero",
+   "nombre": "Liquidez de primera línea, bancos privados",
+   "corto": "Primera línea",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "liquidez_segunda_bp",
+   "sector": "financiero",
+   "nombre": "Liquidez de segunda línea, bancos privados",
+   "corto": "Segunda línea",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "fondos_portafolio_bp",
+   "sector": "financiero",
+   "nombre": "Fondos disponibles y portafolio de inversiones / depósitos de corto plazo, promedio de 12 meses, bancos privados",
+   "corto": "Disponibles + portafolio (prom. 12 meses)",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "fondos_activos_bp",
+   "sector": "financiero",
+   "nombre": "Fondos disponibles / activos totales, bancos privados",
+   "corto": "Fondos disponibles / activos",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "nsfr_bp",
+   "sector": "financiero",
+   "nombre": "Fondeo estable neto (fondeo estable disponible / requerido), bancos privados",
+   "corto": "Fondeo estable neto",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "roe_bp",
+   "sector": "financiero",
+   "nombre": "Rentabilidad sobre patrimonio (ROE), bancos privados",
+   "corto": "ROE",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 1,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
+   "id": "roa_bp",
+   "sector": "financiero",
+   "nombre": "Rentabilidad sobre activos (ROA), bancos privados",
+   "corto": "ROA",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos (compilación interna)"
+  },
+  {
    "id": "liquidez_bp",
    "sector": "financiero",
-   "nombre": "Liquidez de bancos privados",
-   "corto": "Liquidez bancos",
+   "nombre": "Fondos disponibles / depósitos a corto plazo (no incluye otros activos líquidos), bancos privados",
+   "corto": "Fondos disponibles / depósitos CP",
    "unidad": "%",
    "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
+   "decimales": 2,
+   "fuente": "Superintendencia de Bancos, Series del subsistema de bancos privados"
   },
   {
-   "id": "liquidez_coac1",
-   "sector": "financiero",
-   "nombre": "Liquidez de cooperativas segmento 1",
-   "corto": "Liquidez COAC 1",
-   "unidad": "%",
-   "frecuencia": "M",
-   "decimales": 1,
-   "fuente": "Superintendencia de Bancos (compilación interna)"
-  },
-  {
-   "id": "tpr",
+   "id": "tasa_pasiva",
    "sector": "financiero",
    "nombre": "Tasa pasiva referencial",
    "corto": "Tasa pasiva referencial",
    "unidad": "%",
-   "frecuencia": "S",
+   "frecuencia": "M",
    "decimales": 2,
-   "fuente": "BCE"
+   "fuente": "BCE, Tasas de interés referenciales"
   },
   {
-   "id": "tpr_bp",
+   "id": "tasa_activa",
    "sector": "financiero",
-   "nombre": "Tasa pasiva referencial, bancos privados",
-   "corto": "Bancos privados",
+   "nombre": "Tasa activa referencial",
+   "corto": "Tasa activa referencial",
    "unidad": "%",
-   "frecuencia": "S",
+   "frecuencia": "M",
    "decimales": 2,
-   "fuente": "BCE"
+   "fuente": "BCE, Tasas de interés referenciales"
   },
   {
-   "id": "tpr_coop",
+   "id": "tasa_productivo_corporativo",
    "sector": "financiero",
-   "nombre": "Tasa pasiva referencial, cooperativas",
-   "corto": "Cooperativas",
+   "nombre": "Tasa activa efectiva referencial: Productivo corporativo",
+   "corto": "Productivo corporativo",
    "unidad": "%",
-   "frecuencia": "S",
+   "frecuencia": "M",
    "decimales": 2,
-   "fuente": "BCE"
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_productivo_corporativo",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Productivo corporativo",
+   "corto": "Productivo corporativo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_productivo_empresarial",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Productivo empresarial",
+   "corto": "Productivo empresarial",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_productivo_empresarial",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Productivo empresarial",
+   "corto": "Productivo empresarial",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_productivo_pymes",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Productivo PYMES",
+   "corto": "Productivo PYMES",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_productivo_pymes",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Productivo PYMES",
+   "corto": "Productivo PYMES",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_consumo",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Consumo",
+   "corto": "Consumo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_consumo",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Consumo",
+   "corto": "Consumo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_educativo",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Educativo",
+   "corto": "Educativo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_educativo",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Educativo",
+   "corto": "Educativo",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_educativo_social",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Educativo social",
+   "corto": "Educativo social",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_educativo_social",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Educativo social",
+   "corto": "Educativo social",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_microcredito_acumulacion_ampliada",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Microcrédito acumulación ampliada",
+   "corto": "Microcrédito acumulación ampliada",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_microcredito_acumulacion_ampliada",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Microcrédito acumulación ampliada",
+   "corto": "Microcrédito acumulación ampliada",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_microcredito_acumulacion_simple",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Microcrédito acumulación simple",
+   "corto": "Microcrédito acumulación simple",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_microcredito_acumulacion_simple",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Microcrédito acumulación simple",
+   "corto": "Microcrédito acumulación simple",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_microcredito_minorista",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Microcrédito minorista",
+   "corto": "Microcrédito minorista",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_microcredito_minorista",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Microcrédito minorista",
+   "corto": "Microcrédito minorista",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_inmobiliario",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Inmobiliario",
+   "corto": "Inmobiliario",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_inmobiliario",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Inmobiliario",
+   "corto": "Inmobiliario",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_vivienda_de_interes_publico",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Vivienda de interés público",
+   "corto": "Vivienda de interés público",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_vivienda_de_interes_publico",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Vivienda de interés público",
+   "corto": "Vivienda de interés público",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_vivienda_de_interes_social",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Vivienda de interés social",
+   "corto": "Vivienda de interés social",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_vivienda_de_interes_social",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Vivienda de interés social",
+   "corto": "Vivienda de interés social",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_inversion_publica",
+   "sector": "financiero",
+   "nombre": "Tasa activa efectiva referencial: Inversión pública",
+   "corto": "Inversión pública",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
+  },
+  {
+   "id": "tasa_max_inversion_publica",
+   "sector": "financiero",
+   "nombre": "Tasa activa máxima: Inversión pública",
+   "corto": "Inversión pública",
+   "unidad": "%",
+   "frecuencia": "M",
+   "decimales": 2,
+   "fuente": "BCE, Tasas de interés activas efectivas referenciales y máximas"
   },
   {
    "id": "embi",
@@ -531,6 +921,56 @@
    "frecuencia": "D",
    "decimales": 0,
    "fuente": "BCE, con datos de JP Morgan"
+  },
+  {
+   "id": "bono_2030",
+   "sector": "financiero",
+   "nombre": "Bono global Ecuador 2030: precio",
+   "corto": "Ecuador 2030",
+   "unidad": "USD por 100",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "BCE, Bonos soberanos"
+  },
+  {
+   "id": "bono_2034",
+   "sector": "financiero",
+   "nombre": "Bono global Ecuador 2034: precio",
+   "corto": "Ecuador 2034",
+   "unidad": "USD por 100",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "BCE, Bonos soberanos"
+  },
+  {
+   "id": "bono_2035",
+   "sector": "financiero",
+   "nombre": "Bono global Ecuador 2035: precio",
+   "corto": "Ecuador 2035",
+   "unidad": "USD por 100",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "BCE, Bonos soberanos"
+  },
+  {
+   "id": "bono_2039",
+   "sector": "financiero",
+   "nombre": "Bono global Ecuador 2039: precio",
+   "corto": "Ecuador 2039",
+   "unidad": "USD por 100",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "BCE, Bonos soberanos"
+  },
+  {
+   "id": "bono_2040",
+   "sector": "financiero",
+   "nombre": "Bono global Ecuador 2040: precio",
+   "corto": "Ecuador 2040",
+   "unidad": "USD por 100",
+   "frecuencia": "D",
+   "decimales": 2,
+   "fuente": "BCE, Bonos soberanos"
   },
   {
    "id": "reservas",
