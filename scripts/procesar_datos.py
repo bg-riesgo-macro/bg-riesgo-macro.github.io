@@ -424,8 +424,9 @@ for df in cuadro_bce(RAW / "tasas" / "tasas_activas_efectivas_maximas.xlsx").val
                   corto=sub, unidad="%", frecuencia="M", decimales=2,
                   fuente="BCE, Tasas de interés activas efectivas referenciales y máximas")
 
-# Riesgo país: el archivo trae días calendario (fines de semana repetidos); se dejan días hábiles.
-embi = pd.read_excel(RAW / "bce_riesgo_país2.xlsx")
+# Riesgo país (descargar_datos.py): el BCE repite a veces el viernes en el fin de semana; se dejan días hábiles.
+embi = pd.DataFrame(json.loads((RAW / "riesgo_pais.json").read_text())["view_ind_formulario"])
+embi = embi[embi["Indicador"] == "Riesgo País"]
 embi["Fecha"] = pd.to_datetime(embi["Fecha"])
 embi = embi[embi["Fecha"].dt.dayofweek < 5]
 registrar("embi", embi["Fecha"], embi["Valor"], sector="financiero", nombre="Riesgo país (EMBI Ecuador)",

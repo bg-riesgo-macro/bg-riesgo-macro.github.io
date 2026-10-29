@@ -12,6 +12,7 @@ Uso (desde la raíz del repositorio, antes de procesar_datos.py):
 Salidas en data_raw/:
     mercados.csv              series diarias de mercados en formato largo (id, fecha, valor)
     bonos_soberanos.json      precios diarios de los bonos globales de Ecuador (BCE, un día de rezago)
+    riesgo_pais.json          riesgo país (EMBI Ecuador) diario (BCE, con datos de JP Morgan)
     previsiones/fmi.csv       crecimiento del PIB de Ecuador, Perspectivas de la economía mundial (WEO)
     previsiones/bm.csv        crecimiento del PIB de Ecuador, Perspectivas económicas mundiales (GEP)
 """
@@ -73,8 +74,15 @@ def yahoo(codigo: str) -> pd.Series:
            f"?period1={inicio}&period2={int(time.time())}&interval=1d")
     r = json.loads(bajar(url))["chart"]["result"][0]
     zona = ZoneInfo(r["meta"]["exchangeTimezoneName"])
-    fechas = [datetime.fromtimestamp(t, zona).date() for t in r["timestamp"]]
-    return pd.Series(r["indicators"]["quote"][0]["close"], index=fechas, dtype=float)
+    # Solo cierres: mientras la sesión vigente no termina, su barra es un precio intradía.
+    sesion = r["meta"]["currentTradingPeriod"]["regular"]
+    corte = sesion["start"] if time.time() < sesion["end"] else float("inf")
+    pares = [(t, v) for t, v in zip(r["timestamp"], r["indicators"]["quote"][0]["close"]) if t < corte]
+    # Yahoo tarda en llenar el cierre de la última sesión terminada (pasa con las bolsas asiáticas);
+    # mientras tanto, el cierre está en la ficha.
+    if pares and pares[-1][1] is None and r["meta"]["regularMarketTime"] > pares[-1][0]:
+        pares[-1] = (pares[-1][0], r["meta"]["regularMarketPrice"])
+    return pd.Series({datetime.fromtimestamp(t, zona).date(): v for t, v in pares}, dtype=float)
 
 
 def fred(codigo: str) -> pd.Series:
@@ -175,6 +183,16 @@ try:
     print(f"bonos_soberanos.json: {n} observaciones")
 except Exception as e:
     fallas.append(f"bonos soberanos (BCE): {e}")
+
+# Riesgo país: lo publica el BCE en el mismo directorio, junto con el precio del oro.
+try:
+    formulario = bajar("https://contenido.bce.fin.ec/wp-content/uploads/ESTADISTICAS-ECONOMICAS/indicadores/"
+                       "datos_formulario.json")
+    embi = [x for x in json.loads(formulario)["view_ind_formulario"] if x["Indicador"] == "Riesgo País"]
+    (RAW / "riesgo_pais.json").write_bytes(formulario)
+    print(f"riesgo_pais.json: {len(embi)} observaciones hasta {max(x['Fecha'] for x in embi)}")
+except Exception as e:
+    fallas.append(f"riesgo país (BCE): {e}")
 
 
 # ------------------------------------------------------------------ previsiones

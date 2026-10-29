@@ -45,7 +45,7 @@ uv run scripts/descargar_datos.py   # mercados y previsiones del FMI y Banco Mun
 uv run scripts/procesar_datos.py
 ```
 
-`descargar_datos.py` baja las series de mercados de Yahoo Finance (bolsas, monedas, materias primas), FRED (tasas de la Fed y del BCE, SOFR, curva del Tesoro), Banco de Inglaterra, Deutsche Bundesbank, Ministerio de Finanzas de Japón y Banco de Japón, y las previsiones de crecimiento del FMI (WEO) y del Banco Mundial (GEP). Si una fuente falla, no sobrescribe `data_raw/mercados.csv`.
+`descargar_datos.py` baja las series de mercados de Yahoo Finance (bolsas, monedas, materias primas), FRED (tasas de la Fed y del BCE, SOFR, curva del Tesoro), Banco de Inglaterra, Deutsche Bundesbank, Ministerio de Finanzas de Japón y Banco de Japón; del BCE, los precios de los bonos globales de Ecuador y el riesgo país; y las previsiones de crecimiento del FMI (WEO) y del Banco Mundial (GEP). Si una fuente falla, no sobrescribe `data_raw/mercados.csv`.
 
 Sistema de bancos privados: `data_raw/sb/indicadores_banco*.xlsx` (compilación interna con datos de la Superintendencia de Bancos; se usa el más reciente y, de su hoja `Sheet1`, el total del segmento `BANCOS PRIVADOS`). La liquidez oficial (fondos disponibles / depósitos a corto plazo) sale de `data_raw/sb/SERIES SUBSISTEMA BANCA PRIVADA AAAA_MM.xlsx`, las series mensuales que publica la Superintendencia de Bancos (se usa la del último mes según el nombre).
 
