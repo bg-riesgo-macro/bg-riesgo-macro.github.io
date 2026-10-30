@@ -655,10 +655,6 @@ table.cuadro .celda-nota {
   padding-top: 1rem;
   line-height: 1.6;
 }
-.pie-aviso {
-  display: block;
-  color: var(--acento);
-}
 #observablehq-footer nav a {
   border-radius: 6px;
   border-color: var(--linea);

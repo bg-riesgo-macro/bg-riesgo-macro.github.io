@@ -44,6 +44,5 @@ export default {
         .join("")}
     </nav>`,
 
-  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, MEF, SRI, Superintendencia de Bancos, FMI, Banco Mundial, CEPAL, Yahoo Finance, FRED y bancos centrales.
-    <span class="pie-aviso">Cifras sujetas a revisión por las fuentes.</span>`
+  footer: `BG Riesgo Macroeconómico y Sectorial · Fuentes: BCE, INEC, MEF, SRI, Superintendencia de Bancos, FMI, Banco Mundial, CEPAL, Yahoo Finance, FRED y bancos centrales.`
 };
